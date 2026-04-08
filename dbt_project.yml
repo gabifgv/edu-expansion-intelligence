@@ -1,0 +1,35 @@
+name: 'inteligencia_expansao_educacional'
+version: '1.0.0'
+config-version: 2
+
+profile: 'inteligencia_expansao_educacional'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+data-paths: ["data"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  inteligencia_expansao_educacional:
+    materialized: table
+    raw:
+      +materialized: view
+      +tags: ['raw']
+    staging:
+      +materialized: view
+      +tags: ['staging']
+      schema: staging
+    marts:
+      +materialized: table
+      +schema: marts
+      +tags: ['marts']
+
+vars:
+  'data_project': 'inteligencia_expansao_educacional'
+  'raw_database': 'raw'

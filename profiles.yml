@@ -1,0 +1,25 @@
+inteligencia_expansao_educacional:
+  outputs:
+    dev:
+      type: [seu_banco_aqui]  # postgres, snowflake, bigquery, etc
+      host: [host]
+      user: [usuario]
+      password: [senha]
+      port: [porta]
+      dbname: [banco_de_dados]
+      schema: dev
+      threads: 4
+      keepalives_idle: 0
+
+    prod:
+      type: [seu_banco_aqui]
+      host: [host]
+      user: [usuario]
+      password: [senha]
+      port: [porta]
+      dbname: [banco_de_dados]
+      schema: prod
+      threads: 4
+      keepalives_idle: 0
+
+  target: dev
