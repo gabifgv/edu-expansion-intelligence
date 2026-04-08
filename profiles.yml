@@ -1,25 +1,12 @@
 inteligencia_expansao_educacional:
   outputs:
     dev:
-      type: [seu_banco_aqui]  # postgres, snowflake, bigquery, etc
-      host: [host]
-      user: [usuario]
-      password: [senha]
-      port: [porta]
-      dbname: [banco_de_dados]
-      schema: dev
+      type: bigquery
+      project: project-a8f8452a-3033-4dd8-99a
+      dataset: raw
+      location: US
+      method: oauth
       threads: 4
-      keepalives_idle: 0
-
-    prod:
-      type: [seu_banco_aqui]
-      host: [host]
-      user: [usuario]
-      password: [senha]
-      port: [porta]
-      dbname: [banco_de_dados]
-      schema: prod
-      threads: 4
-      keepalives_idle: 0
-
+      timeout_seconds: 300
+      priority: interactive
   target: dev

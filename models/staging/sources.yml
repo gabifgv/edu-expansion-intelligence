@@ -1,0 +1,32 @@
+version: 2
+
+sources:
+  - name: raw
+    description: Raw data from sources
+    schema: raw
+    tables:
+      - name: inep_censo_superior
+        description: INEP Censo Superior raw data
+        columns:
+          - name: ano
+            description: Year
+          - name: sigla_uf
+            description: State code
+          - name: id_municipio
+            description: Municipality ID
+          - name: nome_municipio
+            description: Municipality name
+          - name: rede
+            description: Network
+          - name: modalidade_ensino
+            description: Teaching modality
+          - name: nome_ies
+            description: Higher Education Institution name
+          - name: nome_area_geral
+            description: General area name
+          - name: total_vagas
+            description: Total vacancies
+          - name: total_matriculas
+            description: Total enrollments
+          - name: total_concluintes
+            description: Total graduates
