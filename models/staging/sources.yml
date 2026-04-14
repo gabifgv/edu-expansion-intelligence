@@ -3,9 +3,328 @@ version: 2
 sources:
   - name: raw
     schema: raw
+    description: >
+      Camada raw do projeto de Inteligência de Expansão Educacional da FGV.
+      Contém dados brutos ingeridos de fontes públicas brasileiras via Base dos Dados (basedosdados.org).
+      Objetivo: identificar municípios com potencial de expansão de campus FGV e escolas de ensino médio
+      candidatas a parceria comercial ou programa de bolsas de talentos.
+
     tables:
+
+      # ─────────────────────────────────────────────────────────────────
+      # 1. INEP GRADUAÇÃO
+      # ─────────────────────────────────────────────────────────────────
       - name: inep_graduacao
+        description: >
+          Censo da Educação Superior (INEP) — oferta de ensino superior por município.
+          Fonte original: basedosdados.br_inep_censo_superior.
+          Período: 2020–2024. Granularidade: curso × IES × município × ano.
+          Uso no projeto: identificar presença e gap de IES premium por município,
+          calcular taxa de absorção (matrículas / formandos ensino médio)
+          e mapear concorrentes da FGV por área de conhecimento.
+        columns:
+          - name: ano
+            description: Ano de referência do Censo da Educação Superior (2020–2024).
+          - name: sigla_uf
+            description: Sigla da Unidade da Federação (ex. SP, RJ, MG).
+          - name: id_municipio
+            description: Código IBGE do município com 7 dígitos. Chave de join com demais tabelas.
+          - name: nome_municipio
+            description: Nome do município.
+          - name: rede
+            description: Rede de ensino da IES — Pública Federal, Pública Estadual, Privada, etc.
+          - name: modalidade_ensino
+            description: Modalidade — Presencial ou EAD.
+          - name: id_ies
+            description: Código único da Instituição de Ensino Superior no INEP.
+          - name: nome_ies
+            description: Nome da IES (ex. Universidade de São Paulo, Ibmec, Insper).
+          - name: sigla_ies
+            description: Sigla da IES.
+          - name: nome_mantenedora
+            description: Nome da entidade mantenedora da IES.
+          - name: nome_area_geral
+            description: Área geral do curso (ex. Ciências Sociais Aplicadas, Ciências Humanas).
+          - name: nome_area_especifica
+            description: Área específica do curso (ex. Direito, Administração, Economia).
+          - name: nome_area_detalhada
+            description: Área detalhada do curso — nível mais granular de classificação.
+          - name: docentes
+            description: Número de docentes vinculados ao curso.
+          - name: total_vagas
+            description: Total de vagas ofertadas no curso no ano de referência.
+          - name: total_vagas_ead
+            description: Total de vagas EAD ofertadas no curso.
+          - name: total_inscritos
+            description: Total de inscritos no processo seletivo do curso.
+          - name: total_inscritos_ead
+            description: Total de inscritos EAD no processo seletivo do curso.
+          - name: total_ingressantes
+            description: Total de alunos que ingressaram no curso no ano.
+          - name: total_matriculas
+            description: Total de alunos matriculados no curso (todos os anos/séries).
+          - name: total_concluintes
+            description: Total de alunos que concluíram o curso no ano de referência.
+
+      # ─────────────────────────────────────────────────────────────────
+      # 2. INSE ESCOLA
+      # ─────────────────────────────────────────────────────────────────
       - name: inse_escola
+        description: >
+          Indicador de Nível Socioeconômico (INSE) por escola — INEP.
+          Fonte original: basedosdados.br_inep_indicador_nivel_socioeconomico.escola.
+          Período: ano mais recente disponível (2023).
+          Granularidade: escola × ano.
+          Uso no projeto: proxy de renda e perfil socioeconômico dos alunos por escola.
+          Classificação de I (mais baixo) a VIII (mais alto).
+          Escolas Nível VII–VIII com rede privada = candidatos a parceria comercial FGV.
+          Escolas Nível I–IV com IDEB alto = candidatos a bolsa de talentos FGV.
+        columns:
+          - name: ano
+            description: Ano de referência do indicador INSE.
+          - name: sigla_uf
+            description: Sigla da Unidade da Federação.
+          - name: id_municipio
+            description: Código IBGE do município com 7 dígitos. Chave de join com demais tabelas.
+          - name: nome_municipio
+            description: Nome do município.
+          - name: rede
+            description: >
+              Rede escolar codificada.
+              1 = Federal, 2 = Estadual, 3 = Municipal, 4 = Privada.
+          - name: id_escola
+            description: Código INEP da escola. Chave primária. Permite join com ideb_escola e inep_formandos_ensinomedio.
+          - name: nome_escola
+            description: Nome da escola conforme diretório INEP.
+          - name: latitude
+            description: Latitude geográfica da escola. Útil para visualização em mapa.
+          - name: longitude
+            description: Longitude geográfica da escola. Útil para visualização em mapa.
+          - name: inse
+            description: >
+              Valor numérico contínuo do Indicador de Nível Socioeconômico (escala 1–7).
+              Quanto maior, mais alto o nível socioeconômico dos alunos da escola.
+          - name: classificacao
+            description: >
+              Classificação categórica do INSE em 8 grupos.
+              Nível I e II = extrema pobreza / baixa renda.
+              Nível III e IV = baixa renda.
+              Nível V e VI = classe média.
+              Nível VII = classe média-alta.
+              Nível VIII = elite.
+          - name: quantidade_alunos_inse
+            description: Número de alunos com INSE calculado — base para o indicador da escola.
+
+      # ─────────────────────────────────────────────────────────────────
+      # 3. IDEB ESCOLA
+      # ─────────────────────────────────────────────────────────────────
       - name: ideb_escola
+        description: >
+          Índice de Desenvolvimento da Educação Básica (IDEB) por escola — INEP.
+          Fonte original: basedosdados.br_inep_ideb.escola.
+          Período: 2020–2023 (bienal). Granularidade: escola × ano × etapa de ensino.
+          Filtro aplicado: ensino = 'medio', ideb IS NOT NULL.
+          Uso no projeto: principal indicador de qualidade acadêmica por escola.
+          Combina nota SAEB (proficiência) com taxa de aprovação.
+          Cobre escolas públicas (federal, estadual, municipal) e privadas (1.247 escolas).
+          Substitui o SAEB proficiência — tem ID real de escola e é mais completo.
+        columns:
+          - name: ano
+            description: Ano de referência do IDEB (2020, 2021, 2022, 2023).
+          - name: id_escola
+            description: Código INEP da escola. Chave primária. Permite join com inse_escola e inep_formandos_ensinomedio.
+          - name: id_municipio
+            description: Código IBGE do município com 7 dígitos. Chave de join com demais tabelas.
+          - name: rede
+            description: >
+              Rede escolar.
+              federal = Federal, estadual = Estadual,
+              municipal = Municipal, privada = Privada.
+          - name: ensino
+            description: Etapa de ensino. Filtrado para 'medio' nesta tabela.
+          - name: anos_escolares
+            description: Anos escolares avaliados (ex. finais (6-9), medio).
+          - name: taxa_aprovacao
+            description: >
+              Taxa de aprovação dos alunos no ensino médio (%).
+              Componente do cálculo do IDEB junto com a nota SAEB.
+          - name: nota_saeb_matematica
+            description: >
+              Média da proficiência em Matemática na escala SAEB (média ~250, desvio ~50).
+              Quanto maior, melhor o desempenho dos alunos em matemática.
+          - name: nota_saeb_lingua_portuguesa
+            description: >
+              Média da proficiência em Língua Portuguesa na escala SAEB.
+              Quanto maior, melhor o desempenho dos alunos em português.
+          - name: nota_saeb_media_padronizada
+            description: Média padronizada combinada de LP e MT — usada no cálculo do IDEB.
+          - name: ideb
+            description: >
+              Índice de Desenvolvimento da Educação Básica.
+              Calculado como: nota_saeb_media_padronizada × indicador_rendimento.
+              Escala de 0 a 10. Meta nacional para ensino médio: 6.0 (2022).
+              Escolas acima de 6.0 = alto desempenho. Acima de 7.0 = excelência.
+
+      # ─────────────────────────────────────────────────────────────────
+      # 4. INEP FORMANDOS ENSINO MÉDIO
+      # ─────────────────────────────────────────────────────────────────
       - name: inep_formandos_ensinomedio
+        description: >
+          Formandos do 3º ano do ensino médio por escola e município — Censo Escolar INEP.
+          Fonte original: basedosdados.br_inep_censo_escolar.turma.
+          Período: 2020 em diante (sem limite superior — captura novos anos automaticamente).
+          Granularidade: escola × município × tipo de rede × ano.
+          Filtro de etapa_ensino: '27' (EM 3ª Série), '32' (EM Integrado 3ª Série), '37' (EM Normal/Magistério 3ª Série).
+          Uso no projeto: volume de formandos por escola e município —
+          principal indicador de funil de entrada para o ensino superior.
+          Cruzado com inep_graduacao gera a taxa de absorção por município.
+        columns:
+          - name: ano
+            description: Ano de referência do Censo Escolar.
+          - name: id_municipio
+            description: Código IBGE do município com 7 dígitos. Chave de join com demais tabelas.
+          - name: nome_municipio
+            description: Nome do município.
+          - name: sigla_uf
+            description: Sigla da Unidade da Federação.
+          - name: id_escola
+            description: Código INEP da escola. Chave primária. Permite join com inse_escola e ideb_escola.
+          - name: tipo_rede
+            description: >
+              Rede escolar calculada a partir do campo rede original.
+              'Privada' = rede 4. 'Publica' = redes 1, 2 ou 3 (Federal, Estadual, Municipal).
+          - name: total_formandos
+            description: >
+              Soma de matrículas no 3º ano do ensino médio por escola e ano.
+              Inclui: EM propedêutico 3ª série (27) + EM integrado 3ª série (32) + EM magistério 3ª série (37).
+              Proxy de concluintes — alunos matriculados no último ano tendem a se formar.
+
+      # ─────────────────────────────────────────────────────────────────
+      # 5. RAIS VÍNCULOS MUNICÍPIO
+      # ─────────────────────────────────────────────────────────────────
       - name: rais_vinculos_municipio
+        description: >
+          Mercado de trabalho formal por município, subsetor e setor econômico — RAIS/MTE.
+          Fonte original: basedosdados.br_me_rais.microdados_vinculos +
+          basedosdados.br_me_rais.microdados_estabelecimentos.
+          Período: 2019 em diante. Granularidade: município × subsetor × cnae × ano.
+          Filtro aplicado: vinculo_ativo_3112 = '1' (vínculos ativos em 31/12),
+          id_municipio IS NOT NULL.
+          Uso no projeto: perfil econômico do município — setores dominantes,
+          salário médio, volume de empregos formais e número de estabelecimentos.
+          Municípios com alto salário médio e setor de serviços/finanças = maior
+          propensão à demanda por ensino superior premium.
+        columns:
+          - name: ano
+            description: Ano de referência da RAIS (2019 em diante).
+          - name: id_municipio
+            description: Código IBGE do município com 7 dígitos. Chave de join com demais tabelas.
+          - name: sigla_uf
+            description: Sigla da Unidade da Federação.
+          - name: subsetor_ibge
+            description: Código numérico do subsetor IBGE de atividade econômica.
+          - name: descricao_subsetor
+            description: >
+              Descrição do subsetor IBGE (ex. Administração pública direta e autárquica,
+              Comércio atacadista, Construção civil).
+              Obtida via join com dicionário RAIS.
+          - name: cnae_2
+            description: >
+              Código CNAE 2.0 da atividade econômica do estabelecimento — 4 dígitos
+              (nível de classe, ex. 8411 = Administração pública em geral).
+          - name: descricao_cnae
+            description: >
+              Descrição da classe CNAE 2.0 (ex. Administração pública em geral,
+              Comércio varejista de combustíveis).
+              Obtida via join com basedosdados.br_bd_diretorios_brasil.cnae_2.
+          - name: total_vinculos
+            description: >
+              Total de vínculos empregatícios formais ativos em 31/12 no município,
+              subsetor e CNAE. Representa o estoque de empregos formais.
+          - name: salario_medio
+            description: Salário médio mensal dos vínculos em reais (R$).
+          - name: salario_medio_sm
+            description: Salário médio mensal dos vínculos em número de salários mínimos.
+          - name: total_estabelecimentos
+            description: >
+              Total de estabelecimentos ativos no município e subsetor no ano.
+              Obtido via join com microdados_estabelecimentos (indicador_atividade_ano = 1).
+
+      # ─────────────────────────────────────────────────────────────────
+      # 6. MUNIC SOCIO EDUC
+      # ─────────────────────────────────────────────────────────────────
+      - name: munic_socio_educ
+        description: >
+          Indicadores socioeconômicos e educacionais por município — Atlas ADH (PNUD/IPEA/FJP)
+          e Censo Escolar INEP.
+          Fonte original: basedosdados.mundo_onu_adh.municipio +
+          basedosdados.br_inep_censo_escolar.escola.
+          Período: 2010 (Atlas ADH) + ano mais recente Censo Escolar.
+          Granularidade: município × ano.
+          Uso no projeto: perfil socioeconômico e educacional do município —
+          IDHM, renda per capita, desigualdade (Gini), população target (16–18 anos),
+          infraestrutura escolar e capacidade de absorção do ensino superior.
+          Complementa RAIS (mercado de trabalho) e INEP Superior (oferta educacional).
+        columns:
+          - name: ano
+            description: Ano de referência do indicador (2010 para Atlas ADH).
+          - name: id_municipio
+            description: Código IBGE do município com 7 dígitos. Chave de join com demais tabelas.
+          - name: idhm
+            description: >
+              Índice de Desenvolvimento Humano Municipal — escala 0 a 1.
+              Combina dimensões de saúde (longevidade), educação e renda.
+              Classificação: < 0.550 = muito baixo, 0.550–0.699 = baixo,
+              0.700–0.799 = médio, 0.800–0.899 = alto, >= 0.900 = muito alto.
+          - name: idhm_e
+            description: IDHM dimensão Educação — escolaridade adulta + frequência escolar jovem.
+          - name: idhm_r
+            description: IDHM dimensão Renda — renda per capita municipal.
+          - name: renda_pc
+            description: Renda domiciliar per capita média do município em reais.
+          - name: indice_gini
+            description: >
+              Índice de Gini de desigualdade de renda (0 = perfeita igualdade, 1 = máxima desigualdade).
+              Municípios com Gini alto têm grande disparidade — importante para dimensionar
+              o programa de bolsas de talentos FGV.
+          - name: populacao
+            description: População total residente no município.
+          - name: populacao_urbana
+            description: >
+              População urbana do município.
+              Municípios com alta urbanização têm maior propensão à demanda por ensino superior.
+          - name: populacao_15_17
+            description: População de 15 a 17 anos — em idade de ensino médio.
+          - name: populacao_16_18
+            description: >
+              População de 16 a 18 anos — target primário FGV.
+              Alunos na fase final do ensino médio e início de escolha do curso superior.
+          - name: populacao_18_24
+            description: >
+              População de 18 a 24 anos — em idade de graduação.
+              Representa o mercado potencial imediato para matrículas no ensino superior.
+          - name: taxa_freq_liquida_medio
+            description: >
+              Taxa de frequência líquida ao ensino médio (%).
+              Percentual da população de 15–17 anos que frequenta o ensino médio na série correta.
+              Quanto maior, mais o município está preparando sua juventude para o ensino superior.
+          - name: taxa_freq_bruta_superior
+            description: >
+              Taxa de frequência bruta ao ensino superior (%).
+              Indica o quanto a população do município já acessa o ensino superior.
+              Municípios com taxa baixa + renda alta = demanda reprimida = oportunidade FGV.
+          - name: taxa_medio_18_24
+            description: >
+              Percentual da população de 18 a 24 anos com ensino médio completo.
+              Proxy de maturidade educacional do município — base potencial para o ensino superior.
+          - name: taxa_superior_25_mais
+            description: >
+              Percentual da população de 25 anos ou mais com ensino superior completo.
+              Indica o capital educacional acumulado do município —
+              municípios com taxa baixa têm potencial de crescimento de demanda por graduação.
+          - name: prop_pobreza
+            description: >
+              Proporção de pessoas em situação de pobreza (renda domiciliar per capita
+              abaixo da linha de pobreza).
+              Complementa a análise de bolsas de talentos FGV —
+              municípios com prop_pobreza alta e IDEB alto indicam talentos em contexto de vulnerabilidade.
