@@ -1,0 +1,149 @@
+version: 2
+
+models:
+
+  - name: stg_inep_graduacao
+    description: >
+      Censo da Educação Superior (INEP) — oferta de graduação por IES, município e área de conhecimento.
+      Granularidade: curso × IES × município × ano.
+    columns:
+      - name: ano
+        data_tests:
+          - not_null
+      - name: id_municipio
+        data_tests:
+          - not_null
+      - name: id_ies
+        data_tests:
+          - not_null
+      - name: rede
+        data_tests:
+          - not_null
+      - name: modalidade_ensino
+        data_tests:
+          - accepted_values:
+              values: ['Presencial', 'EAD']
+      - name: total_matriculas
+        data_tests:
+          - not_null
+      - name: total_concluintes
+        data_tests:
+          - not_null
+
+  - name: stg_inse_escola
+    description: >
+      Indicador de Nível Socioeconômico (INSE) por escola — INEP.
+      Granularidade: escola × ano.
+    columns:
+      - name: id_escola
+        data_tests:
+          - not_null
+          - unique
+      - name: ano
+        data_tests:
+          - not_null
+      - name: id_municipio
+        data_tests:
+          - not_null
+      - name: inse_valor
+        data_tests:
+          - not_null
+      - name: inse_classificacao
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII']
+      - name: rede
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['Federal', 'Estadual', 'Municipal', 'Privada', 'Não informado']
+
+  - name: stg_ideb_escola
+    description: >
+      IDEB por escola — ensino médio. Combina proficiência SAEB e taxa de aprovação.
+      Granularidade: escola × ano.
+    columns:
+      - name: id_escola
+        data_tests:
+          - not_null
+      - name: ano
+        data_tests:
+          - not_null
+      - name: id_municipio
+        data_tests:
+          - not_null
+      - name: ideb
+        data_tests:
+          - not_null
+      - name: faixa_ideb
+        data_tests:
+          - accepted_values:
+              values: ['Excelente', 'Alto', 'Médio', 'Baixo']
+      - name: rede
+        data_tests:
+          - not_null
+
+  - name: stg_inep_formandos_ensinomedio
+    description: >
+      Formandos do 3º ano do ensino médio por escola e município — Censo Escolar INEP.
+      Granularidade: escola × ano.
+    columns:
+      - name: id_escola
+        data_tests:
+          - not_null
+      - name: ano
+        data_tests:
+          - not_null
+      - name: id_municipio
+        data_tests:
+          - not_null
+      - name: total_formandos
+        data_tests:
+          - not_null
+      - name: tipo_rede
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['Publica', 'Privada']
+
+  - name: stg_rais_vinculos_municipio
+    description: >
+      Vínculos formais por município, subsetor e CNAE — RAIS/MTE.
+      Granularidade: município × subsetor × cnae × ano.
+    columns:
+      - name: ano
+        data_tests:
+          - not_null
+      - name: id_municipio
+        data_tests:
+          - not_null
+      - name: total_vinculos
+        data_tests:
+          - not_null
+      - name: salario_medio_reais
+        data_tests:
+          - not_null
+
+  - name: stg_munic_socio_educ
+    description: >
+      Indicadores socioeconômicos e educacionais por município — Atlas ADH + Censo Escolar.
+      Granularidade: município × ano.
+    columns:
+      - name: id_municipio
+        data_tests:
+          - not_null
+          - unique
+      - name: ano
+        data_tests:
+          - not_null
+      - name: idhm
+        data_tests:
+          - not_null
+      - name: faixa_idhm
+        data_tests:
+          - accepted_values:
+              values: ['Muito Alto', 'Alto', 'Médio', 'Baixo', 'Muito Baixo']
+      - name: populacao_total
+        data_tests:
+          - not_null
