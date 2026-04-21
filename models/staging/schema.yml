@@ -22,7 +22,8 @@ models:
       - name: modalidade_ensino
         data_tests:
           - accepted_values:
-              values: ['Presencial', 'EAD']
+              arguments:
+                values: ['Presencial', 'EAD']
       - name: total_matriculas
         data_tests:
           - not_null
@@ -52,12 +53,14 @@ models:
         data_tests:
           - not_null
           - accepted_values:
-              values: ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII']
+              arguments:
+                values: ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII']
       - name: rede
         data_tests:
           - not_null
           - accepted_values:
-              values: ['Federal', 'Estadual', 'Municipal', 'Privada', 'Não informado']
+              arguments:
+                values: ['Federal', 'Estadual', 'Municipal', 'Privada', 'Não informado']
 
   - name: stg_ideb_escola
     description: >
@@ -79,7 +82,8 @@ models:
       - name: faixa_ideb
         data_tests:
           - accepted_values:
-              values: ['Excelente', 'Alto', 'Médio', 'Baixo']
+              arguments:
+                values: ['Excelente', 'Alto', 'Médio', 'Baixo']
       - name: rede
         data_tests:
           - not_null
@@ -105,7 +109,8 @@ models:
         data_tests:
           - not_null
           - accepted_values:
-              values: ['Publica', 'Privada']
+              arguments:
+                values: ['Publica', 'Privada']
 
   - name: stg_rais_vinculos_municipio
     description: >
@@ -143,7 +148,8 @@ models:
       - name: faixa_idhm
         data_tests:
           - accepted_values:
-              values: ['Muito Alto', 'Alto', 'Médio', 'Baixo', 'Muito Baixo']
+              arguments:
+                values: ['Muito Alto', 'Alto', 'Médio', 'Baixo', 'Muito Baixo']
       - name: populacao_total
         data_tests:
           - not_null

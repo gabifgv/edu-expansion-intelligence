@@ -24,7 +24,7 @@ models:
     staging:
       +materialized: view
       +tags: ['staging']
-      schema: staging
+      +schema: staging
     marts:
       +materialized: table
       +schema: marts

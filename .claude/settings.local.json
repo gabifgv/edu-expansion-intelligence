@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dbt run:*)"
+      "Bash(dbt run:*)",
+      "Bash(dbt parse:*)"
     ]
   }
 }
