@@ -78,3 +78,15 @@ Use `data_tests:` (not `tests:`) for column-level tests.
 
 - Raw source tables may have schema changes made directly in BigQuery (e.g., new columns added). Always check `sources.yml` and the corresponding staging model when a source column is referenced that isn't yet declared.
 - `profiles.yml` uses OAuth — run `gcloud auth application-default login` if authentication fails.
+
+## Analytics AI Garden integration
+
+This repo is a Sentinel for `C:\meu-digital-garden`. When a milestone is reached, run `/done`.
+
+The `/done` command will:
+1. Analyze `git diff HEAD` to capture what changed
+2. Extract a Technical Achievement (the "how") and a Managerial Perspective (the "why")
+3. Auto-assign a category: `MLOps` for pipeline/dbt work, `Data Architecture` for schema/mart work, `GenAI` for Gemini/LLM work
+4. Export a draft `.md` to `C:\meu-digital-garden\src\content\drafts\`
+
+Review the draft, then move it to `C:\meu-digital-garden\src\content\garden\` to publish it on the live site.
