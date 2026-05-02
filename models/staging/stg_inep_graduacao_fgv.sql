@@ -51,8 +51,7 @@ joined as (
 
     from inep
     inner join depara dep
-        on  inep.id_ies   = cast(dep.co_ies   as string)
-        and inep.id_curso = cast(dep.co_curso  as string)
+        on inep.id_curso = cast(dep.co_curso as string)
 
     where
         -- FGV: apenas presencial (naturalmente em SP, RJ e DF)
