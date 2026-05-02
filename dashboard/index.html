@@ -135,6 +135,13 @@
     /* EMPTY STATE */
     .empty { text-align: center; padding: 30px; color: var(--gray-text); font-size: 13px; }
 
+    /* PAGINATION */
+    .pag-ctrl { display: flex; align-items: center; gap: 4px; padding: 10px 0 4px; flex-wrap: wrap; }
+    .pag-btn { background: white; border: 1.5px solid var(--gray-border); border-radius: 4px; padding: 4px 10px; cursor: pointer; font-size: 12px; color: var(--navy); transition: all .15s; }
+    .pag-btn:hover { background: var(--gray-bg); }
+    .pag-btn.pag-active { background: var(--navy); color: white; border-color: var(--navy); font-weight: 700; }
+    .pag-info { font-size: 11px; color: var(--gray-text); margin-right: 8px; white-space: nowrap; }
+
     footer { background: var(--navy); color: rgba(255,255,255,.5); text-align: center; padding: 14px 40px; font-size: 11px; margin-top: 30px; }
     footer strong { color: var(--accent); }
   </style>
@@ -422,54 +429,52 @@ function renderVinculos(v, renda_min) {
   let h = `
     <div class="tb-toolbar">
       <div class="tb-count">
-        <strong>${fmtN(rows.length)}</strong> combinações ·
-        <span style="color:var(--green-text);font-weight:600">${fmtN(v.total_elegiveis)} elegíveis</span> ·
+        <strong>${fmtN(rows.length)}</strong> setores ·
+        <span style="color:var(--green-text);font-weight:600">${fmtN(v.total_elegiveis)} vínculos elegíveis</span> ·
         Renda mínima: <strong>R$ ${fmt(renda_min)}/mês</strong>
       </div>
       <div style="display:flex;gap:8px">
         <select class="tb-sel" onchange="filterVinculos(this.value)">
-          <option value="all">Todos</option>
-          <option value="yes">Apenas elegíveis</option>
-          <option value="no">Apenas não elegíveis</option>
+          <option value="all">Todos os setores</option>
+          <option value="yes">Apenas com elegíveis</option>
+          <option value="no">Sem elegíveis</option>
         </select>
-        <input class="tb-search" placeholder="Buscar cargo ou setor..." oninput="searchTable('tbl-vinc',this.value)">
+        <input class="tb-search" placeholder="Buscar setor..." oninput="searchTable('tbl-vinc',this.value)">
       </div>
     </div>
     <table id="tbl-vinc">
       <thead><tr>
         <th onclick="sortTable('tbl-vinc',0)">Setor IBGE</th>
-        <th onclick="sortTable('tbl-vinc',1)">Atividade (CNAE)</th>
-        <th onclick="sortTable('tbl-vinc',2)">Cargo (CBO)</th>
-        <th onclick="sortTable('tbl-vinc',3)" class="nr">Vínculos</th>
-        <th onclick="sortTable('tbl-vinc',4)" class="nr">Sal. médio (R$)</th>
-        <th onclick="sortTable('tbl-vinc',5)" class="nr">Sal. médio (SM)</th>
-        <th>Elegível</th>
+        <th onclick="sortTable('tbl-vinc',1)" class="nr">Total vínculos</th>
+        <th onclick="sortTable('tbl-vinc',2)" class="nr">Vínculos elegíveis</th>
+        <th onclick="sortTable('tbl-vinc',3)" class="nr">Sal. médio ponderado (R$)</th>
+        <th>Status</th>
       </tr></thead><tbody>`;
 
   rows.forEach(r => {
     const eli  = r.elegivel;
     const rowClass = eli ? 'eligible' : '';
-    const badge    = eli ? '<span class="badge b-ok">✓ Elegível</span>' : '<span class="badge b-no">✗</span>';
+    const badge    = eli ? '<span class="badge b-ok">✓ Com elegíveis</span>' : '<span class="badge b-no">✗ Sem elegíveis</span>';
     const heatSal  = r.salario_medio_reais > renda_min * 2 ? 'heat-h' : r.salario_medio_reais >= renda_min ? 'heat-m' : '';
-    const heatVinc = r.total_vinculos > 1000 ? 'heat-h' : r.total_vinculos > 200 ? 'heat-m' : '';
+    const heatVinc = r.vinculos_elegiveis > 10000 ? 'heat-h' : r.vinculos_elegiveis > 2000 ? 'heat-m' : '';
     h += `<tr class="${rowClass}" data-elig="${eli ? 'yes' : 'no'}">
       <td>${r.descricao_subsetor || '—'}</td>
-      <td>${r.descricao_cnae || r.cnae_2 || '—'}</td>
-      <td>${r.descricao_cargo || '—'}</td>
-      <td class="nr ${heatVinc}">${fmtN(r.total_vinculos)}</td>
+      <td class="nr">${fmtN(r.total_vinculos)}</td>
+      <td class="nr ${heatVinc}">${fmtN(r.vinculos_elegiveis)}</td>
       <td class="nr ${heatSal}">R$ ${fmt(r.salario_medio_reais)}</td>
-      <td class="nr">${(r.salario_medio_sm || 0).toFixed(1)} SM</td>
       <td>${badge}</td>
     </tr>`;
   });
-  h += '</tbody></table><div style="margin-top:8px;font-size:11px;color:var(--gray-text)">🟢 Verde = salário médio ≥ renda mínima · Clique no cabeçalho para ordenar</div>';
+  h += '</tbody></table>';
   document.getElementById('bc2').innerHTML = h;
+  paginateTable('tbl-vinc');
 }
 
 function filterVinculos(val) {
   document.querySelectorAll('#tbl-vinc tbody tr').forEach(tr => {
     tr.style.display = val === 'all' ? '' : tr.dataset.elig === val ? '' : 'none';
   });
+  paginateTable('tbl-vinc');
 }
 
 // ── BLOCO 3 — ESTABELECIMENTOS ─────────────────────
@@ -477,17 +482,16 @@ function renderEstabelecimentos(estab) {
   const rows = estab.rows;
   let h = `
     <div class="tb-toolbar">
-      <div class="tb-count"><strong>${fmtN(rows.length)}</strong> setores/CNAEs · <strong>${fmtN(estab.total_estabelecimentos)}</strong> estabelecimentos totais</div>
-      <input class="tb-search" placeholder="Buscar atividade..." oninput="searchTable('tbl-estab',this.value)">
+      <div class="tb-count"><strong>${fmtN(rows.length)}</strong> setores · <strong>${fmtN(estab.total_estabelecimentos)}</strong> estabelecimentos totais</div>
+      <input class="tb-search" placeholder="Buscar setor..." oninput="searchTable('tbl-estab',this.value)">
     </div>
     <table id="tbl-estab">
       <thead><tr>
         <th onclick="sortTable('tbl-estab',0)">Setor IBGE</th>
-        <th onclick="sortTable('tbl-estab',1)">Atividade (CNAE)</th>
-        <th onclick="sortTable('tbl-estab',2)" class="nr">Estabelecimentos</th>
-        <th onclick="sortTable('tbl-estab',3)" class="nr">Vínculos ativos</th>
-        <th onclick="sortTable('tbl-estab',4)" class="nr">Vínculos elegíveis</th>
-        <th onclick="sortTable('tbl-estab',5)" class="nr">% elegível</th>
+        <th onclick="sortTable('tbl-estab',1)" class="nr">Estabelecimentos</th>
+        <th onclick="sortTable('tbl-estab',2)" class="nr">Vínculos ativos</th>
+        <th onclick="sortTable('tbl-estab',3)" class="nr">Vínculos elegíveis</th>
+        <th onclick="sortTable('tbl-estab',4)" class="nr">% elegível</th>
         <th>Concentração</th>
       </tr></thead><tbody>`;
 
@@ -496,19 +500,20 @@ function renderEstabelecimentos(estab) {
     const hPct = pct > 50 ? 'heat-h' : pct > 20 ? 'heat-m' : 'heat-l';
     const hEstab = r.total_estabelecimentos > 1000 ? 'heat-h' : r.total_estabelecimentos > 200 ? 'heat-m' : '';
     const ratio  = r.total_estabelecimentos > 0 ? (r.vinculos_total_rais / r.total_estabelecimentos) : 0;
-    const concentracao = ratio > 500 ? '🔴 Alta — poucas empresas grandes' : ratio > 100 ? '🟡 Moderada' : '🟢 Distribuída';
+    const concentracao = ratio > 500 ? 'Alta — poucas empresas grandes' : ratio > 100 ? 'Moderada' : 'Distribuída';
+    const hConc = ratio > 500 ? 'heat-l' : ratio > 100 ? 'heat-m' : '';
     h += `<tr>
       <td>${r.descricao_subsetor || '—'}</td>
-      <td>${r.descricao_cnae || r.cnae_2 || '—'}</td>
       <td class="nr ${hEstab}">${fmtN(r.total_estabelecimentos)}</td>
       <td class="nr">${fmtN(r.total_vinculos_ativos)}</td>
       <td class="nr">${fmtN(r.vinculos_elegiveis)}</td>
       <td class="nr ${hPct}">${pct}%</td>
-      <td style="font-size:12px">${concentracao}</td>
+      <td class="${hConc}" style="font-size:12px">${concentracao}</td>
     </tr>`;
   });
   h += '</tbody></table>';
   document.getElementById('bc3').innerHTML = h;
+  paginateTable('tbl-estab');
 }
 
 // ── BLOCO 4 — EMPRESAS ─────────────────────────────
@@ -519,21 +524,21 @@ function renderEmpresas(emp, comDist) {
   let h = warn ? warn.outerHTML : '';
   h += `
     <div class="tb-toolbar">
-      <div class="tb-count"><strong>${fmtN(rows.length)}</strong> empresas · setores com renda elegível · ${comDist ? '📍 com distância do polo' : 'CEP do polo não informado'}</div>
+      <div class="tb-count"><strong>${fmtN(rows.length)}</strong> empresas · setores com vínculos elegíveis · ${comDist ? 'com distância do polo' : 'CEP do polo não informado'}</div>
       <div style="display:flex;gap:8px">
         <select class="tb-sel" onchange="sortEmpresasBy(this.value)">
           <option value="cap">Ordenar: Capital social ↓</option>
           ${comDist ? '<option value="dist">Ordenar: Distância ↑</option>' : ''}
         </select>
-        <input class="tb-search" placeholder="Buscar empresa ou setor..." oninput="searchTable('tbl-emp',this.value)">
+        <input class="tb-search" placeholder="Buscar empresa..." oninput="searchTable('tbl-emp',this.value)">
       </div>
     </div>
     <table id="tbl-emp">
       <thead><tr>
         <th onclick="sortTable('tbl-emp',0)">Empresa</th>
-        <th onclick="sortTable('tbl-emp',1)">Setor (CNAE)</th>
+        <th onclick="sortTable('tbl-emp',1)">Porte</th>
         <th>CEP</th>
-        <th>DDD + Telefone</th>
+        <th>Telefone</th>
         <th>Email</th>
         <th onclick="sortTable('tbl-emp',5)" class="nr">Capital social (R$)</th>
         <th>Fundação</th>
@@ -544,7 +549,7 @@ function renderEmpresas(emp, comDist) {
     const capClass = r.capital_social > 10_000_000 ? 'heat-h' : r.capital_social > 1_000_000 ? 'heat-m' : '';
     h += `<tr>
       <td><strong>${r.nome_empresa || r.razao_social || '—'}</strong></td>
-      <td style="font-size:12px">${r.descricao_cnae || r.cnae_classe || '—'}</td>
+      <td style="font-size:12px">${r.porte || '—'}</td>
       <td>${r.cep || '—'}</td>
       <td>${r.telefone || '—'}</td>
       <td style="font-size:12px">${r.email || '<span style="color:var(--gray-text)">—</span>'}</td>
@@ -554,8 +559,9 @@ function renderEmpresas(emp, comDist) {
     </tr>`;
   });
 
-  h += '</tbody></table><div style="margin-top:8px;font-size:11px;color:var(--gray-text)">Endereço completo: use o CEP para consultar logradouro via ViaCEP · Email pode estar vazio (declaração Receita Federal)</div>';
+  h += '</tbody></table><div style="margin-top:8px;font-size:11px;color:var(--gray-text)">Use o CEP para consultar o endereço via ViaCEP · Email pode estar vazio (declaração Receita Federal)</div>';
   document.getElementById('bc4').innerHTML = h;
+  paginateTable('tbl-emp');
 }
 
 // ── BLOCO 5 — FORMANDOS ────────────────────────────
@@ -612,6 +618,7 @@ function renderFormandos(f) {
   });
   h += '</tbody></table>';
   document.getElementById('bc5').innerHTML = h;
+  paginateTable('tbl-form');
 }
 
 // ── BLOCO 6 — SCORE ────────────────────────────────
@@ -658,15 +665,69 @@ async function runLLM() {
   }
 }
 
+// ── paginação ──────────────────────────────────────
+const _pagState = {};
+const PAGE_SIZE = 15;
+
+function paginateTable(tableId) {
+  const tbl = document.getElementById(tableId);
+  if (!tbl) return;
+  const visibleRows = Array.from(tbl.querySelectorAll('tbody tr')).filter(r => r.style.display !== 'none');
+  _pagState[tableId] = { pageSize: PAGE_SIZE, current: 1, total: visibleRows.length };
+  _applyPage(tableId, 1);
+}
+
+function _applyPage(tableId, p) {
+  const tbl = document.getElementById(tableId);
+  if (!tbl) return;
+  const state = _pagState[tableId];
+  if (!state) return;
+  state.current = p;
+  const allRows = Array.from(tbl.querySelectorAll('tbody tr'));
+  const visibleRows = allRows.filter(r => !r.dataset.pagHidden);
+  const pages = Math.ceil(visibleRows.length / state.pageSize);
+  const start = (p - 1) * state.pageSize;
+
+  visibleRows.forEach((r, i) => {
+    r.style.display = (i >= start && i < start + state.pageSize) ? '' : 'none';
+  });
+
+  const old = document.getElementById(tableId + '-pag');
+  if (old) old.remove();
+  if (pages <= 1) return;
+
+  const ctrl = document.createElement('div');
+  ctrl.id = tableId + '-pag';
+  ctrl.className = 'pag-ctrl';
+  let btns = `<span class="pag-info">Página ${p} de ${pages} · ${visibleRows.length} registros</span>`;
+  for (let i = 1; i <= pages; i++) {
+    btns += `<button class="pag-btn${i === p ? ' pag-active' : ''}" onclick="_applyPage('${tableId}',${i})">${i}</button>`;
+  }
+  ctrl.innerHTML = btns;
+  tbl.parentNode.appendChild(ctrl);
+}
+
 // ── utilitários ────────────────────────────────────
 function fmt(v)  { if (v === null || v === undefined) return '—'; return Number(v).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}); }
 function fmtN(v) { if (v === null || v === undefined) return '—'; return Number(v).toLocaleString('pt-BR'); }
 
 function searchTable(tblId, q) {
   const qq = q.toLowerCase();
-  document.querySelectorAll(`#${tblId} tbody tr`).forEach(tr => {
-    tr.style.display = tr.textContent.toLowerCase().includes(qq) ? '' : 'none';
+  const tbl = document.getElementById(tblId);
+  if (!tbl) return;
+  const rows = Array.from(tbl.querySelectorAll('tbody tr'));
+  if (qq === '') {
+    rows.forEach(r => { delete r.dataset.pagHidden; r.style.display = ''; });
+    if (_pagState[tblId]) paginateTable(tblId);
+    return;
+  }
+  rows.forEach(tr => {
+    const match = tr.textContent.toLowerCase().includes(qq);
+    tr.dataset.pagHidden = match ? '' : '1';
+    tr.style.display = match ? '' : 'none';
   });
+  const old = document.getElementById(tblId + '-pag');
+  if (old) old.remove();
 }
 
 function sortTable(tblId, col) {

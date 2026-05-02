@@ -126,31 +126,26 @@ def get_perfil_socioeconomico(id_municipio: str, sigla_uf: str) -> dict:
 # ─────────────────────────────────────────
 
 def get_vinculos(id_municipio: str, sigla_uf: str, renda_minima: float, ano: int = 2022) -> dict:
-    # Vínculos do município com enriquecimento de cnae via diretório
+    # Agregado por subsetor — sem CNAE/cargo individual (~20-30 linhas por município)
     df = _run(f"""
-        WITH vinculos AS (
-            SELECT
-                e.descricao_subsetor,
-                COALESCE(e.descricao_cnae, cn.descricao) AS descricao_cnae,
-                e.cnae_2,
-                e.cbo_2002,
-                e.descricao_cargo,
-                e.total_vinculos,
-                e.salario_medio_reais,
-                e.salario_medio_sm
-            FROM `project-a8f8452a-3033-4dd8-99a.raw_facts.fct_empregos` e
-            LEFT JOIN `basedosdados.br_bd_diretorios_brasil.cnae_2` cn
-                ON LPAD(e.cnae_2, 5, '0') = cn.classe
-            WHERE e.id_municipio = @municipio
-              AND e.ano = {ano}
-        )
-        SELECT *,
-            (salario_medio_reais >= @renda_min) AS elegivel
-        FROM vinculos
-        ORDER BY salario_medio_reais DESC
+        SELECT
+            e.subsetor_ibge,
+            e.descricao_subsetor,
+            SUM(e.total_vinculos) AS total_vinculos,
+            SUM(CASE WHEN e.salario_medio_reais >= @renda_min THEN e.total_vinculos ELSE 0 END) AS vinculos_elegiveis,
+            ROUND(SAFE_DIVIDE(
+                SUM(e.total_vinculos * e.salario_medio_reais),
+                NULLIF(SUM(e.total_vinculos), 0)
+            ), 2) AS salario_medio_reais,
+            (SUM(CASE WHEN e.salario_medio_reais >= @renda_min THEN e.total_vinculos ELSE 0 END) > 0) AS elegivel
+        FROM `project-a8f8452a-3033-4dd8-99a.raw_facts.fct_empregos` e
+        WHERE e.id_municipio = @municipio
+          AND e.ano = {ano}
+        GROUP BY e.subsetor_ibge, e.descricao_subsetor
+        ORDER BY total_vinculos DESC
     """, {"municipio": id_municipio, "renda_min": renda_minima})
 
-    # Série histórica de vínculos elegíveis (anos com dados completos)
+    # Série histórica de vínculos elegíveis
     trend_df = _run("""
         SELECT ano,
                SUM(total_vinculos) AS total_vinculos,
@@ -161,7 +156,6 @@ def get_vinculos(id_municipio: str, sigla_uf: str, renda_minima: float, ano: int
         GROUP BY ano ORDER BY ano
     """, {"municipio": id_municipio, "renda_min": renda_minima})
 
-    # Mesmo threshold mas para a UF (para contexto)
     uf_total = _run(f"""
         SELECT SUM(CASE WHEN salario_medio_reais >= @renda_min THEN total_vinculos ELSE 0 END) AS uf_elegiveis
         FROM `project-a8f8452a-3033-4dd8-99a.raw_facts.fct_empregos`
@@ -172,7 +166,7 @@ def get_vinculos(id_municipio: str, sigla_uf: str, renda_minima: float, ano: int
         "ano": ano,
         "renda_minima": renda_minima,
         "rows": df.to_dict(orient="records"),
-        "total_elegiveis": int(df[df["elegivel"] == True]["total_vinculos"].sum()) if len(df) else 0,
+        "total_elegiveis": int(df["vinculos_elegiveis"].sum()) if len(df) else 0,
         "total_vinculos": int(df["total_vinculos"].sum()) if len(df) else 0,
         "uf_elegiveis": int(uf_total.iloc[0]["uf_elegiveis"]) if len(uf_total) else 0,
         "trend": trend_df.to_dict(orient="records"),
@@ -184,18 +178,18 @@ def get_vinculos(id_municipio: str, sigla_uf: str, renda_minima: float, ano: int
 # ─────────────────────────────────────────
 
 def get_estabelecimentos(id_municipio: str, renda_minima: float, ano: int = 2023) -> dict:
-    # Estabelecimentos com % elegível calculado via join com vinculos 2022
+    # Agregado por subsetor — join com vínculos no mesmo nível
     df = _run(f"""
         WITH estab AS (
-            SELECT descricao_subsetor, descricao_cnae, cnae_2,
+            SELECT subsetor_ibge, descricao_subsetor,
                    SUM(total_estabelecimentos) AS total_estabelecimentos,
                    SUM(total_vinculos_ativos)  AS total_vinculos_ativos
             FROM `project-a8f8452a-3033-4dd8-99a.raw_facts.fct_estabelecimentos`
             WHERE id_municipio = @municipio AND ano = {ano}
-            GROUP BY 1, 2, 3
+            GROUP BY 1, 2
         ),
         vinc AS (
-            SELECT COALESCE(cnae_2, '') AS cnae_2,
+            SELECT subsetor_ibge,
                    SUM(total_vinculos) AS total_vinculos,
                    SUM(CASE WHEN salario_medio_reais >= @renda_min THEN total_vinculos ELSE 0 END) AS vinculos_elegiveis
             FROM `project-a8f8452a-3033-4dd8-99a.raw_facts.fct_empregos`
@@ -204,8 +198,6 @@ def get_estabelecimentos(id_municipio: str, renda_minima: float, ano: int = 2023
         )
         SELECT
             e.descricao_subsetor,
-            e.descricao_cnae,
-            e.cnae_2,
             e.total_estabelecimentos,
             e.total_vinculos_ativos,
             COALESCE(v.vinculos_elegiveis, 0) AS vinculos_elegiveis,
@@ -215,7 +207,7 @@ def get_estabelecimentos(id_municipio: str, renda_minima: float, ano: int = 2023
                             NULLIF(COALESCE(v.total_vinculos, 0), 0)) * 100, 1
             ) AS pct_elegivel
         FROM estab e
-        LEFT JOIN vinc v USING (cnae_2)
+        LEFT JOIN vinc v ON e.subsetor_ibge = v.subsetor_ibge
         ORDER BY e.total_estabelecimentos DESC
     """, {"municipio": id_municipio, "renda_min": renda_minima})
 
@@ -248,8 +240,8 @@ def get_empresas(
     if len(cnae_df) == 0:
         return {"rows": [], "total": 0}
 
-    # IN list de CNAEs com espaços (máx 500)
-    cnae_list = cnae_df["cnae_2"].dropna().tolist()[:500]
+    # fct_empregos.cnae_2 tem 5 dígitos; fct_empresas.cnae_classe tem 4 → truncar
+    cnae_list = list({c[:4] for c in cnae_df["cnae_2"].dropna().tolist() if len(c) >= 4})[:500]
     cnae_in = ", ".join(f"'{c}'" for c in cnae_list)
 
     # Geocodificação embutida via haversine se tiver polo
@@ -276,8 +268,7 @@ def get_empresas(
         SELECT
             e.nome_empresa,
             e.razao_social,
-            e.cnae_classe,
-            e.cnae_fiscal_principal,
+            e.porte,
             e.cep,
             CONCAT(e.ddd, ' ', e.telefone) AS telefone,
             e.email,
@@ -285,10 +276,7 @@ def get_empresas(
             e.data_inicio_atividade,
             e.natureza_juridica,
             {dist_col}
-            cn.descricao AS descricao_cnae
         FROM `project-a8f8452a-3033-4dd8-99a.raw_facts.fct_empresas` e
-        LEFT JOIN `basedosdados.br_bd_diretorios_brasil.cnae_2` cn
-            ON LPAD(e.cnae_classe, 5, '0') = cn.classe
         {join_cep}
         WHERE e.id_municipio = @municipio
           AND e.cnae_classe IN ({cnae_in})
@@ -481,8 +469,8 @@ def get_llm_context(
     )
 
     cargos_txt = "\n".join(
-        f"  - {r.get('descricao_cargo', '?')} | {r.get('descricao_subsetor', '?')} | "
-        f"Vínculos: {r.get('total_vinculos', 0):,} | Salário médio: R$ {r.get('salario_medio_reais', 0):,.0f}"
+        f"  - {r.get('descricao_subsetor', '?')} | "
+        f"Vínculos elegíveis: {r.get('vinculos_elegiveis', 0):,} | Total vínculos: {r.get('total_vinculos', 0):,} | Salário médio ponderado: R$ {r.get('salario_medio_reais', 0):,.0f}"
         for r in top_cargos
     )
 
