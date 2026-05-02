@@ -4,80 +4,122 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project context
 
-TCC (MBA capstone) — MLOps + GenAI pipeline for educational market intelligence in Brazil. The goal is to cluster Brazilian municipalities by socioeconomic and educational profile, then use Gemini to generate strategic insights for FGV campus expansion decisions.
+TCC (MBA capstone) — **FGV Market Intelligence Dashboard**. Real-time educational market analysis for campus expansion decisions. Combines institutional data (RAIS, INEP, IBGE) with Claude API for executive narratives.
+
+**Product:** Interactive web dashboard analyzing municipality opportunity scores across 7 dimensions (socioeconomic profile, formal employment, corporate density, target companies, university pipeline, synthetic score, AI narrative).
 
 **GCP project:** `project-a8f8452a-3033-4dd8-99a`
-**BigQuery dataset (raw sources):** `raw`
+**BigQuery datasets:** `raw` (base), `raw_staging`, `raw_facts`, `raw_dimensions`
 **dbt profile:** `inteligencia_expansao_educacional` (BigQuery, OAuth, US region)
+
+## Stack
+
+**Backend:** FastAPI (Python) + BigQuery
+**Frontend:** HTML5 + Alpine.js + Plotly.js + Leaflet.js
+**LLM:** Claude API (Anthropic) for narrative generation
+**Infrastructure:** Cloud Run (planned) or local uvicorn
 
 ## Common commands
 
 ```bash
-dbt parse                          # Validate project config and models (no BQ connection needed)
-dbt debug                          # Test BigQuery connection
-dbt run --select staging           # Run all staging models
-dbt test --select staging          # Run all staging tests
-dbt run --select marts             # Run all mart models
-dbt run --select <model_name>      # Run a single model
-dbt test --select <model_name>     # Test a single model
-dbt docs generate && dbt docs serve  # Generate and serve lineage docs
+# dbt models
+dbt parse
+dbt debug
+dbt run --select staging
+dbt test --select staging
+dbt run --select facts dimensions
+dbt docs generate && dbt docs serve
+
+# Dashboard
+cd dashboard
+pip install -r requirements.txt
+uvicorn app:app --reload --host 0.0.0.0 --port 8000
+# Open http://localhost:8000
 ```
 
 ## Architecture
 
 ```
-BigQuery raw dataset (source tables)
+Raw BigQuery tables (INEP, RAIS, IBGE, IDEB, INSE)
         ↓
-dbt staging (views)     — type casting, column renaming, classification bands, null filters
+dbt staging views       — casting, trimming, CASE decoding
         ↓
-dbt marts (tables)      — municipality-level aggregations, funnel metrics, ML feature table
+dbt dimensions + facts tables — star schema
         ↓
-Vertex AI               — unsupervised clustering (K-Means)
+FastAPI backend queries
         ↓
-Gemini + LangChain      — natural language strategic insights
+HTML dashboard (7 blocks)
+        ├─ Block 1: Perfil socioeconômico (vs UF)
+        ├─ Block 2: Mercado de trabalho formal (RAIS)
+        ├─ Block 3: Densidade empresarial por setor
+        ├─ Block 4: Lista de empresas-alvo (CNPJ)
+        ├─ Block 5: Formandos por IES e área (INEP)
+        ├─ Block 6: Score de atratividade (4-dim)
+        └─ Block 7: Narrativa AI (Claude)
 ```
 
-**Current status:** Staging complete (P3). Marts and ML pipeline (P4–P5) in progress.
+**Current status:** Dashboard ✅ live. Data quality: CNAE field sparse in RAIS (99% null) — subsetor and cargo still usable.
 
 ## dbt layer conventions
 
-- **Staging** (`models/staging/`): Views. One model per source table. File naming: `stg_[source]_[entity].sql`. Handles casting, trimming, CASE decoding, and filters only. No joins.
-- **Marts** (`models/marts/`): Tables. File naming: `mart_[entity].sql` for aggregated facts, `dim_[dimension].sql` for dimensions. Business logic and cross-source joins live here.
-- **Raw** (`models/raw/`): Not yet implemented. Planned as thin views over source tables.
+- **Staging** (`models/staging/stg_*`): Views. One per source table. Cast, trim, CASE decode, filter only. No joins.
+- **Dimensions** (`models/dimensions/dim_*`): Tables. Reference dimensions (e.g., `dim_municipio`). Single source of truth.
+- **Facts** (`models/facts/fct_*`): Tables. Aggregated facts joined from staging. One row ≈ `(id_municipio, ano, setor, ...)` grain.
 
-## Data sources and join keys
+## dbt → BigQuery schema mapping
 
-All 6 sources share `id_municipio` (IBGE 7-digit code) + `ano` as the common grain for municipality-level joins:
+| dbt config | BQ dataset |
+|---|---|
+| `+schema: staging` | `raw_staging` |
+| `+schema: dimensions` | `raw_dimensions` |
+| `+schema: facts` | `raw_facts` |
 
-| Staging model | Source table | Grain |
-|---|---|---|
-| `stg_inep_graduacao` | higher education census | course × IES × municipality × year |
-| `stg_inse_escola` | school socioeconomic index | school × year |
-| `stg_ideb_escola` | school quality index (high school only) | school × year |
-| `stg_inep_formandos_ensinomedio` | high school graduates | school × municipality × year |
-| `stg_rais_vinculos_municipio` | formal employment | municipality × sector × CNAE × year |
-| `stg_munic_socio_educ` | municipal HDI, income, population | municipality × year |
+Example: `select * from {{ref('fct_empregos')}}` → `project-a8f8452a-3033-4dd8-99a.raw_facts.fct_empregos`
 
-## Key mart to build next
+## Data source grain
 
-`mart_municipio_perfil` — the central ML feature table. Aggregates all 6 staging models to municipality grain. This table feeds directly into Vertex AI clustering. Features include: `idhm`, `renda_per_capita`, `populacao_18_24`, `taxa_freq_bruta_superior`, `salario_medio_reais`, `total_matriculas_ies`, `ideb_medio_municipio`, `pct_escolas_inse_alto`, `indice_gini`.
+All sources join on `id_municipio` + `ano`:
 
-## dbt test syntax (dbt 1.9+)
+| dbt model | Source | Grain | Status |
+|---|---|---|---|
+| `stg_inep_graduacao` | INEP Census | course × IES × municipality × year | ✅ Loaded |
+| `stg_inse_escola` | INSE | school × year | ✅ Loaded |
+| `stg_ideb_escola` | IDEB | school × year | ✅ Loaded |
+| `stg_inep_formandos_ensinomedio` | High school graduates | school × municipality × year | ✅ Loaded |
+| `stg_rais_vinculos_municipio` | RAIS employment | municipality × sector × CNAE × year | ✅ Loaded (CNAE sparse) |
+| `stg_munic_socio_educ` | IBGE socio-economic | municipality × year | ✅ Loaded |
 
-Use `arguments:` nesting for generic test parameters — this project is on dbt 1.11:
+## Dashboard data flow
 
-```yaml
-- accepted_values:
-    arguments:
-      values: ['Presencial', 'EAD']
-```
+1. **Filter:** User selects (UF, municipality, product, tuition % income, CEP)
+2. **Renda mínima:** `tuition / (% income / 100)`
+3. **API call:** `POST /api/analise` → 7 BigQuery queries in `queries.py`
+4. **Frontend render:** Blocks 1–6 populate with tables + KPI strip
+5. **Block 7 LLM:** User clicks "⚡ Gerar análise" → `POST /api/analise-llm` + Claude API
+6. **Narrative:** 4 paragraphs on market sizing, sector strategy, prospecting, risks
 
-Use `data_tests:` (not `tests:`) for column-level tests.
+## Important: BigQuery parameter types
+
+The `queries.py::_run()` function auto-detects parameter types:
+- `float` → `FLOAT64` (for salary comparisons)
+- `int` → `INT64`
+- `str` → `STRING`
+
+This is critical for comparisons like `salario_medio_reais >= @renda_min`.
 
 ## BigQuery notes
 
-- Raw source tables may have schema changes made directly in BigQuery (e.g., new columns added). Always check `sources.yml` and the corresponding staging model when a source column is referenced that isn't yet declared.
-- `profiles.yml` uses OAuth — run `gcloud auth application-default login` if authentication fails.
+- Source tables may have schema changes in BigQuery (e.g., new columns). Check `sources.yml`.
+- RAIS `cnae_2` field is 99% null in current dataset — dashboard still works (subsetor sufficient).
+- `profiles.yml` uses OAuth — run `gcloud auth application-default login` if auth fails.
+
+## Dashboard setup checklist
+
+- [ ] `pip install -r dashboard/requirements.txt`
+- [ ] Create `dashboard/.env` with `ANTHROPIC_API_KEY=sk-ant-...`
+- [ ] `cd dashboard && uvicorn app:app --reload`
+- [ ] Test with Campinas (SP, `id_municipio=3509007`)
+- [ ] Verify all 7 blocks load + Block 7 LLM works
 
 ## Analytics AI Garden integration
 
@@ -86,7 +128,7 @@ This repo is a Sentinel for `C:\meu-digital-garden`. When a milestone is reached
 The `/done` command will:
 1. Analyze `git diff HEAD` to capture what changed
 2. Extract a Technical Achievement (the "how") and a Managerial Perspective (the "why")
-3. Auto-assign a category: `MLOps` for pipeline/dbt work, `Data Architecture` for schema/mart work, `GenAI` for Gemini/LLM work
+3. Auto-assign a category: `MLOps` for dbt/pipeline, `Data Architecture` for schema/star schema, `GenAI` for Claude integration
 4. Export a draft `.md` to `C:\meu-digital-garden\src\content\drafts\`
 
-Review the draft, then move it to `C:\meu-digital-garden\src\content\garden\` to publish it on the live site.
+Review the draft, then move it to `C:\meu-digital-garden\src\content\garden\` to publish.
