@@ -55,11 +55,15 @@ joined as (
         and inep.id_curso = cast(dep.co_curso  as string)
 
     where
-        -- FGV: apenas presencial
+        -- FGV: apenas presencial (naturalmente em SP, RJ e DF)
         (dep.grupo_ies = 'FGV' and inep.modalidade_ensino = 'Presencial')
         or
-        -- Concorrentes: qualquer modalidade, mas apenas SP, RJ e DF
-        (dep.grupo_ies != 'FGV' and inep.sigla_uf in ('SP', 'RJ', 'DF'))
+        -- Concorrentes: apenas nos municípios onde a FGV opera
+        (dep.grupo_ies != 'FGV' and inep.id_municipio in (
+            '3550308',  -- São Paulo
+            '3304557',  -- Rio de Janeiro
+            '5300108'   -- Brasília
+        ))
 )
 
 select * from joined

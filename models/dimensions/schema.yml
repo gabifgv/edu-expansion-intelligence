@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: dim_municipio
+    description: >
+      Dimensão central do star schema. Um registro por município brasileiro.
+      Atributos socioeconômicos do Atlas ADH 2010 (PNUD/IPEA/FJP) — tratados como perfil fixo.
+      Nome e UF enriquecidos via Censo Escolar INEP.
+    columns:
+      - name: id_municipio
+        description: Código IBGE 7 dígitos. Chave primária e FK em todos os fatos.
+        data_tests:
+          - not_null
+          - unique
+      - name: nome_municipio
+        data_tests:
+          - not_null
+      - name: sigla_uf
+        data_tests:
+          - not_null
+      - name: idhm
+        data_tests:
+          - not_null

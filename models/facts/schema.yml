@@ -1,0 +1,119 @@
+version: 2
+
+models:
+
+  - name: fct_mercado_superior
+    description: >
+      Mercado de ensino superior completo por município, IES e curso — Censo INEP.
+      Grain: id_municipio × id_ies × id_curso × modalidade_ensino × ano.
+      Série histórica: 2020–2024.
+    columns:
+      - name: ano
+        data_tests: [not_null]
+      - name: id_municipio
+        data_tests: [not_null]
+      - name: id_ies
+        data_tests: [not_null]
+      - name: id_curso
+        data_tests: [not_null]
+      - name: total_matriculas
+        data_tests: [not_null]
+
+  - name: fct_mercado_fgv
+    description: >
+      Recorte competitivo: FGV (presencial) + concorrentes selecionados em SP, RJ e DF.
+      Grain: id_municipio × id_ies × id_curso × grupo_ies × ano.
+      Join via seed fgv_depara por id_ies + id_curso.
+      Série histórica: 2020–2024.
+    columns:
+      - name: ano
+        data_tests: [not_null]
+      - name: id_municipio
+        data_tests: [not_null]
+      - name: id_ies
+        data_tests: [not_null]
+      - name: grupo_ies
+        data_tests: [not_null]
+      - name: curso_agrupado_fgv
+        data_tests: [not_null]
+
+  - name: fct_empregos
+    description: >
+      Vínculos formais por município, setor econômico e cargo — RAIS/MTE.
+      Grain: id_municipio × subsetor × cnae × cbo × ano.
+      Série histórica: 2020–2024.
+    columns:
+      - name: ano
+        data_tests: [not_null]
+      - name: id_municipio
+        data_tests: [not_null]
+      - name: cbo_2002
+        data_tests: [not_null]
+      - name: total_vinculos
+        data_tests: [not_null]
+
+  - name: fct_estabelecimentos
+    description: >
+      Estabelecimentos ativos por município e CNAE — RAIS/MTE.
+      Grain: id_municipio × cnae × ano.
+      Série histórica: 2020–2024.
+    columns:
+      - name: ano
+        data_tests: [not_null]
+      - name: id_municipio
+        data_tests: [not_null]
+      - name: total_estabelecimentos
+        data_tests: [not_null]
+
+  - name: fct_formandos_em
+    description: >
+      Formandos do 3º ano do ensino médio por escola e município — Censo Escolar INEP.
+      Grain: id_escola × id_municipio × ano.
+      Série histórica: 2020–2024.
+    columns:
+      - name: ano
+        data_tests: [not_null]
+      - name: id_escola
+        data_tests: [not_null]
+      - name: id_municipio
+        data_tests: [not_null]
+      - name: total_formandos
+        data_tests: [not_null]
+
+  - name: fct_ideb_escola
+    description: >
+      IDEB por escola — ensino médio. Grain: id_escola × id_municipio × ano.
+      Bienal: 2020, 2021, 2023.
+    columns:
+      - name: ano
+        data_tests: [not_null]
+      - name: id_escola
+        data_tests: [not_null]
+      - name: id_municipio
+        data_tests: [not_null]
+      - name: ideb
+        data_tests: [not_null]
+
+  - name: fct_inse_escola
+    description: >
+      Indicador de Nível Socioeconômico por escola — INEP.
+      Grain: id_escola × id_municipio. Snapshot 2023.
+    columns:
+      - name: id_escola
+        data_tests: [not_null]
+      - name: id_municipio
+        data_tests: [not_null]
+      - name: inse_valor
+        data_tests: [not_null]
+
+  - name: fct_empresas
+    description: >
+      Empresas médias e grandes ativas por município — Receita Federal (CNPJ).
+      Grain: cnpj × id_municipio. Snapshot sem série histórica.
+    columns:
+      - name: cnpj
+        data_tests:
+          - not_null
+          - unique
+      - name: id_municipio
+        data_tests: [not_null]
