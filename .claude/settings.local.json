@@ -5,7 +5,15 @@
       "Bash(dbt parse:*)",
       "Bash(sed 's/.*- name: //')",
       "Bash(sed \"s/'//g\")",
-      "Bash(awk '/^      - name:/{print}' /c/edu-expansion-intelligence/models/staging/sources.yml)"
+      "Bash(awk '/^      - name:/{print}' /c/edu-expansion-intelligence/models/staging/sources.yml)",
+      "Bash(bq ls *)",
+      "Bash(python *)",
+      "Bash(bq query *)",
+      "Bash(git add *)",
+      "Bash(git rm *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git reset *)"
     ]
   }
 }
