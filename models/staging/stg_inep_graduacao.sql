@@ -18,8 +18,11 @@ renamed as (
 
         -- instituição
         trim(id_ies)                       as id_ies,
-        trim(sigla_ies)                    as sigla_ies,
         trim(nome_ies)                     as nome_ies,
+        trim(sigla_ies)                    as sigla_ies,
+
+        -- curso
+        trim(id_curso)                     as id_curso,
         trim(nome_mantenedora)             as nome_mantenedora,
         trim(rede)                         as rede,
         trim(modalidade_ensino)            as modalidade_ensino,

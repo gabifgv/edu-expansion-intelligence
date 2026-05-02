@@ -328,3 +328,84 @@ sources:
               abaixo da linha de pobreza).
               Complementa a análise de bolsas de talentos FGV —
               municípios com prop_pobreza alta e IDEB alto indicam talentos em contexto de vulnerabilidade.
+
+      # ─────────────────────────────────────────────────────────────────
+      # 7. RAIS ESTABELECIMENTOS MUNICÍPIO
+      # ─────────────────────────────────────────────────────────────────
+      - name: rais_estabelecimentos_municipio
+        description: >
+          Estabelecimentos ativos por município, subsetor e CNAE — RAIS/MTE.
+          Fonte original: basedosdados.br_me_rais.microdados_estabelecimentos.
+          Período: 2020 em diante. Granularidade: município × cnae_subclasse × ano.
+          Filtro: indicador_atividade_ano = 1 (estabelecimento ativo no ano).
+          Uso no projeto: densidade empresarial por setor e município —
+          complementa vinculos com contagem de estabelecimentos e vínculos ativos.
+        columns:
+          - name: ano
+            description: Ano de referência da RAIS.
+          - name: id_municipio
+            description: Código IBGE do município com 7 dígitos.
+          - name: sigla_uf
+            description: Sigla da Unidade da Federação.
+          - name: subsetor_ibge
+            description: Código numérico do subsetor IBGE.
+          - name: cnae_2_subclasse
+            description: Código CNAE 2.0 subclasse com 7 dígitos.
+          - name: cnae_2
+            description: Código CNAE 2.0 classe com 5 dígitos. Derivado do JOIN com diretório.
+          - name: descricao_cnae
+            description: Descrição da classe CNAE 2.0.
+          - name: total_estabelecimentos
+            description: Total de estabelecimentos ativos no município e CNAE no ano.
+          - name: total_vinculos_ativos
+            description: Soma de vínculos ativos declarados pelos estabelecimentos.
+
+      # ─────────────────────────────────────────────────────────────────
+      # 8. CNPJ EMPRESAS (Receita Federal — join pré-processado)
+      # ─────────────────────────────────────────────────────────────────
+      - name: cnpj_empresas
+        description: >
+          Empresas médias e grandes ativas por município — join pré-processado de
+          basedosdados.br_me_cnpj.estabelecimentos + basedosdados.br_me_cnpj.empresas.
+          Snapshot mais recente (filtrado por data = MAX(data) em ambas as fontes).
+          Filtros aplicados na ingestão:
+            - situacao_cadastral = '2' (ativas)
+            - porte = '5' (Demais — médias e grandes)
+            - natureza_juridica in (2046, 2054, 2062, 2240, 2305)
+            - capital_social > 0
+            - sem massa falida, condomínio
+          Granularidade: CNPJ (estabelecimento). Join feito via cnpj_basico.
+          Uso no projeto: base para mart de potencial de parcerias corporativas FGV.
+        columns:
+          - name: cnpj
+            description: CNPJ completo com 14 dígitos (estabelecimento).
+          - name: cnpj_basico
+            description: Primeiros 8 dígitos do CNPJ. Join entre estabelecimento e empresa.
+          - name: nome_empresa
+            description: Nome fantasia se preenchido, senão razao_social. Campo display.
+          - name: razao_social
+            description: Razão social conforme registro na Receita Federal.
+          - name: cnae_fiscal_principal
+            description: Código CNAE principal de 7 dígitos (subclasse).
+          - name: cnae_classe
+            description: Primeiros 4 dígitos do CNAE — nível de classe. Chave para categorização setorial.
+          - name: id_municipio
+            description: Código IBGE do município com 7 dígitos. Chave de join com demais tabelas.
+          - name: sigla_uf
+            description: Sigla da Unidade da Federação.
+          - name: cep
+            description: CEP do estabelecimento com 8 dígitos.
+          - name: ddd
+            description: DDD normalizado (zero à esquerda removido).
+          - name: telefone
+            description: Número do telefone sem DDD.
+          - name: email
+            description: Email do estabelecimento. Nulo se vazio ou '.'.
+          - name: data_inicio_atividade
+            description: Data de abertura do estabelecimento na Receita Federal.
+          - name: natureza_juridica
+            description: Código de natureza jurídica (ex. 2062 = Sociedade Empresária Limitada).
+          - name: porte
+            description: Código de porte. Valor nesta tabela é sempre '5' (Demais — médias/grandes).
+          - name: capital_social
+            description: Capital social integralizado em reais. Sempre > 0 nesta tabela.

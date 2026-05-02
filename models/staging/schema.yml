@@ -114,13 +114,17 @@ models:
 
   - name: stg_rais_vinculos_municipio
     description: >
-      Vínculos formais por município, subsetor e CNAE — RAIS/MTE.
-      Granularidade: município × subsetor × cnae × ano.
+      Vínculos formais por município, subsetor, CNAE e cargo (CBO) — RAIS/MTE.
+      Granularidade: município × subsetor × cnae × cargo × ano. Filtrado: ano >= 2020.
+      Inclui todos os setores inclusive militares (subsetor_ibge NULL → 'Não Classificado').
     columns:
       - name: ano
         data_tests:
           - not_null
       - name: id_municipio
+        data_tests:
+          - not_null
+      - name: cbo_2002
         data_tests:
           - not_null
       - name: total_vinculos
@@ -153,3 +157,61 @@ models:
       - name: populacao_total
         data_tests:
           - not_null
+
+  - name: stg_inep_graduacao_fgv
+    description: >
+      Recorte do Censo da Educação Superior restrito à cesta de cursos FGV e seus concorrentes selecionados.
+      FGV: apenas modalidade Presencial, sem restrição de UF.
+      Concorrentes: todas as modalidades, restrito a SP, RJ e DF (mercados FGV).
+      Join por id_ies + id_curso com o seed fgv_depara.
+      Granularidade: curso × IES × município × ano.
+    columns:
+      - name: ano
+        data_tests:
+          - not_null
+      - name: id_ies
+        data_tests:
+          - not_null
+      - name: id_curso
+        data_tests:
+          - not_null
+      - name: grupo_ies
+        data_tests:
+          - not_null
+      - name: curso_agrupado_fgv
+        data_tests:
+          - not_null
+      - name: total_matriculas
+        data_tests:
+          - not_null
+
+  - name: stg_cnpj_empresas
+    description: >
+      Empresas médias e grandes ativas por município — join pré-processado de
+      estabelecimentos + empresas da Receita Federal.
+      Granularidade: CNPJ (estabelecimento). Já filtrado por porte '5', natureza_juridica
+      e capital_social > 0 na ingestão.
+      Fonte raw: cnpj_empresas.
+    columns:
+      - name: cnpj
+        data_tests:
+          - not_null
+          - unique
+      - name: cnpj_basico
+        data_tests:
+          - not_null
+      - name: razao_social
+        data_tests:
+          - not_null
+      - name: id_municipio
+        data_tests:
+          - not_null
+      - name: cnae_classe
+        data_tests:
+          - not_null
+      - name: porte
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['5']

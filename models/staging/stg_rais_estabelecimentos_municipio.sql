@@ -5,7 +5,7 @@
 }}
 
 with source as (
-    select * from {{ source('raw', 'rais_vinculos_municipio') }}
+    select * from {{ source('raw', 'rais_estabelecimentos_municipio') }}
     where ano >= 2020
 ),
 
@@ -46,17 +46,13 @@ renamed as (
             when 25 then 'Agricultura, Silvicultura, Criação de Animais e Extrativismo Vegetal'
             else        'Não Classificado'
         end                            as descricao_subsetor,
+        trim(cnae_2_subclasse)         as cnae_2_subclasse,
         trim(cnae_2)                   as cnae_2,
         trim(descricao_cnae)           as descricao_cnae,
 
-        -- cargo
-        trim(cbo_2002)                 as cbo_2002,
-        trim(descricao_cargo)          as descricao_cargo,
-
         -- métricas
-        cast(total_vinculos      as integer) as total_vinculos,
-        cast(salario_medio_reais as float64) as salario_medio_reais,
-        cast(salario_medio_sm    as float64) as salario_medio_sm
+        cast(total_estabelecimentos as integer) as total_estabelecimentos,
+        cast(total_vinculos_ativos  as integer) as total_vinculos_ativos
 
     from source
     where id_municipio is not null

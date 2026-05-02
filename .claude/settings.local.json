@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(dbt run:*)",
-      "Bash(dbt parse:*)"
+      "Bash(dbt parse:*)",
+      "Bash(sed 's/.*- name: //')",
+      "Bash(sed \"s/'//g\")",
+      "Bash(awk '/^      - name:/{print}' /c/edu-expansion-intelligence/models/staging/sources.yml)"
     ]
   }
 }

@@ -25,10 +25,30 @@ models:
       +materialized: view
       +tags: ['staging']
       +schema: staging
-    marts:
+    dimensions:
       +materialized: table
-      +schema: marts
-      +tags: ['marts']
+      +schema: dimensions
+      +tags: ['dimensions']
+    facts:
+      +materialized: table
+      +schema: facts
+      +tags: ['facts']
+
+seeds:
+  inteligencia_expansao_educacional:
+    +quote_columns: false
+    fgv_cursos_competidores:
+      +schema: fgv_internal
+      +column_types:
+        co_uf: integer
+        co_curso: integer
+        co_ies: integer
+    fgv_depara:
+      +schema: staging
+      +column_types:
+        co_uf: integer
+        co_ies: integer
+        co_curso: integer
 
 vars:
   'data_project': 'inteligencia_expansao_educacional'
