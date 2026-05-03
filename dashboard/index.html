@@ -1,755 +1,1867 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inteligência de Mercado — FGV</title>
-  <style>
-    :root {
-      --navy:        #003770;
-      --navy-light:  #004A9F;
-      --accent:      #4A9FD4;
-      --accent-light:#7BC4E8;
-      --white:       #FFFFFF;
-      --gray-bg:     #F2F5F9;
-      --gray-border: #DDE3EC;
-      --gray-text:   #6B7280;
-      --text:        #1A1A2E;
-      --green-bg:    #E8F5E9;
-      --green-text:  #1B5E20;
-      --amber-bg:    #FFF8E1;
-      --amber-text:  #E65100;
-      --red-bg:      #FFEBEE;
-      --red-text:    #B71C1C;
-      --blue-accent: #EFF4FB;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gray-bg); color: var(--text); font-size: 14px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FGV — Inteligência de Mercado para Expansão</title>
+<script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+<style>
+  /* ═══════════════════════════════════════════════════════════════════════
+     IDENTIDADE VISUAL FGV — Manual de Marca v1.2
+     Paleta dominante: Azul Escuro #003A79 (60-70% do peso visual)
+     Fonte: Arial em todas as variações
+     ═══════════════════════════════════════════════════════════════════════ */
+  :root {
+    --azul-marinho: #002D4D;
+    --azul-escuro:  #003A79;
+    --azul-medio:   #0C63AA;
+    --azul-claro:   #008BC9;
+    --azul-celeste: #73BFE8;
+    --cinza-80:     #5C5B5F;
+    --cinza-60:     #88868B;
+    --cinza-40:     #AFAEB4;
+    --cinza-20:     #D7D9DD;
+    --branco:       #FFFFFF;
+    --bg:           #F4F6F9;
 
-    /* HEADER */
-    header { background: var(--navy); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 68px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
-    .brand-fgv  { font-size: 26px; font-weight: 800; color: var(--white); letter-spacing: 4px; }
-    .brand-dept { font-size: 11px; color: rgba(255,255,255,0.75); letter-spacing: 0.5px; margin-top: 3px; }
-    .header-badge { background: var(--accent); color: var(--white); font-weight: 700; font-size: 12px; padding: 4px 14px; border-radius: 20px; }
+    --aux-amarelo:  #FDDB51;
+    --aux-laranja:  #E29200;
+    --aux-vinho:    #9B0A51;
+    --aux-turquesa: #3BAE96;
+    --aux-oliva:    #89A950;
 
-    /* FILTER BAR */
-    .filter-bar { background: var(--white); padding: 16px 40px; border-bottom: 3px solid var(--accent); display: flex; gap: 14px; align-items: flex-end; flex-wrap: wrap; }
-    .fg { display: flex; flex-direction: column; gap: 4px; }
-    .fg label { font-size: 11px; font-weight: 600; color: var(--navy); text-transform: uppercase; letter-spacing: 0.5px; }
-    .fg select, .fg input { border: 1.5px solid var(--gray-border); border-radius: 6px; padding: 7px 10px; font-size: 13px; color: var(--text); background: white; outline: none; transition: border-color .2s; min-width: 140px; }
-    .fg select:focus, .fg input:focus { border-color: var(--navy); }
-    .fg input.opt { border-style: dashed; background: var(--gray-bg); }
-    .divider { width: 1px; height: 40px; background: var(--gray-border); align-self: flex-end; margin: 0 2px; }
-    .btn-primary { background: var(--navy); color: white; border: none; border-radius: 6px; padding: 8px 22px; font-size: 13px; font-weight: 600; cursor: pointer; height: 36px; transition: background .2s; }
-    .btn-primary:hover { background: var(--navy-light); }
-    .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+    --shadow-sm: 0 1px 3px rgba(0, 58, 121, 0.08);
+    --shadow-md: 0 2px 8px rgba(0, 58, 121, 0.12);
+  }
 
-    /* NAV */
-    .nav-bar { background: var(--white); border-bottom: 1px solid var(--gray-border); padding: 10px 40px; display: flex; gap: 8px; flex-wrap: wrap; }
-    .nav-pill { font-size: 12px; color: var(--navy); background: var(--gray-bg); border: 1px solid var(--gray-border); padding: 4px 14px; border-radius: 20px; cursor: pointer; text-decoration: none; font-weight: 500; transition: all .15s; }
-    .nav-pill:hover { background: var(--navy); color: white; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { font-family: Arial, sans-serif; }
+  body { background: var(--bg); color: #1A1A2E; font-size: 14px; line-height: 1.5; }
 
-    /* KPI STRIP */
-    .kpi-strip { background: var(--navy); padding: 14px 40px; display: flex; gap: 0; }
-    .kpi { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 10px 16px; border-right: 1px solid rgba(255,255,255,0.12); }
-    .kpi:last-child { border-right: none; }
-    .kpi-val { font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1; }
-    .kpi-lbl { font-size: 11px; color: rgba(255,255,255,.7); margin-top: 4px; text-align: center; text-transform: uppercase; letter-spacing: .5px; }
-    .kpi-sub { font-size: 11px; margin-top: 3px; color: rgba(255,255,255,.5); }
+  /* ═══════════════ HEADER (Azul Escuro dominante) ═══════════════ */
+  header.fgv-header {
+    background: var(--azul-escuro);
+    color: var(--branco);
+    padding: 18px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 4px solid var(--azul-claro);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-md);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .brand-fgv {
+    font-family: Arial Black, Arial, sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    color: var(--branco);
+  }
+  .brand-divider {
+    width: 1px;
+    height: 38px;
+    background: rgba(255,255,255,0.3);
+  }
+  .brand-product h1 {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .brand-product p {
+    font-size: 11px;
+    opacity: 0.75;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-top: 2px;
+  }
+  .header-tag {
+    background: var(--azul-claro);
+    color: var(--branco);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 16px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
 
-    /* BLOCKS */
-    .block { margin: 20px 40px; background: var(--white); border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.08); overflow: hidden; }
-    .bh { background: var(--navy); padding: 13px 22px; display: flex; align-items: center; gap: 10px; border-left: 5px solid var(--accent); }
-    .bnum { background: var(--accent); color: white; font-weight: 800; font-size: 12px; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .bh h2 { font-size: 13px; font-weight: 600; color: white; }
-    .btag { margin-left: auto; font-size: 10px; color: rgba(255,255,255,.5); font-style: italic; }
-    .bi { background: var(--blue-accent); border-left: 4px solid var(--accent); padding: 10px 22px; font-size: 12px; color: var(--text); line-height: 1.7; }
-    .bi strong { color: var(--navy); }
-    .bc { padding: 18px 22px; overflow-x: auto; }
+  /* ═══════════════ FILTER BAR ═══════════════ */
+  .filter-bar {
+    background: var(--branco);
+    padding: 18px 40px;
+    border-bottom: 1px solid var(--cinza-20);
+    display: flex;
+    gap: 14px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
+  .fg {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .fg label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--azul-escuro);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+  .fg select, .fg input {
+    border: 1.5px solid var(--cinza-20);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: #1A1A2E;
+    background: var(--branco);
+    outline: none;
+    transition: border-color 0.15s;
+    min-width: 150px;
+  }
+  .fg select:focus, .fg input:focus {
+    border-color: var(--azul-escuro);
+  }
+  .filter-divider {
+    width: 1px;
+    height: 36px;
+    background: var(--cinza-20);
+    align-self: flex-end;
+    margin: 0 6px;
+  }
+  .btn-primary {
+    background: var(--azul-escuro);
+    color: var(--branco);
+    border: none;
+    border-radius: 4px;
+    padding: 9px 24px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    cursor: pointer;
+    height: 38px;
+    transition: background 0.15s;
+  }
+  .btn-primary:hover { background: var(--azul-medio); }
+  .btn-primary:disabled { background: var(--cinza-40); cursor: not-allowed; }
 
-    /* TABLES */
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    thead th { background: var(--gray-bg); color: var(--navy); font-weight: 600; padding: 9px 10px; text-align: left; border-bottom: 2px solid var(--gray-border); white-space: nowrap; cursor: pointer; user-select: none; }
-    thead th:hover { background: #e0e7f0; }
-    tbody td { padding: 8px 10px; border-bottom: 1px solid var(--gray-border); }
-    tbody tr:hover { background: var(--gray-bg); }
-    tr.eligible td:first-child { border-left: 3px solid #2E7D32; }
-    tr.eligible { background: var(--green-bg); }
-    tr.partial { background: var(--amber-bg); }
-    .nr { text-align: right; font-variant-numeric: tabular-nums; }
-    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
-    .b-ok  { background: #2E7D32; color: white; }
-    .b-no  { background: #9E9E9E; color: white; }
-    .b-pub { background: #003B8E; color: white; }
-    .b-priv{ background: var(--accent); color: white; }
-    .b-up  { background: var(--green-bg); color: var(--green-text); }
-    .b-dn  { background: var(--red-bg); color: var(--red-text); }
-    .heat-h { background: #C8E6C9; color: #1B5E20; font-weight: 600; }
-    .heat-m { background: #FFF9C4; color: #F57F17; }
-    .heat-l { background: #FFCDD2; color: #B71C1C; }
+  /* ═══════════════ KPI STRIP ═══════════════ */
+  .kpi-strip {
+    background: var(--azul-escuro);
+    padding: 18px 40px;
+    display: none;
+    gap: 0;
+    border-bottom: 4px solid var(--azul-claro);
+  }
+  .kpi-strip.show { display: flex; }
+  .kpi {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 16px;
+    border-right: 1px solid rgba(255,255,255,0.15);
+    text-align: center;
+  }
+  .kpi:last-child { border-right: none; }
+  .kpi-val {
+    font-family: Arial Black, Arial, sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--azul-celeste);
+    line-height: 1;
+  }
+  .kpi-lbl {
+    font-size: 11px;
+    color: rgba(255,255,255,0.75);
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+  .kpi-sub {
+    font-size: 11px;
+    margin-top: 3px;
+    color: rgba(255,255,255,0.55);
+  }
 
-    /* TABLE TOOLBAR */
-    .tb-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
-    .tb-count { font-size: 12px; color: var(--gray-text); }
-    .tb-search { border: 1.5px solid var(--gray-border); border-radius: 6px; padding: 5px 10px; font-size: 12px; width: 180px; outline: none; }
-    .tb-search:focus { border-color: var(--navy); }
-    .tb-sel { font-size: 12px; padding: 4px 8px; border: 1.5px solid var(--gray-border); border-radius: 6px; outline: none; }
+  /* ═══════════════ NAV PILLS ═══════════════ */
+  .nav-bar {
+    background: var(--branco);
+    border-bottom: 1px solid var(--cinza-20);
+    padding: 12px 40px;
+    display: none;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .nav-bar.show { display: flex; }
+  .nav-pill {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--azul-escuro);
+    background: var(--bg);
+    border: 1px solid var(--cinza-20);
+    padding: 5px 14px;
+    border-radius: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+  .nav-pill:hover {
+    background: var(--azul-escuro);
+    color: var(--branco);
+    border-color: var(--azul-escuro);
+  }
 
-    /* SOCIO COMPARE TABLE */
-    .ct td.mn { font-weight: 600; color: var(--navy); width: 220px; }
-    .ct td.cv { font-weight: 700; }
-    .ct td.uv { color: var(--gray-text); }
-    .ct td.dp { font-weight: 600; color: var(--green-text); }
-    .ct td.dn { font-weight: 600; color: var(--red-text); }
+  /* ═══════════════ MAIN CONTAINER ═══════════════ */
+  main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 40px 48px;
+  }
 
-    /* SCORE */
-    .score-wrap { margin: 20px 40px; background: var(--white); border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.08); overflow: hidden; border-top: 4px solid var(--accent); }
-    .score-top { padding: 16px 22px 8px; display: flex; align-items: center; gap: 20px; }
-    .score-num { font-size: 54px; font-weight: 800; color: var(--accent); line-height: 1; }
-    .score-bar-t { height: 8px; background: var(--gray-border); margin: 0 22px 0; border-radius: 4px; }
-    .score-bar-f { height: 100%; background: linear-gradient(90deg, var(--navy), var(--accent)); border-radius: 4px; transition: width .8s ease; }
-    .score-dims { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--gray-border); margin-top: 14px; }
-    .sdim { background: var(--white); padding: 12px 18px; }
-    .sdim-name { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--gray-text); font-weight: 600; }
-    .sdim-val  { font-size: 22px; font-weight: 700; color: var(--navy); margin-top: 4px; }
-    .sdim-bar  { height: 4px; background: var(--gray-border); border-radius: 2px; margin-top: 8px; }
-    .sdim-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width .8s; }
+  /* ═══════════════ EMPTY STATE ═══════════════ */
+  .empty-state {
+    background: var(--branco);
+    border-radius: 8px;
+    padding: 80px 40px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    border-left: 5px solid var(--azul-claro);
+    margin-top: 24px;
+  }
+  .empty-state h2 {
+    font-family: Arial Black, Arial, sans-serif;
+    font-size: 32px;
+    color: var(--azul-escuro);
+    margin-bottom: 16px;
+  }
+  .empty-state p {
+    font-size: 15px;
+    color: var(--cinza-80);
+    max-width: 600px;
+    margin: 0 auto 8px;
+  }
+  .empty-state .empty-mark {
+    font-size: 40px;
+    color: var(--azul-claro);
+    margin-bottom: 20px;
+    font-weight: 900;
+  }
 
-    /* LLM */
-    .llm-wrap { margin: 20px 40px; background: var(--white); border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.08); overflow: hidden; border-top: 4px solid var(--navy); }
-    .llm-hdr { background: var(--navy); padding: 13px 22px; display: flex; align-items: center; justify-content: space-between; border-left: 5px solid var(--accent); }
-    .llm-hdr h2 { color: white; font-size: 13px; font-weight: 600; }
-    .btn-llm { background: var(--accent); color: white; border: none; border-radius: 6px; padding: 8px 18px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background .2s; }
-    .btn-llm:hover { background: var(--accent-light); }
-    .btn-llm:disabled { opacity: .5; cursor: not-allowed; }
-    .llm-out { padding: 22px; min-height: 100px; }
-    .llm-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100px; color: var(--gray-text); font-size: 13px; gap: 8px; }
-    .llm-narrative p { margin-bottom: 12px; line-height: 1.8; font-size: 14px; }
-    .loading { text-align: center; padding: 30px; color: var(--gray-text); font-size: 13px; }
-    .spin { display: inline-block; width: 18px; height: 18px; border: 3px solid var(--gray-border); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; margin-right: 8px; vertical-align: middle; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+  /* ═══════════════ BLOCK STRUCTURE ═══════════════ */
+  .block {
+    background: var(--branco);
+    border-radius: 8px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    display: none;
+  }
+  .block.show { display: block; }
+  .block-header {
+    background: var(--azul-escuro);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-left: 5px solid var(--azul-claro);
+  }
+  .block-num {
+    background: var(--azul-claro);
+    color: var(--branco);
+    font-family: Arial Black, Arial, sans-serif;
+    font-weight: 900;
+    font-size: 13px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .block-header h2 {
+    color: var(--branco);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .block-tag {
+    margin-left: auto;
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    font-style: italic;
+  }
+  .block-insight {
+    background: #EFF4FB;
+    border-left: 4px solid var(--azul-claro);
+    padding: 12px 24px;
+    font-size: 13px;
+    color: var(--cinza-80);
+    line-height: 1.7;
+  }
+  .block-insight strong { color: var(--azul-escuro); }
+  .block-body { padding: 22px 24px; }
 
-    /* WARNING BOX */
-    .warn { background: var(--amber-bg); border-left: 3px solid var(--amber-text); padding: 8px 14px; border-radius: 4px; margin-bottom: 12px; font-size: 12px; color: var(--amber-text); }
+  /* ═══════════════ TABLES ═══════════════ */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead th {
+    background: var(--bg);
+    color: var(--azul-escuro);
+    font-weight: 700;
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--cinza-20);
+    white-space: nowrap;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    user-select: none;
+  }
+  thead th:hover { background: var(--cinza-20); }
+  thead th.sorted { background: var(--azul-claro); color: var(--branco); }
+  tbody td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--cinza-20);
+  }
+  tbody tr:hover { background: var(--bg); }
+  tbody tr.highlight {
+    background: rgba(0, 139, 201, 0.08);
+    font-weight: 700;
+  }
+  .nr { text-align: right; font-variant-numeric: tabular-nums; }
 
-    /* EMPTY STATE */
-    .empty { text-align: center; padding: 30px; color: var(--gray-text); font-size: 13px; }
+  /* ═══════════════ STATUS BADGES ═══════════════ */
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .badge-up    { background: rgba(59, 174, 150, 0.18); color: #1F6B57; }
+  .badge-down  { background: rgba(155, 10, 81, 0.15);  color: var(--aux-vinho); }
+  .badge-neutral { background: var(--cinza-20); color: var(--cinza-80); }
+  .badge-pub   { background: var(--azul-escuro); color: var(--branco); }
+  .badge-priv  { background: var(--azul-claro); color: var(--branco); }
 
-    /* PAGINATION */
-    .pag-ctrl { display: flex; align-items: center; gap: 4px; padding: 10px 0 4px; flex-wrap: wrap; }
-    .pag-btn { background: white; border: 1.5px solid var(--gray-border); border-radius: 4px; padding: 4px 10px; cursor: pointer; font-size: 12px; color: var(--navy); transition: all .15s; }
-    .pag-btn:hover { background: var(--gray-bg); }
-    .pag-btn.pag-active { background: var(--navy); color: white; border-color: var(--navy); font-weight: 700; }
-    .pag-info { font-size: 11px; color: var(--gray-text); margin-right: 8px; white-space: nowrap; }
+  /* ═══════════════ TABLE TOOLBAR ═══════════════ */
+  .tb-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .tb-search {
+    border: 1.5px solid var(--cinza-20);
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    width: 220px;
+    outline: none;
+  }
+  .tb-search:focus { border-color: var(--azul-escuro); }
+  .tb-count { font-size: 12px; color: var(--cinza-60); }
 
-    footer { background: var(--navy); color: rgba(255,255,255,.5); text-align: center; padding: 14px 40px; font-size: 11px; margin-top: 30px; }
-    footer strong { color: var(--accent); }
-  </style>
+  /* ═══════════════ MULTI-SELECT BAR ═══════════════ */
+  .ms-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--cinza-20);
+  }
+  .ms-chip {
+    font-size: 11px;
+    color: var(--azul-escuro);
+    background: var(--bg);
+    border: 1.5px solid var(--cinza-20);
+    padding: 4px 12px;
+    border-radius: 14px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.15s;
+    font-weight: 600;
+  }
+  .ms-chip:hover { background: var(--cinza-20); }
+  .ms-chip.active {
+    background: var(--azul-escuro);
+    color: var(--branco);
+    border-color: var(--azul-escuro);
+  }
+  .ms-label {
+    font-size: 11px;
+    color: var(--cinza-80);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 700;
+    margin-right: 8px;
+    align-self: center;
+  }
+
+  /* ═══════════════ PAGINATION ═══════════════ */
+  .pagination {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .pagination button {
+    padding: 5px 11px;
+    border: 1px solid var(--cinza-20);
+    border-radius: 4px;
+    background: var(--branco);
+    color: var(--azul-escuro);
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 32px;
+  }
+  .pagination button.active {
+    background: var(--azul-escuro);
+    color: var(--branco);
+    border-color: var(--azul-escuro);
+  }
+  .pagination button:hover:not(.active) { background: var(--bg); }
+  .pagination span { color: var(--cinza-60); padding: 0 4px; }
+
+  /* ═══════════════ MINI KPIs (within block) ═══════════════ */
+  .mini-kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .mini-kpi {
+    background: var(--bg);
+    border-left: 4px solid var(--azul-claro);
+    padding: 12px 16px;
+    border-radius: 4px;
+  }
+  .mini-kpi-lbl {
+    font-size: 10px;
+    color: var(--cinza-80);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+  }
+  .mini-kpi-val {
+    font-family: Arial Black, Arial, sans-serif;
+    font-size: 22px;
+    color: var(--azul-escuro);
+    margin-top: 4px;
+  }
+  .mini-kpi-sub { font-size: 11px; color: var(--cinza-60); margin-top: 2px; }
+
+  /* ═══════════════ TWO-COLUMN ═══════════════ */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 1000px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* ═══════════════ SLIDERS (Block 6) ═══════════════ */
+  .weights-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+    padding: 16px;
+    background: var(--bg);
+    border-radius: 6px;
+    border-left: 4px solid var(--azul-claro);
+  }
+  @media (max-width: 900px) { .weights-grid { grid-template-columns: 1fr 1fr; } }
+  .witem label {
+    font-size: 12px;
+    color: var(--azul-escuro);
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .witem .wval {
+    font-family: Arial Black, Arial, sans-serif;
+    color: var(--azul-claro);
+  }
+  .witem input[type=range] {
+    width: 100%;
+    accent-color: var(--azul-escuro);
+  }
+  .witem .wsub {
+    font-size: 10px;
+    color: var(--cinza-60);
+    margin-top: 4px;
+  }
+  .w-total {
+    text-align: right;
+    font-size: 11px;
+    margin-top: 6px;
+    grid-column: 1 / -1;
+    font-weight: 700;
+  }
+
+  /* ═══════════════ NARRATIVA AI (Block 7) ═══════════════ */
+  .narr-card {
+    border-left: 5px solid var(--azul-escuro);
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    background: var(--bg);
+    border-radius: 0 6px 6px 0;
+  }
+  .narr-card.c1 { border-left-color: var(--azul-escuro); }
+  .narr-card.c2 { border-left-color: var(--azul-medio); }
+  .narr-card.c3 { border-left-color: var(--azul-claro); }
+  .narr-card.c4 { border-left-color: var(--aux-turquesa); }
+  .narr-card.c5 { border-left-color: var(--aux-oliva); }
+  .narr-card.c6 { border-left-color: var(--aux-vinho); }
+  .narr-titulo {
+    font-family: Arial Black, Arial, sans-serif;
+    font-size: 14px;
+    color: var(--azul-escuro);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .narr-corpo {
+    font-size: 13px;
+    color: #2C2C3E;
+    line-height: 1.75;
+    white-space: pre-wrap;
+  }
+  .narr-corpo strong { color: var(--azul-escuro); font-weight: 700; }
+  .narr-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .btn-llm {
+    background: var(--azul-escuro);
+    color: var(--branco);
+    border: none;
+    padding: 11px 24px;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.15s;
+  }
+  .btn-llm:hover { background: var(--azul-medio); }
+  .btn-llm:disabled { background: var(--cinza-40); cursor: not-allowed; }
+  .btn-secondary {
+    background: var(--branco);
+    color: var(--azul-escuro);
+    border: 1.5px solid var(--cinza-20);
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .btn-secondary:hover { background: var(--bg); }
+  .loading {
+    display: none;
+    padding: 40px;
+    text-align: center;
+    color: var(--cinza-80);
+  }
+  .loading.show { display: block; }
+  .spinner {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    border: 3px solid var(--cinza-20);
+    border-top-color: var(--azul-escuro);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ═══════════════ FOOTER ═══════════════ */
+  footer.fgv-footer {
+    background: var(--azul-escuro);
+    color: rgba(255,255,255,0.7);
+    padding: 24px 40px;
+    font-size: 11px;
+    text-align: center;
+    letter-spacing: 0.5px;
+    margin-top: 40px;
+  }
+  footer.fgv-footer strong { color: var(--branco); letter-spacing: 1px; }
+
+  /* ═══════════════ ALERT ═══════════════ */
+  .alert-error {
+    background: #FFE5EE;
+    border-left: 4px solid var(--aux-vinho);
+    padding: 12px 18px;
+    margin: 16px 0;
+    color: var(--aux-vinho);
+    border-radius: 4px;
+    font-size: 13px;
+    display: none;
+  }
+  .alert-error.show { display: block; }
+
+  /* ═══════════════ CHART CONTAINERS ═══════════════ */
+  .chart-container {
+    background: var(--branco);
+    border: 1px solid var(--cinza-20);
+    border-radius: 6px;
+    padding: 14px;
+  }
+  .chart-title {
+    font-size: 12px;
+    color: var(--azul-escuro);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--azul-claro);
+  }
+
+  /* responsive */
+  @media (max-width: 768px) {
+    .filter-bar, header.fgv-header, main { padding-left: 16px; padding-right: 16px; }
+    .kpi-strip { padding-left: 16px; padding-right: 16px; }
+    .brand-fgv { font-size: 22px; letter-spacing: 2px; }
+  }
+</style>
 </head>
 <body>
 
 <!-- HEADER -->
-<header>
-  <div>
+<header class="fgv-header">
+  <div class="brand">
     <div class="brand-fgv">FGV</div>
-    <div class="brand-dept">Gerência de Inteligência de Dados e Pesquisa de Mercado</div>
+    <div class="brand-divider"></div>
+    <div class="brand-product">
+      <h1>Inteligência de Mercado</h1>
+      <p>Plataforma de Decisão de Expansão</p>
+    </div>
   </div>
-  <div class="header-badge" id="badge-produto">MBA &amp; PÓS-GRADUAÇÃO</div>
+  <span class="header-tag">MVP &middot; SP</span>
 </header>
 
-<!-- FILTROS -->
-<div class="filter-bar">
+<!-- FILTROS GLOBAIS -->
+<section class="filter-bar">
   <div class="fg">
     <label>Estado (UF)</label>
-    <select id="sel-uf" onchange="loadMunicipios()">
-      <option value="">— selecione —</option>
+    <select id="f-uf" disabled>
+      <option value="SP" selected>SP — São Paulo</option>
     </select>
   </div>
   <div class="fg">
-    <label>Cidade</label>
-    <select id="sel-municipio">
-      <option value="">— selecione o estado primeiro —</option>
+    <label>Município</label>
+    <select id="f-municipio">
+      <option value="">Carregando municípios...</option>
     </select>
   </div>
+  <div class="filter-divider"></div>
   <div class="fg">
     <label>Produto</label>
-    <select id="sel-produto">
+    <select id="f-produto">
+      <option value="MBA Executivo">MBA Executivo</option>
       <option value="MBA">MBA</option>
-      <option value="Pós-graduação">Pós-graduação</option>
+      <option value="Pós-Graduação">Pós-Graduação</option>
     </select>
   </div>
-  <div class="divider"></div>
   <div class="fg">
-    <label>% da renda com especialização</label>
-    <input type="number" id="inp-pct" value="9" min="1" max="30" step="0.5" style="width:90px">
+    <label>Mensalidade (R$/mês)</label>
+    <input type="number" id="f-mensalidade" value="1200" step="100" min="0">
   </div>
   <div class="fg">
-    <label>Mensalidade (R$)</label>
-    <input type="number" id="inp-mens" placeholder="ex: 1200" style="width:130px">
+    <label>% renda destinada</label>
+    <input type="number" id="f-pct" value="30" step="1" min="1" max="100">
   </div>
-  <div class="divider"></div>
+  <div class="filter-divider"></div>
   <div class="fg">
-    <label>CEP do polo FGV <span style="color:var(--accent)">(opcional)</span></label>
-    <input type="text" id="inp-cep" class="opt" placeholder="00000-000" style="width:130px">
+    <label>CEP da gestora local <span style="opacity:0.5;font-weight:400">(opcional)</span></label>
+    <input type="text" id="f-cep" placeholder="00000-000" maxlength="9">
   </div>
-  <button class="btn-primary" onclick="runAnalise()" id="btn-run">Analisar mercado →</button>
-</div>
+  <button class="btn-primary" id="btn-analisar" onclick="loadAnalise()">Carregar análise</button>
+</section>
 
-<!-- NAV -->
-<div class="nav-bar">
-  <a href="#b1" class="nav-pill">1 · Perfil socioecon.</a>
-  <a href="#b2" class="nav-pill">2 · Vínculos formais</a>
-  <a href="#b3" class="nav-pill">3 · Densidade empresarial</a>
-  <a href="#b4" class="nav-pill">4 · Empresas-alvo</a>
-  <a href="#b5" class="nav-pill">5 · Formandos por IES</a>
-  <a href="#b6" class="nav-pill">6 · Score</a>
-  <a href="#b7" class="nav-pill">7 · Análise IA</a>
-</div>
+<!-- KPI STRIP (aparece após análise) -->
+<section class="kpi-strip" id="kpi-strip">
+  <div class="kpi"><div class="kpi-val" id="kpi-pop">—</div><div class="kpi-lbl">População</div><div class="kpi-sub" id="kpi-pop-sub">—</div></div>
+  <div class="kpi"><div class="kpi-val" id="kpi-eleg">—</div><div class="kpi-lbl">Vínculos elegíveis</div><div class="kpi-sub" id="kpi-eleg-sub">—</div></div>
+  <div class="kpi"><div class="kpi-val" id="kpi-sal">—</div><div class="kpi-lbl">Salário médio elegíveis</div><div class="kpi-sub" id="kpi-sal-sub">—</div></div>
+  <div class="kpi"><div class="kpi-val" id="kpi-emp">—</div><div class="kpi-lbl">Empresas grandes</div><div class="kpi-sub" id="kpi-emp-sub">—</div></div>
+  <div class="kpi"><div class="kpi-val" id="kpi-conc">—</div><div class="kpi-lbl">Concluintes/ano</div><div class="kpi-sub" id="kpi-conc-sub">—</div></div>
+  <div class="kpi"><div class="kpi-val" id="kpi-rank">—</div><div class="kpi-lbl">Rank em SP</div><div class="kpi-sub" id="kpi-rank-sub">—</div></div>
+</section>
 
-<!-- KPI STRIP -->
-<div class="kpi-strip">
-  <div class="kpi"><div class="kpi-val" id="kpi-elegiveis">—</div><div class="kpi-lbl">Vínculos elegíveis</div><div class="kpi-sub" id="kpi-elegiveis-sub">mensalidade ÷ %</div></div>
-  <div class="kpi"><div class="kpi-val" id="kpi-renda-min">—</div><div class="kpi-lbl">Renda mínima (R$/mês)</div><div class="kpi-sub">mensalidade ÷ %</div></div>
-  <div class="kpi"><div class="kpi-val" id="kpi-empresas">—</div><div class="kpi-lbl">Empresas-alvo</div><div class="kpi-sub">médias e grandes, setores elegíveis</div></div>
-  <div class="kpi"><div class="kpi-val" id="kpi-superior">—</div><div class="kpi-lbl">Pop. 25+ c/ superior (%)</div><div class="kpi-sub" id="kpi-superior-sub">vs UF</div></div>
-  <div class="kpi"><div class="kpi-val" id="kpi-score">—</div><div class="kpi-lbl">Score de atratividade</div><div class="kpi-sub">de 10</div></div>
-</div>
+<!-- NAV PILLS -->
+<nav class="nav-bar" id="nav-bar">
+  <a class="nav-pill" href="#b1">1. Perfil da Cidade</a>
+  <a class="nav-pill" href="#b23">2-3. Mercado de Trabalho</a>
+  <a class="nav-pill" href="#b4">4. Empresas-Alvo</a>
+  <a class="nav-pill" href="#b5">5. Pipeline Universitário</a>
+  <a class="nav-pill" href="#b6">6. Score de Atratividade</a>
+  <a class="nav-pill" href="#b7">7. Análise AI</a>
+</nav>
 
-<!-- BLOCO 1 — PERFIL SOCIOECONÔMICO -->
-<div class="block" id="b1">
-  <div class="bh"><div class="bnum">1</div><h2>Perfil Socioeconômico — Cidade vs. Estado <span style="font-weight:400;color:rgba(255,255,255,.5);margin-left:6px;font-size:11px">(Atlas ADH 2010)</span></h2><span class="btag">dim_municipio</span></div>
-  <div class="bi"><strong>O que é:</strong> Indicadores estruturais de renda, desenvolvimento humano e escolaridade da cidade comparados com a média do estado. <strong>Como ajuda:</strong> Contextualiza o tamanho e a qualidade da audiência-alvo antes de olhar o emprego formal. <strong>Como é acionável:</strong> Delta positivo em "Pop. 25+ com superior" indica mais pessoas formadas que a média estadual — mercado com audiência qualificada. Gini alto com renda alta sinaliza concentração: o topo paga, mas o universo é menor.</div>
-  <div class="bc" id="bc1"><div class="empty">Preencha os filtros e clique em "Analisar mercado".</div></div>
-</div>
+<!-- MAIN -->
+<main>
 
-<!-- BLOCO 2 — VÍNCULOS FORMAIS -->
-<div class="block" id="b2">
-  <div class="bh"><div class="bnum">2</div><h2>Mercado de Trabalho Formal — Vínculos RAIS <span style="font-weight:400;color:rgba(255,255,255,.5);margin-left:6px;font-size:11px">(2022, ano mais completo)</span></h2><span class="btag">fct_empregos</span></div>
-  <div class="bi"><strong>O que é:</strong> Todos os vínculos empregatícios formais da cidade por setor (IBGE) e cargo (CBO), com salário médio. O filtro de mensalidade aplica o threshold de renda — linhas verdes são cargos que sustentam a mensalidade. <strong>Como é acionável:</strong> Identifique em quais setores e funções o público-alvo está concentrado. Isso define quais setores priorizar na prospecção e qual portfólio de curso tem aderência ao mercado local — compare com as áreas de formação no Bloco 5.</div>
-  <div class="bc" id="bc2"><div class="empty">Aguardando análise.</div></div>
-</div>
-
-<!-- BLOCO 3 — ESTABELECIMENTOS -->
-<div class="block" id="b3">
-  <div class="bh"><div class="bnum">3</div><h2>Densidade Empresarial por Setor <span style="font-weight:400;color:rgba(255,255,255,.5);margin-left:6px;font-size:11px">(2023)</span></h2><span class="btag">fct_estabelecimentos × fct_empregos</span></div>
-  <div class="bi"><strong>O que é:</strong> Quantidade de estabelecimentos e vínculos ativos por atividade econômica, cruzados com vínculos elegíveis do Bloco 2. <strong>Como é acionável:</strong> Setores com alto % elegível e poucos estabelecimentos = concentração em empresas grandes (canal corporativo). Muitos estabelecimentos com % elegível baixo = capilaridade (canal individual). A coluna "% elegível" orienta qual setor priorizar na prospecção corporativa e qual MBA tem maior aderência.</div>
-  <div class="bc" id="bc3"><div class="empty">Aguardando análise.</div></div>
-</div>
-
-<!-- BLOCO 4 — EMPRESAS CNPJ -->
-<div class="block" id="b4">
-  <div class="bh"><div class="bnum">4</div><h2>Lista de Empresas-Alvo <span style="font-weight:400;color:rgba(255,255,255,.5);margin-left:6px;font-size:11px">(Receita Federal — CNPJ)</span></h2><span class="btag">fct_empresas</span></div>
-  <div class="bi"><strong>O que é:</strong> Empresas de médio e grande porte ativas na cidade, nos setores com maior concentração de público elegível. Ordenadas por capital social (proxy de porte) ou por distância do polo FGV se CEP foi informado. <strong>Como é acionável:</strong> Esta é sua lista de prospecção corporativa para convênios e patrocínio de MBA. Exporte, ligue para o RH, apresente programas de desenvolvimento executivo. Com CEP do polo: priorize empresas no raio de conveniência do campus.</div>
-  <div class="bc" id="bc4">
-    <div class="warn">⚠️ <strong>Capital social ≠ faturamento.</strong> É o valor declarado de integralização na Receita Federal — usado como proxy de porte.</div>
-    <div class="empty">Aguardando análise.</div>
+  <!-- EMPTY STATE -->
+  <div class="empty-state" id="empty-state">
+    <div class="empty-mark">↑</div>
+    <h2>Selecione um município de São Paulo</h2>
+    <p>Esta plataforma cruza dados de RAIS, INEP, IBGE e Receita Federal para 645 municípios paulistas.</p>
+    <p>Escolha a cidade no filtro acima e clique em <strong>Carregar análise</strong> para ver os 7 blocos populados em tempo real.</p>
   </div>
-</div>
 
-<!-- BLOCO 5 — FORMANDOS -->
-<div class="block" id="b5">
-  <div class="bh"><div class="bnum">5</div><h2>Formandos por Universidade e Área de Conhecimento <span style="font-weight:400;color:rgba(255,255,255,.5);margin-left:6px;font-size:11px">(INEP Censo Superior)</span></h2><span class="btag">fct_mercado_superior</span></div>
-  <div class="bi"><strong>O que é:</strong> Todas as universidades da cidade com seus concluintes por área de conhecimento — todas as áreas, sem filtro. <strong>Como é acionável (duplo uso):</strong> (1) <em>Aderência de portfólio:</em> compare as áreas com mais formandos com os setores dominantes do Bloco 2 — onde há convergência, há demanda para MBA ou pós. (2) <em>Relacionamento institucional:</em> as IES com mais formandos nas suas áreas de interesse são seus alvos de parceria — ofereça desconto de pós-graduação para recém-formados sem exigência de experiência.</div>
-  <div class="bc" id="bc5"><div class="empty">Aguardando análise.</div></div>
-</div>
+  <div class="alert-error" id="alert-error"></div>
 
-<!-- BLOCO 6 — SCORE -->
-<div class="score-wrap" id="b6">
-  <div class="bh" style="background:var(--navy);border-left:5px solid var(--accent)"><div class="bnum">6</div><h2 style="color:white;font-size:13px;font-weight:600">Score de Atratividade de Mercado</h2><span class="btag">composto de 4 dimensões · 0–10</span></div>
-  <div class="bi"><strong>O que é:</strong> Índice sintético que combina quatro dimensões em um número de 0 a 10. <strong>Como é acionável:</strong> Score alto em "Volume elegível" + baixo em "Capacidade corporativa" = mercado de pessoa física, priorize canal individual. Score alto em tudo = cidade prioritária para abertura de polo ou intensificação de prospecção. Use para comparar cidades sem precisar ler todas as tabelas.</div>
-  <div class="score-top">
-    <div>
-      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-text);font-weight:600;margin-bottom:4px">Score geral</div>
-      <div style="display:flex;align-items:baseline;gap:6px">
-        <span class="score-num" id="score-val">—</span>
-        <span style="font-size:20px;color:var(--gray-text);font-weight:400">/10</span>
+  <!-- BLOCO 1 — PERFIL SOCIOECONÔMICO -->
+  <section class="block" id="b1">
+    <div class="block-header">
+      <div class="block-num">1</div>
+      <h2>Perfil Socioeconômico</h2>
+      <span class="block-tag">cidade vs média ponderada da UF</span>
+    </div>
+    <div class="block-insight" id="b1-insight"></div>
+    <div class="block-body">
+      <div style="overflow-x:auto">
+        <table id="b1-table">
+          <thead>
+            <tr>
+              <th>Indicador</th>
+              <th class="nr">Cidade</th>
+              <th class="nr">Média SP</th>
+              <th class="nr">Δ %</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
     </div>
-    <div style="flex:1;margin-left:28px">
-      <div style="font-size:12px;color:var(--gray-text);margin-bottom:6px" id="score-caption">—</div>
-      <div class="score-bar-t"><div class="score-bar-f" id="score-bar" style="width:0%"></div></div>
-    </div>
-  </div>
-  <div class="score-dims" id="score-dims">
-    <div class="sdim"><div class="sdim-name">Volume elegível</div><div class="sdim-val">—</div><div class="sdim-bar"><div class="sdim-fill" style="width:0%"></div></div></div>
-    <div class="sdim"><div class="sdim-name">Crescimento 2020→2022</div><div class="sdim-val">—</div><div class="sdim-bar"><div class="sdim-fill" style="width:0%"></div></div></div>
-    <div class="sdim"><div class="sdim-name">Capacidade corporativa</div><div class="sdim-val">—</div><div class="sdim-bar"><div class="sdim-fill" style="width:0%"></div></div></div>
-    <div class="sdim"><div class="sdim-name">Renda per capita relativa</div><div class="sdim-val">—</div><div class="sdim-bar"><div class="sdim-fill" style="width:0%"></div></div></div>
-  </div>
-</div>
+  </section>
 
-<!-- BLOCO 7 — LLM -->
-<div class="llm-wrap" id="b7">
-  <div class="llm-hdr">
-    <div style="display:flex;align-items:center;gap:10px">
-      <div class="bnum" style="background:var(--accent)">7</div>
-      <h2>Análise de Mercado — Inteligência Artificial (Claude)</h2>
+  <!-- BLOCO 2+3 — MERCADO DE TRABALHO + TECIDO EMPRESARIAL -->
+  <section class="block" id="b23">
+    <div class="block-header">
+      <div class="block-num">2-3</div>
+      <h2>Mercado de Trabalho e Tecido Empresarial</h2>
+      <span class="block-tag" id="b23-ano-tag"></span>
     </div>
-    <button class="btn-llm" id="btn-llm" onclick="runLLM()" disabled>⚡ Gerar análise de mercado</button>
-  </div>
-  <div class="bi"><strong>O que é:</strong> Narrativa executiva gerada pela IA Claude com base em todos os dados carregados nesta página. Interpreta padrões, sugere portfólio de cursos aderente ao mercado local e recomenda estratégias de prospecção. <strong>Como é acionável:</strong> Use como ponto de partida para relatórios de inteligência de mercado ou apresentações para a diretoria. A IA cruza vínculos elegíveis, setores dominantes, formandos e perfil socioeconômico para gerar recomendações de portfólio específicas para aquela cidade.</div>
-  <div class="llm-out" id="llm-out"><div class="llm-placeholder">💡 Execute a análise e clique em "Gerar análise de mercado".</div></div>
-</div>
+    <div class="block-insight" id="b23-insight"></div>
+    <div class="block-body">
 
-<footer>
-  <strong>FGV</strong> · Gerência de Inteligência de Dados e Pesquisa de Mercado ·
-  Fontes: RAIS/MTE · Receita Federal (CNPJ) · INEP Censo Superior · Atlas ADH 2010 (PNUD/IPEA/FJP) ·
-  BigQuery · <strong>Claude API</strong>
+      <h3 style="font-size:13px;font-weight:700;color:var(--azul-escuro);text-transform:uppercase;margin-bottom:12px;letter-spacing:0.4px">Tabela 1 — Por Setor</h3>
+      <div style="overflow-x:auto">
+        <table id="b23-setor-table">
+          <thead>
+            <tr>
+              <th data-col="setor">Setor</th>
+              <th class="nr" data-col="estabs">Estabs</th>
+              <th class="nr" data-col="func_por_emp">Func/emp</th>
+              <th class="nr" data-col="vinculos">Vínculos</th>
+              <th class="nr" data-col="sal_medio">Sal. médio</th>
+              <th class="nr" data-col="eleg">Elegíveis</th>
+              <th class="nr" data-col="pct_eleg">% eleg.</th>
+              <th class="nr" data-col="sal_eleg">Sal. eleg.</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <h3 style="font-size:13px;font-weight:700;color:var(--azul-escuro);text-transform:uppercase;margin:24px 0 12px;letter-spacing:0.4px">Tabela 2 — Por Cargo (multi-select de setor)</h3>
+      <div class="ms-bar" id="b23-setor-chips">
+        <span class="ms-label">Setores:</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table id="b23-cargo-table">
+          <thead>
+            <tr>
+              <th data-col="cargo">Cargo</th>
+              <th class="nr" data-col="vinculos">Vínculos</th>
+              <th class="nr" data-col="sal_medio">Sal. médio</th>
+              <th class="nr" data-col="eleg">Elegíveis</th>
+              <th class="nr" data-col="pct_eleg">% eleg.</th>
+              <th class="nr" data-col="sal_eleg">Sal. eleg.</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="b23-cargo-pag"></div>
+    </div>
+  </section>
+
+  <!-- BLOCO 4 — EMPRESAS-ALVO -->
+  <section class="block" id="b4">
+    <div class="block-header">
+      <div class="block-num">4</div>
+      <h2>Empresas-Alvo</h2>
+      <span class="block-tag" id="b4-tag">CNPJs ativos &middot; porte grande</span>
+    </div>
+    <div class="block-insight" id="b4-insight"></div>
+    <div class="block-body">
+
+      <div class="tb-toolbar">
+        <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap">
+          <div class="fg">
+            <label>Capital social mínimo</label>
+            <select id="b4-cap-min">
+              <option value="0">Qualquer valor</option>
+              <option value="100000">Acima de R$ 100K</option>
+              <option value="500000" selected>Acima de R$ 500K</option>
+              <option value="1000000">Acima de R$ 1M</option>
+              <option value="2000000">Acima de R$ 2M</option>
+              <option value="5000000">Acima de R$ 5M</option>
+              <option value="10000000">Acima de R$ 10M</option>
+            </select>
+          </div>
+          <button class="btn-secondary" onclick="reloadEmpresas()">Aplicar filtro</button>
+        </div>
+        <input class="tb-search" id="b4-search" placeholder="Buscar empresa ou setor..." oninput="renderB4()">
+      </div>
+
+      <div class="ms-bar" id="b4-setor-chips">
+        <span class="ms-label">Setores:</span>
+      </div>
+
+      <div style="overflow-x:auto">
+        <table id="b4-table">
+          <thead>
+            <tr>
+              <th data-col="nome_empresa">Empresa</th>
+              <th data-col="setor">Setor</th>
+              <th class="nr" data-col="capital_social">Capital</th>
+              <th class="nr" data-col="distancia_km">Distância</th>
+              <th data-col="cep">CEP</th>
+              <th data-col="telefone">Telefone</th>
+              <th data-col="email">Email</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="b4-pag"></div>
+    </div>
+  </section>
+
+  <!-- BLOCO 5 — PIPELINE UNIVERSITÁRIO -->
+  <section class="block" id="b5">
+    <div class="block-header">
+      <div class="block-num">5</div>
+      <h2>Pipeline Universitário</h2>
+      <span class="block-tag" id="b5-tag">INEP Censo Superior</span>
+    </div>
+    <div class="block-insight" id="b5-insight"></div>
+    <div class="block-body">
+
+      <div class="mini-kpis" id="b5-kpis"></div>
+
+      <h3 style="font-size:12px;color:var(--cinza-80);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;font-weight:700">Filtros</h3>
+      <div class="ms-bar" id="b5-area-chips"><span class="ms-label">Áreas:</span></div>
+      <div class="ms-bar" id="b5-ies-chips"><span class="ms-label">IES:</span></div>
+
+      <div class="two-col">
+        <div class="chart-container">
+          <div class="chart-title">Série temporal de concluintes</div>
+          <div id="b5-chart-serie" style="height:260px"></div>
+        </div>
+        <div class="chart-container">
+          <div class="chart-title">Top IES por concluintes (último ano)</div>
+          <div id="b5-chart-ies" style="height:260px"></div>
+        </div>
+      </div>
+
+      <h3 style="font-size:12px;color:var(--cinza-80);text-transform:uppercase;letter-spacing:0.5px;margin:18px 0 8px;font-weight:700">Tabela detalhada (área &times; curso &times; IES)</h3>
+      <div style="overflow-x:auto">
+        <table id="b5-table">
+          <thead>
+            <tr>
+              <th data-col="area">Área</th>
+              <th data-col="curso">Curso</th>
+              <th data-col="ies">IES</th>
+              <th data-col="rede">Rede</th>
+              <th class="nr" data-col="conc">Concluintes</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="b5-pag"></div>
+    </div>
+  </section>
+
+  <!-- BLOCO 6 — SCORE DE ATRATIVIDADE -->
+  <section class="block" id="b6">
+    <div class="block-header">
+      <div class="block-num">6</div>
+      <h2>Score de Atratividade</h2>
+      <span class="block-tag" id="b6-tag">645 municípios SP &middot; pesos ajustáveis</span>
+    </div>
+    <div class="block-insight" id="b6-insight"></div>
+    <div class="block-body">
+
+      <div class="weights-grid">
+        <div class="witem">
+          <label>D1 Capacidade de Pagamento <span class="wval" id="lw1">35%</span></label>
+          <input type="range" id="w1" min="0" max="100" value="35" oninput="updateWeights()">
+          <div class="wsub">Salário médio &middot; % vínc. ≥ 3 SM</div>
+        </div>
+        <div class="witem">
+          <label>D2 Tamanho do Mercado <span class="wval" id="lw2">30%</span></label>
+          <input type="range" id="w2" min="0" max="100" value="30" oninput="updateWeights()">
+          <div class="wsub">Vínculos &middot; empresas grandes / 1k</div>
+        </div>
+        <div class="witem">
+          <label>D3 Pipeline Acadêmico <span class="wval" id="lw3">20%</span></label>
+          <input type="range" id="w3" min="0" max="100" value="20" oninput="updateWeights()">
+          <div class="wsub">Tx. sup. 25+ &middot; conc. alvo / 1k hab</div>
+        </div>
+        <div class="witem">
+          <label>D4 Dinamismo Econômico <span class="wval" id="lw4">15%</span></label>
+          <input type="range" id="w4" min="0" max="100" value="15" oninput="updateWeights()">
+          <div class="wsub">IDHM &middot; crescimento empregos 20→24</div>
+        </div>
+        <div class="w-total" id="w-total" style="color:var(--aux-turquesa)">Total: 100%</div>
+      </div>
+
+      <div class="mini-kpis" id="b6-kpis"></div>
+
+      <div class="two-col">
+        <div class="chart-container">
+          <div class="chart-title">Top 20 municípios</div>
+          <div id="b6-chart-top" style="height:340px"></div>
+        </div>
+        <div class="chart-container">
+          <div class="chart-title">Perfil dimensional &mdash; <span id="b6-radar-title" style="color:var(--azul-claro);font-weight:700">cidade selecionada</span></div>
+          <div id="b6-chart-radar" style="height:340px"></div>
+        </div>
+      </div>
+
+      <div class="tb-toolbar" style="margin-top:18px">
+        <div class="tb-count" id="b6-count">—</div>
+        <input class="tb-search" id="b6-search" placeholder="Buscar município..." oninput="renderB6Table()">
+      </div>
+      <div style="overflow-x:auto">
+        <table id="b6-table">
+          <thead>
+            <tr>
+              <th data-col="rank">#</th>
+              <th data-col="nm">Município</th>
+              <th class="nr" data-col="score">Score</th>
+              <th class="nr" data-col="D1">D1</th>
+              <th class="nr" data-col="D2">D2</th>
+              <th class="nr" data-col="D3">D3</th>
+              <th class="nr" data-col="D4">D4</th>
+              <th class="nr" data-col="pop">Pop.</th>
+              <th class="nr" data-col="sal">Sal. médio</th>
+              <th class="nr" data-col="idhm">IDHM</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="b6-pag"></div>
+    </div>
+  </section>
+
+  <!-- BLOCO 7 — NARRATIVA AI -->
+  <section class="block" id="b7">
+    <div class="block-header">
+      <div class="block-num">7</div>
+      <h2>Análise Executiva por IA</h2>
+      <span class="block-tag">Claude opus-4-7 &middot; ~15s &middot; ~R$ 0,30 por análise</span>
+    </div>
+    <div class="block-insight">
+      <strong>Síntese executiva</strong> em 6 seções: perfil da cidade, mercado de trabalho, cursos recomendados (com cruzamento setor→pós e graduação→pós), prospecção corporativa, parcerias acadêmicas e veredito estratégico (Prioridade Alta/Média/Baixa).
+    </div>
+    <div class="block-body">
+
+      <div class="narr-actions">
+        <div style="font-size:13px;color:var(--cinza-80)">
+          A IA recebe os dados dos blocos 1–6 + portfólio FGV + cursos de concorrentes e devolve recomendação acionável.
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-secondary" id="btn-copy" onclick="copiarNarrativa()" style="display:none">Copiar texto</button>
+          <button class="btn-llm" id="btn-llm" onclick="gerarNarrativa()">⚡ Gerar análise</button>
+        </div>
+      </div>
+
+      <div class="loading" id="loading-llm">
+        <div class="spinner"></div>
+        <div style="margin-top:14px;font-size:13px">Gerando análise executiva com Claude...</div>
+        <div style="margin-top:6px;font-size:11px;color:var(--cinza-60)">Isso pode levar até 20 segundos.</div>
+      </div>
+
+      <div id="narr-area"></div>
+      <div id="narr-tokens" style="font-size:11px;color:var(--cinza-60);text-align:right;margin-top:10px"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="fgv-footer">
+  <div><strong>FGV</strong> &middot; FUNDAÇÃO GETULIO VARGAS</div>
+  <div style="margin-top:6px">Plataforma de Inteligência de Mercado para Decisões de Expansão &middot; MVP &middot; 645 municípios SP</div>
 </footer>
 
 <script>
-// ── estado global ──────────────────────────────────
-let _state = { perfil: null, vinculos: null, estabelecimentos: null, formandos: null, score: null };
-let _req   = null;
+// ═══════════════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════════════
+const STATE = {
+  filtros: { uf: 'SP', municipio: null, produto: 'MBA Executivo', mensalidade: 1200, pct_renda: 30, cep: '' },
+  dados: null,
+  narrativa: null,
+  // estado por bloco
+  b23: { setoresAtivos: new Set(), cargoSort: { col: 'eleg', dir: -1 }, cargoPage: 1 },
+  b4:  { setoresAtivos: new Set(), sort: { col: 'capital_social', dir: -1 }, page: 1 },
+  b5:  { areasAtivas: new Set(), iesAtivas: new Set(), sort: { col: 'conc', dir: -1 }, page: 1 },
+  b6:  { sort: { col: 'rank', dir: 1 }, page: 1 },
+};
+const PAGE_SIZE = 15;
+const PAGE_SIZE_BIG = 20;
 
-// ── inicialização ──────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════════════════
+const fmtN = n => n == null ? '—' : Number(n).toLocaleString('pt-BR');
+const fmtR = n => n == null ? '—' : 'R$ ' + Number(n).toLocaleString('pt-BR', { maximumFractionDigits: 0 });
+const fmtPct = n => n == null ? '—' : Number(n).toFixed(1) + '%';
+const fmtPctNoSign = n => n == null ? '—' : (n > 0 ? '+' : '') + Number(n).toFixed(1) + '%';
+
+function showError(msg) {
+  const el = document.getElementById('alert-error');
+  el.textContent = '⚠ ' + msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 6000);
+}
+
+function statusBadge(status, delta) {
+  if (status === 'above') return `<span class="badge badge-up">▲ ${fmtPctNoSign(delta)}</span>`;
+  if (status === 'below') return `<span class="badge badge-down">▼ ${fmtPctNoSign(delta)}</span>`;
+  return '<span class="badge badge-neutral">—</span>';
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// INIT — carrega municípios SP
+// ═══════════════════════════════════════════════════════════════════════
 async function init() {
-  const r = await fetch('/api/ufs');
-  const ufs = await r.json();
-  const sel = document.getElementById('sel-uf');
-  ufs.forEach(uf => sel.add(new Option(uf, uf)));
-}
-
-async function loadMunicipios() {
-  const uf  = document.getElementById('sel-uf').value;
-  const sel = document.getElementById('sel-municipio');
-  sel.innerHTML = '<option value="">Carregando...</option>';
-  if (!uf) { sel.innerHTML = '<option value="">— selecione o estado primeiro —</option>'; return; }
-  const r    = await fetch(`/api/municipios/${uf}`);
-  const list = await r.json();
-  sel.innerHTML = '<option value="">— selecione a cidade —</option>';
-  list.forEach(m => sel.add(new Option(m.nome_municipio, m.id_municipio)));
-}
-
-// ── análise principal ──────────────────────────────
-async function runAnalise() {
-  const id_municipio = document.getElementById('sel-municipio').value;
-  const sigla_uf     = document.getElementById('sel-uf').value;
-  const produto      = document.getElementById('sel-produto').value;
-  const mensalidade  = parseFloat(document.getElementById('inp-mens').value);
-  const pct          = parseFloat(document.getElementById('inp-pct').value) || 9;
-  const cep_polo     = document.getElementById('inp-cep').value.trim() || null;
-
-  if (!id_municipio || !sigla_uf || !mensalidade) {
-    alert('Preencha: estado, cidade e mensalidade.'); return;
+  try {
+    const resp = await fetch('/api/municipios/SP');
+    const muns = await resp.json();
+    const sel = document.getElementById('f-municipio');
+    sel.innerHTML = '<option value="">Selecione o município...</option>' +
+      muns.map(m => `<option value="${m.id_municipio}">${m.nome_municipio}</option>`).join('');
+  } catch (e) {
+    showError('Erro ao carregar municípios: ' + e.message);
   }
+}
+init();
 
-  document.getElementById('btn-run').disabled = true;
-  document.getElementById('btn-run').textContent = 'Carregando...';
-  setLoading();
+// ═══════════════════════════════════════════════════════════════════════
+// LOAD ANÁLISE — chama /api/analise e popula tudo
+// ═══════════════════════════════════════════════════════════════════════
+async function loadAnalise() {
+  const idMun = document.getElementById('f-municipio').value;
+  if (!idMun) { showError('Selecione um município antes de carregar.'); return; }
 
-  _req = { id_municipio, sigla_uf, produto, mensalidade, percentual_renda: pct, cep_polo };
+  STATE.filtros.municipio = idMun;
+  STATE.filtros.produto = document.getElementById('f-produto').value;
+  STATE.filtros.mensalidade = +document.getElementById('f-mensalidade').value;
+  STATE.filtros.pct_renda = +document.getElementById('f-pct').value;
+  STATE.filtros.cep = document.getElementById('f-cep').value;
+
+  const btn = document.getElementById('btn-analisar');
+  btn.disabled = true;
+  btn.textContent = 'Carregando...';
+  document.getElementById('empty-state').style.display = 'none';
 
   try {
-    const r = await fetch('/api/analise', {
+    const capMin = +(document.getElementById('b4-cap-min')?.value || 500000);
+    const resp = await fetch('/api/analise', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(_req)
+      body: JSON.stringify({
+        id_municipio: idMun,
+        sigla_uf: STATE.filtros.uf,
+        produto: STATE.filtros.produto,
+        mensalidade: STATE.filtros.mensalidade,
+        pct_renda: STATE.filtros.pct_renda,
+        cep_polo: STATE.filtros.cep || null,
+        capital_min: capMin,
+      }),
     });
-    if (!r.ok) throw new Error(await r.text());
-    const d = await r.json();
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    STATE.dados = await resp.json();
 
-    _state.perfil         = d.perfil;
-    _state.vinculos       = d.vinculos;
-    _state.estabelecimentos = d.estabelecimentos;
-    _state.empresas       = d.empresas;
-    _state.formandos      = d.formandos;
-    _state.score          = d.score;
+    // Reseta estados e renderiza
+    STATE.b23.setoresAtivos = new Set();
+    STATE.b4.setoresAtivos = new Set();
+    STATE.b5.areasAtivas = new Set();
+    STATE.b5.iesAtivas = new Set();
+    STATE.b23.cargoPage = 1;
+    STATE.b4.page = 1;
+    STATE.b5.page = 1;
+    STATE.b6.page = 1;
 
-    renderKPIs(d);
-    renderPerfil(d.perfil);
-    renderVinculos(d.vinculos, d.renda_minima);
-    renderEstabelecimentos(d.estabelecimentos);
-    renderEmpresas(d.empresas, d.cep_polo_geocodificado);
-    renderFormandos(d.formandos);
-    renderScore(d.score);
+    renderAll();
+    document.getElementById('kpi-strip').classList.add('show');
+    document.getElementById('nav-bar').classList.add('show');
+    document.querySelectorAll('.block').forEach(b => b.classList.add('show'));
 
-    document.getElementById('btn-llm').disabled = false;
-    document.getElementById('badge-produto').textContent = produto;
-  } catch(e) {
-    alert('Erro: ' + e.message);
+    // Reset bloco 7
+    document.getElementById('narr-area').innerHTML = '';
+    document.getElementById('btn-copy').style.display = 'none';
+    document.getElementById('narr-tokens').textContent = '';
+    STATE.narrativa = null;
+  } catch (e) {
+    showError('Erro ao carregar análise: ' + e.message);
   } finally {
-    document.getElementById('btn-run').disabled = false;
-    document.getElementById('btn-run').textContent = 'Analisar mercado →';
+    btn.disabled = false;
+    btn.textContent = 'Carregar análise';
   }
 }
 
-function setLoading() {
-  ['bc1','bc2','bc3','bc4','bc5'].forEach(id => {
-    document.getElementById(id).innerHTML = '<div class="loading"><span class="spin"></span>Carregando dados do BigQuery...</div>';
-  });
+async function reloadEmpresas() {
+  // Reusa o fluxo loadAnalise para recarregar tudo com o novo filtro de capital
+  if (STATE.dados) loadAnalise();
 }
 
-// ── KPIs ───────────────────────────────────────────
-function renderKPIs(d) {
-  const renda_min = d.renda_minima;
-  const perfil_row = d.perfil.rows.find(r => r.metrica.includes('superior'));
-  document.getElementById('kpi-renda-min').textContent  = fmt(renda_min);
-  document.getElementById('kpi-elegiveis').textContent  = fmtN(d.vinculos.total_elegiveis);
-  document.getElementById('kpi-empresas').textContent   = fmtN(d.empresas.total);
-  document.getElementById('kpi-score').textContent      = d.score.score + '/10';
-  if (perfil_row) {
-    document.getElementById('kpi-superior').textContent = (perfil_row.cidade || '—') + '%';
-    document.getElementById('kpi-superior-sub').textContent = 'UF: ' + (perfil_row.uf_media || '—') + '%';
+// ═══════════════════════════════════════════════════════════════════════
+// RENDER ALL
+// ═══════════════════════════════════════════════════════════════════════
+function renderAll() {
+  if (!STATE.dados) return;
+  renderKPIStrip();
+  renderB1();
+  renderB23();
+  renderB4Setup();
+  renderB4();
+  renderB5Setup();
+  renderB5();
+  renderB6Setup();
+  renderB6All();
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// KPI STRIP
+// ═══════════════════════════════════════════════════════════════════════
+function renderKPIStrip() {
+  const d = STATE.dados;
+  const perfil = d.perfil;
+  const mt = d.mercado_trabalho;
+  const emp = d.empresas;
+  const pipe = d.pipeline;
+
+  document.getElementById('kpi-pop').textContent = (perfil.populacao / 1000).toFixed(0) + 'k';
+  document.getElementById('kpi-pop-sub').textContent = perfil.cidade_nome;
+
+  document.getElementById('kpi-eleg').textContent = (mt.kpis.elegiveis / 1000).toFixed(0) + 'k';
+  document.getElementById('kpi-eleg-sub').textContent = mt.kpis.pct_elegiveis.toFixed(1) + '% do mercado formal';
+
+  document.getElementById('kpi-sal').textContent = fmtR(mt.kpis.sal_eleg_medio);
+  const ticket = STATE.filtros.mensalidade / mt.kpis.sal_eleg_medio * 100;
+  document.getElementById('kpi-sal-sub').textContent = 'mensalidade = ' + ticket.toFixed(1) + '% renda';
+
+  document.getElementById('kpi-emp').textContent = fmtN(emp.total);
+  const capMin = +(document.getElementById('b4-cap-min').value || 500000);
+  document.getElementById('kpi-emp-sub').textContent = 'capital ≥ ' + fmtR(capMin);
+
+  document.getElementById('kpi-conc').textContent = fmtN(pipe.kpis.c24);
+  document.getElementById('kpi-conc-sub').textContent = pipe.kpis.delta_23 != null ? `vs ${pipe.ano_max - 1}: ${fmtPctNoSign(pipe.kpis.delta_23)}` : '—';
+
+  // Rank
+  const W1 = +document.getElementById('w1').value;
+  const W2 = +document.getElementById('w2').value;
+  const W3 = +document.getElementById('w3').value;
+  const W4 = +document.getElementById('w4').value;
+  const tot = W1 + W2 + W3 + W4 || 100;
+  const rk = computeRanking(W1, W2, W3, W4, tot);
+  const sel = rk.find(r => r.id === STATE.filtros.municipio);
+  if (sel) {
+    document.getElementById('kpi-rank').textContent = '#' + sel.rank;
+    document.getElementById('kpi-rank-sub').textContent = `score ${sel.score.toFixed(1)} / ${rk.length} mun.`;
   }
 }
 
-// ── BLOCO 1 — PERFIL ───────────────────────────────
-function renderPerfil(p) {
-  let h = `<table class="ct">
-    <thead><tr><th>Indicador</th><th>Cidade</th><th>Média UF</th><th>Delta</th><th></th></tr></thead><tbody>`;
-  p.rows.forEach(r => {
-    const dClass = r.delta_pct === null ? '' : (r.status === 'acima' ? 'dp' : r.status === 'abaixo' ? 'dn' : '');
-    const badge  = r.status === 'acima'  ? '<span class="badge b-ok">Acima da UF</span>' :
-                   r.status === 'abaixo' ? '<span class="badge b-no">Abaixo da UF</span>' : '';
-    const dStr   = r.delta_pct !== null ? (r.delta_pct > 0 ? '+' : '') + r.delta_pct + '%' : '—';
-    h += `<tr>
-      <td class="mn">${r.metrica}</td>
-      <td class="cv">${fmtVal(r.metrica, r.cidade)}</td>
-      <td class="uv">${fmtVal(r.metrica, r.uf_media)}</td>
-      <td class="${dClass}">${dStr}</td>
-      <td>${badge}</td>
+// ═══════════════════════════════════════════════════════════════════════
+// BLOCO 1 — PERFIL SOCIOECONÔMICO
+// ═══════════════════════════════════════════════════════════════════════
+function renderB1() {
+  const perfil = STATE.dados.perfil;
+  const eleg = perfil.rows.find(r => r.metrica.includes('Elegíveis'));
+  const sup = perfil.rows.find(r => r.metrica.includes('superior'));
+  const insightHtml = `
+    Em <strong>${perfil.cidade_nome}</strong>,
+    <strong>${eleg ? eleg.cidade.toFixed(1) + '%' : '—'}</strong> dos profissionais formais ganham acima do limiar de elegibilidade
+    para o produto configurado.
+    Comparando com a média ponderada de SP, o município está ${eleg && eleg.delta > 0 ? '<strong>acima</strong>' : 'em linha'}
+    ${eleg ? '(' + (eleg.delta > 0 ? '+' : '') + eleg.delta.toFixed(1) + '%)' : ''}.
+    Pop. 25+ com superior: <strong>${sup ? sup.cidade.toFixed(1) + '%' : '—'}</strong>.
+  `;
+  document.getElementById('b1-insight').innerHTML = insightHtml;
+
+  const tbody = document.querySelector('#b1-table tbody');
+  tbody.innerHTML = perfil.rows.map(r => {
+    const isCurrency = r.metrica.includes('Renda per');
+    const isPct = r.metrica.includes('%') || r.metrica.includes('Gini') || r.metrica.includes('IDHM');
+    const fmtV = v => v == null ? '—' : (isCurrency ? fmtR(v) : (isPct ? Number(v).toFixed(3).replace(/\.?0+$/, '') : fmtN(Math.round(v))));
+    return `<tr>
+      <td><strong>${r.metrica}</strong></td>
+      <td class="nr">${fmtV(r.cidade)}</td>
+      <td class="nr">${fmtV(r.uf)}</td>
+      <td class="nr">${r.delta != null ? fmtPctNoSign(r.delta) : '—'}</td>
+      <td>${statusBadge(r.status, r.delta)}</td>
     </tr>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// BLOCO 2+3 — MERCADO DE TRABALHO + TECIDO EMPRESARIAL
+// ═══════════════════════════════════════════════════════════════════════
+function renderB23() {
+  const mt = STATE.dados.mercado_trabalho;
+  document.getElementById('b23-ano-tag').textContent = `Empregos ${mt.ano} · Renda mín. ${fmtR(mt.renda_min)}`;
+
+  // Insight
+  const top1 = mt.por_setor[0];
+  const adm = mt.por_setor.find(r => (r.setor || '').includes('Administração Pública'));
+  const insightHtml = `
+    Top setor por elegíveis: <strong>${top1 ? top1.setor : '—'}</strong>
+    com <strong>${top1 ? fmtN(top1.eleg) : '—'}</strong> profissionais.
+    ${adm ? `Administração Pública apresenta <strong>${adm.pct_eleg}%</strong> de elegibilidade — o maior índice setorial.` : ''}
+    Salário médio dos elegíveis: <strong>${fmtR(mt.kpis.sal_eleg_medio)}</strong>/mês.
+  `;
+  document.getElementById('b23-insight').innerHTML = insightHtml;
+
+  // Tabela 1: por setor
+  const tbody1 = document.querySelector('#b23-setor-table tbody');
+  tbody1.innerHTML = mt.por_setor.map(r => `
+    <tr>
+      <td><strong>${r.setor}</strong></td>
+      <td class="nr">${fmtN(r.estabs)}</td>
+      <td class="nr">${r.func_por_emp != null ? fmtN(r.func_por_emp) : '—'}</td>
+      <td class="nr">${fmtN(r.vinculos)}</td>
+      <td class="nr">${fmtR(r.sal_medio)}</td>
+      <td class="nr">${fmtN(r.eleg)}</td>
+      <td class="nr">${fmtPct(r.pct_eleg)}</td>
+      <td class="nr">${r.sal_eleg ? fmtR(r.sal_eleg) : '—'}</td>
+    </tr>`).join('');
+
+  // Multi-select de setores
+  const chipsBar = document.getElementById('b23-setor-chips');
+  chipsBar.innerHTML = '<span class="ms-label">Setores:</span>' +
+    mt.setores_unicos.map(s =>
+      `<span class="ms-chip ${STATE.b23.setoresAtivos.has(s) ? 'active' : ''}" onclick="toggleB23Setor('${s.replace(/'/g, "\\'")}')">${s}</span>`
+    ).join('');
+
+  renderB23Cargo();
+}
+
+function toggleB23Setor(s) {
+  if (STATE.b23.setoresAtivos.has(s)) STATE.b23.setoresAtivos.delete(s);
+  else STATE.b23.setoresAtivos.add(s);
+  STATE.b23.cargoPage = 1;
+  renderB23();
+}
+
+function renderB23Cargo() {
+  const mt = STATE.dados.mercado_trabalho;
+  let rows;
+  if (STATE.b23.setoresAtivos.size === 0) {
+    rows = mt.por_cargo.slice();
+  } else {
+    // Agrega cargo_setor com filtro
+    const filtered = mt.cargo_setor.filter(r => STATE.b23.setoresAtivos.has(r.setor));
+    const agg = {};
+    filtered.forEach(r => {
+      if (!agg[r.cargo]) agg[r.cargo] = { cargo: r.cargo, vinculos: 0, eleg: 0, sumSalT: 0, sumSalE: 0 };
+      agg[r.cargo].vinculos += r.vinculos;
+      agg[r.cargo].eleg += r.eleg;
+      agg[r.cargo].sumSalT += (r.sal_medio || 0) * r.vinculos;
+      agg[r.cargo].sumSalE += (r.sal_eleg || 0) * (r.eleg || 0);
+    });
+    rows = Object.values(agg).map(o => ({
+      cargo: o.cargo,
+      vinculos: o.vinculos,
+      sal_medio: o.vinculos > 0 ? Math.round(o.sumSalT / o.vinculos) : null,
+      eleg: o.eleg,
+      pct_eleg: o.vinculos > 0 ? +(o.eleg / o.vinculos * 100).toFixed(1) : 0,
+      sal_eleg: o.eleg >= 5 ? Math.round(o.sumSalE / o.eleg) : null,
+    })).filter(r => r.eleg > 0);
+  }
+
+  // Sort
+  rows.sort((a, b) => {
+    const av = a[STATE.b23.cargoSort.col], bv = b[STATE.b23.cargoSort.col];
+    if (typeof av === 'string') return STATE.b23.cargoSort.dir * av.localeCompare(bv, 'pt');
+    return STATE.b23.cargoSort.dir * ((av || 0) - (bv || 0));
   });
-  h += '</tbody></table>';
-  document.getElementById('bc1').innerHTML = h;
+
+  const total = rows.length;
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+  if (STATE.b23.cargoPage > totalPages) STATE.b23.cargoPage = 1;
+  const slice = rows.slice((STATE.b23.cargoPage - 1) * PAGE_SIZE, STATE.b23.cargoPage * PAGE_SIZE);
+
+  const tbody = document.querySelector('#b23-cargo-table tbody');
+  tbody.innerHTML = slice.map(r => `
+    <tr>
+      <td><strong>${r.cargo}</strong></td>
+      <td class="nr">${fmtN(r.vinculos)}</td>
+      <td class="nr">${fmtR(r.sal_medio)}</td>
+      <td class="nr">${fmtN(r.eleg)}</td>
+      <td class="nr">${fmtPct(r.pct_eleg)}</td>
+      <td class="nr">${r.sal_eleg ? fmtR(r.sal_eleg) : '—'}</td>
+    </tr>`).join('');
+
+  renderPagination('b23-cargo-pag', STATE.b23.cargoPage, totalPages, total, p => { STATE.b23.cargoPage = p; renderB23Cargo(); });
 }
 
-function fmtVal(metrica, v) {
-  if (v === null || v === undefined) return '—';
-  if (metrica.includes('R$') || metrica.includes('renda') || metrica.toLowerCase().includes('renda')) return 'R$ ' + fmtN(v);
-  if (metrica.includes('%') || metrica.includes('superior') || metrica.includes('pobreza') || metrica.includes('urbana')) return v + '%';
-  if (metrica.includes('Population') || metrica.includes('total') || metrica.includes('urbana') && !metrica.includes('%')) return fmtN(v);
-  return v;
+// Setup sort handlers para b23
+document.querySelectorAll('#b23-cargo-table th[data-col]').forEach(th => {
+  th.onclick = () => {
+    const col = th.dataset.col;
+    if (STATE.b23.cargoSort.col === col) STATE.b23.cargoSort.dir *= -1;
+    else { STATE.b23.cargoSort.col = col; STATE.b23.cargoSort.dir = -1; }
+    renderB23Cargo();
+  };
+});
+
+// ═══════════════════════════════════════════════════════════════════════
+// BLOCO 4 — EMPRESAS-ALVO
+// ═══════════════════════════════════════════════════════════════════════
+function renderB4Setup() {
+  const emp = STATE.dados.empresas;
+  document.getElementById('b4-tag').textContent = `${fmtN(emp.total)} empresas elegíveis · top ${emp.exibidos} carregadas`;
+
+  // Insight
+  const top1 = emp.rows[0];
+  const insightHtml = `
+    <strong>${fmtN(emp.total)}</strong> empresas com porte grande e capital social acima do mínimo.
+    ${emp.com_distancia ? 'Distâncias calculadas a partir do CEP da gestora.' : 'Forneça um CEP no filtro para calcular distâncias.'}
+    ${top1 ? `Maior capital: <strong>${top1.nome_empresa}</strong> (${fmtR(top1.capital_social)}).` : ''}
+  `;
+  document.getElementById('b4-insight').innerHTML = insightHtml;
+
+  // Multi-select setores
+  const setoresBar = document.getElementById('b4-setor-chips');
+  setoresBar.innerHTML = '<span class="ms-label">Setores:</span>' +
+    emp.setores_unicos.slice(0, 25).map(s =>
+      `<span class="ms-chip ${STATE.b4.setoresAtivos.has(s) ? 'active' : ''}" onclick="toggleB4Setor('${s.replace(/'/g, "\\'")}')">${s}</span>`
+    ).join('');
 }
 
-// ── BLOCO 2 — VÍNCULOS ─────────────────────────────
-function renderVinculos(v, renda_min) {
-  const rows = v.rows;
-  let h = `
-    <div class="tb-toolbar">
-      <div class="tb-count">
-        <strong>${fmtN(rows.length)}</strong> setores ·
-        <span style="color:var(--green-text);font-weight:600">${fmtN(v.total_elegiveis)} vínculos elegíveis</span> ·
-        Renda mínima: <strong>R$ ${fmt(renda_min)}/mês</strong>
-      </div>
-      <div style="display:flex;gap:8px">
-        <select class="tb-sel" onchange="filterVinculos(this.value)">
-          <option value="all">Todos os setores</option>
-          <option value="yes">Apenas com elegíveis</option>
-          <option value="no">Sem elegíveis</option>
-        </select>
-        <input class="tb-search" placeholder="Buscar setor..." oninput="searchTable('tbl-vinc',this.value)">
-      </div>
-    </div>
-    <table id="tbl-vinc">
-      <thead><tr>
-        <th onclick="sortTable('tbl-vinc',0)">Setor IBGE</th>
-        <th onclick="sortTable('tbl-vinc',1)" class="nr">Total vínculos</th>
-        <th onclick="sortTable('tbl-vinc',2)" class="nr">Vínculos elegíveis</th>
-        <th onclick="sortTable('tbl-vinc',3)" class="nr">Sal. médio ponderado (R$)</th>
-        <th>Status</th>
-      </tr></thead><tbody>`;
+function toggleB4Setor(s) {
+  if (STATE.b4.setoresAtivos.has(s)) STATE.b4.setoresAtivos.delete(s);
+  else STATE.b4.setoresAtivos.add(s);
+  STATE.b4.page = 1;
+  renderB4Setup();
+  renderB4();
+}
 
-  rows.forEach(r => {
-    const eli  = r.elegivel;
-    const rowClass = eli ? 'eligible' : '';
-    const badge    = eli ? '<span class="badge b-ok">✓ Com elegíveis</span>' : '<span class="badge b-no">✗ Sem elegíveis</span>';
-    const heatSal  = r.salario_medio_reais > renda_min * 2 ? 'heat-h' : r.salario_medio_reais >= renda_min ? 'heat-m' : '';
-    const heatVinc = r.vinculos_elegiveis > 10000 ? 'heat-h' : r.vinculos_elegiveis > 2000 ? 'heat-m' : '';
-    h += `<tr class="${rowClass}" data-elig="${eli ? 'yes' : 'no'}">
-      <td>${r.descricao_subsetor || '—'}</td>
-      <td class="nr">${fmtN(r.total_vinculos)}</td>
-      <td class="nr ${heatVinc}">${fmtN(r.vinculos_elegiveis)}</td>
-      <td class="nr ${heatSal}">R$ ${fmt(r.salario_medio_reais)}</td>
-      <td>${badge}</td>
-    </tr>`;
+function renderB4() {
+  if (!STATE.dados) return;
+  let rows = STATE.dados.empresas.rows.slice();
+  const q = (document.getElementById('b4-search')?.value || '').toLowerCase();
+  if (q) rows = rows.filter(r =>
+    (r.nome_empresa || '').toLowerCase().includes(q) ||
+    (r.setor || '').toLowerCase().includes(q)
+  );
+  if (STATE.b4.setoresAtivos.size > 0) rows = rows.filter(r => STATE.b4.setoresAtivos.has(r.setor));
+
+  rows.sort((a, b) => {
+    const av = a[STATE.b4.sort.col], bv = b[STATE.b4.sort.col];
+    if (typeof av === 'string') return STATE.b4.sort.dir * av.localeCompare(bv, 'pt');
+    return STATE.b4.sort.dir * ((av == null ? -Infinity : av) - (bv == null ? -Infinity : bv));
   });
-  h += '</tbody></table>';
-  document.getElementById('bc2').innerHTML = h;
-  paginateTable('tbl-vinc');
-}
 
-function filterVinculos(val) {
-  document.querySelectorAll('#tbl-vinc tbody tr').forEach(tr => {
-    tr.style.display = val === 'all' ? '' : tr.dataset.elig === val ? '' : 'none';
-  });
-  paginateTable('tbl-vinc');
-}
+  const total = rows.length;
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+  if (STATE.b4.page > totalPages) STATE.b4.page = 1;
+  const slice = rows.slice((STATE.b4.page - 1) * PAGE_SIZE, STATE.b4.page * PAGE_SIZE);
 
-// ── BLOCO 3 — ESTABELECIMENTOS ─────────────────────
-function renderEstabelecimentos(estab) {
-  const rows = estab.rows;
-  let h = `
-    <div class="tb-toolbar">
-      <div class="tb-count"><strong>${fmtN(rows.length)}</strong> setores · <strong>${fmtN(estab.total_estabelecimentos)}</strong> estabelecimentos totais</div>
-      <input class="tb-search" placeholder="Buscar setor..." oninput="searchTable('tbl-estab',this.value)">
-    </div>
-    <table id="tbl-estab">
-      <thead><tr>
-        <th onclick="sortTable('tbl-estab',0)">Setor IBGE</th>
-        <th onclick="sortTable('tbl-estab',1)" class="nr">Estabelecimentos</th>
-        <th onclick="sortTable('tbl-estab',2)" class="nr">Vínculos ativos</th>
-        <th onclick="sortTable('tbl-estab',3)" class="nr">Vínculos elegíveis</th>
-        <th onclick="sortTable('tbl-estab',4)" class="nr">% elegível</th>
-        <th>Concentração</th>
-      </tr></thead><tbody>`;
-
-  rows.forEach(r => {
-    const pct  = r.pct_elegivel || 0;
-    const hPct = pct > 50 ? 'heat-h' : pct > 20 ? 'heat-m' : 'heat-l';
-    const hEstab = r.total_estabelecimentos > 1000 ? 'heat-h' : r.total_estabelecimentos > 200 ? 'heat-m' : '';
-    const ratio  = r.total_estabelecimentos > 0 ? (r.vinculos_total_rais / r.total_estabelecimentos) : 0;
-    const concentracao = ratio > 500 ? 'Alta — poucas empresas grandes' : ratio > 100 ? 'Moderada' : 'Distribuída';
-    const hConc = ratio > 500 ? 'heat-l' : ratio > 100 ? 'heat-m' : '';
-    h += `<tr>
-      <td>${r.descricao_subsetor || '—'}</td>
-      <td class="nr ${hEstab}">${fmtN(r.total_estabelecimentos)}</td>
-      <td class="nr">${fmtN(r.total_vinculos_ativos)}</td>
-      <td class="nr">${fmtN(r.vinculos_elegiveis)}</td>
-      <td class="nr ${hPct}">${pct}%</td>
-      <td class="${hConc}" style="font-size:12px">${concentracao}</td>
-    </tr>`;
-  });
-  h += '</tbody></table>';
-  document.getElementById('bc3').innerHTML = h;
-  paginateTable('tbl-estab');
-}
-
-// ── BLOCO 4 — EMPRESAS ─────────────────────────────
-function renderEmpresas(emp, comDist) {
-  const rows = emp.rows;
-  const warn = document.querySelector('#bc4 .warn');
-
-  let h = warn ? warn.outerHTML : '';
-  h += `
-    <div class="tb-toolbar">
-      <div class="tb-count"><strong>${fmtN(rows.length)}</strong> empresas · setores com vínculos elegíveis · ${comDist ? 'com distância do polo' : 'CEP do polo não informado'}</div>
-      <div style="display:flex;gap:8px">
-        <select class="tb-sel" onchange="sortEmpresasBy(this.value)">
-          <option value="cap">Ordenar: Capital social ↓</option>
-          ${comDist ? '<option value="dist">Ordenar: Distância ↑</option>' : ''}
-        </select>
-        <input class="tb-search" placeholder="Buscar empresa..." oninput="searchTable('tbl-emp',this.value)">
-      </div>
-    </div>
-    <table id="tbl-emp">
-      <thead><tr>
-        <th onclick="sortTable('tbl-emp',0)">Empresa</th>
-        <th onclick="sortTable('tbl-emp',1)">Porte</th>
-        <th>CEP</th>
-        <th>Telefone</th>
-        <th>Email</th>
-        <th onclick="sortTable('tbl-emp',5)" class="nr">Capital social (R$)</th>
-        <th>Fundação</th>
-        ${comDist ? '<th class="nr">Distância (km)</th>' : ''}
-      </tr></thead><tbody>`;
-
-  rows.forEach(r => {
-    const capClass = r.capital_social > 10_000_000 ? 'heat-h' : r.capital_social > 1_000_000 ? 'heat-m' : '';
-    h += `<tr>
-      <td><strong>${r.nome_empresa || r.razao_social || '—'}</strong></td>
-      <td style="font-size:12px">${r.porte || '—'}</td>
+  const tbody = document.querySelector('#b4-table tbody');
+  tbody.innerHTML = slice.map(r => `
+    <tr>
+      <td><strong>${r.nome_empresa}</strong></td>
+      <td>${r.setor}</td>
+      <td class="nr">${fmtR(r.capital_social)}</td>
+      <td class="nr">${r.distancia_km != null ? r.distancia_km.toFixed(1) + ' km' : '—'}</td>
       <td>${r.cep || '—'}</td>
       <td>${r.telefone || '—'}</td>
-      <td style="font-size:12px">${r.email || '<span style="color:var(--gray-text)">—</span>'}</td>
-      <td class="nr ${capClass}">R$ ${fmtN(r.capital_social)}</td>
-      <td style="font-size:12px">${r.data_inicio_atividade ? r.data_inicio_atividade.substring(0,10) : '—'}</td>
-      ${comDist ? `<td class="nr">${r.distancia_km !== null ? r.distancia_km + ' km' : '—'}</td>` : ''}
-    </tr>`;
-  });
+      <td style="font-size:11px;color:var(--cinza-80)">${r.email || '—'}</td>
+    </tr>`).join('');
 
-  h += '</tbody></table><div style="margin-top:8px;font-size:11px;color:var(--gray-text)">Use o CEP para consultar o endereço via ViaCEP · Email pode estar vazio (declaração Receita Federal)</div>';
-  document.getElementById('bc4').innerHTML = h;
-  paginateTable('tbl-emp');
+  renderPagination('b4-pag', STATE.b4.page, totalPages, total, p => { STATE.b4.page = p; renderB4(); });
 }
 
-// ── BLOCO 5 — FORMANDOS ────────────────────────────
-function renderFormandos(f) {
-  const rows = f.rows;
-  let h = `
-    <div class="tb-toolbar">
-      <div class="tb-count"><strong>${fmtN(rows.length)}</strong> combinações IES × área · <strong>${fmtN(f.total_concluintes)}</strong> concluintes no período</div>
-      <div style="display:flex;gap:8px">
-        <select class="tb-sel">
-          <option>Todas as modalidades</option>
-          <option>Presencial</option>
-          <option>EAD</option>
-        </select>
-        <select class="tb-sel">
-          <option>Todas as redes</option>
-          <option>Pública</option>
-          <option>Privada</option>
-        </select>
-        <input class="tb-search" placeholder="Buscar IES ou área..." oninput="searchTable('tbl-form',this.value)">
-      </div>
+document.querySelectorAll('#b4-table th[data-col]').forEach(th => {
+  th.onclick = () => {
+    const col = th.dataset.col;
+    if (STATE.b4.sort.col === col) STATE.b4.sort.dir *= -1;
+    else { STATE.b4.sort.col = col; STATE.b4.sort.dir = col === 'nome_empresa' || col === 'setor' || col === 'cep' ? 1 : -1; }
+    renderB4();
+  };
+});
+
+// ═══════════════════════════════════════════════════════════════════════
+// BLOCO 5 — PIPELINE UNIVERSITÁRIO
+// ═══════════════════════════════════════════════════════════════════════
+function renderB5Setup() {
+  const p = STATE.dados.pipeline;
+  document.getElementById('b5-tag').textContent = `INEP Censo Superior · ${p.anos[0]}–${p.ano_max}`;
+
+  // KPIs
+  const kpis = p.kpis;
+  document.getElementById('b5-kpis').innerHTML = `
+    <div class="mini-kpi">
+      <div class="mini-kpi-lbl">Concluintes ${p.ano_max}</div>
+      <div class="mini-kpi-val">${fmtN(kpis.c24)}</div>
+      <div class="mini-kpi-sub">vs ${p.ano_max - 1}: ${fmtPctNoSign(kpis.delta_23)}</div>
     </div>
-    <table id="tbl-form">
-      <thead><tr>
-        <th onclick="sortTable('tbl-form',0)">Instituição</th>
-        <th>Rede</th>
-        <th>Modal.</th>
-        <th onclick="sortTable('tbl-form',3)">Área geral</th>
-        <th onclick="sortTable('tbl-form',4)">Área específica</th>
-        <th onclick="sortTable('tbl-form',5)">Área detalhada</th>
-        <th class="nr" onclick="sortTable('tbl-form',6)">Vagas</th>
-        <th class="nr" onclick="sortTable('tbl-form',7)">Inscritos</th>
-        <th class="nr" onclick="sortTable('tbl-form',8)">Matrículas</th>
-        <th class="nr" onclick="sortTable('tbl-form',9)">Concluintes</th>
-        <th>Ano</th>
-      </tr></thead><tbody>`;
+    <div class="mini-kpi">
+      <div class="mini-kpi-lbl">vs 2020</div>
+      <div class="mini-kpi-val">${fmtPctNoSign(kpis.delta_20)}</div>
+      <div class="mini-kpi-sub">crescimento de 4 anos</div>
+    </div>
+    <div class="mini-kpi">
+      <div class="mini-kpi-lbl">IES no município</div>
+      <div class="mini-kpi-val">${kpis.ies24}</div>
+      <div class="mini-kpi-sub">com formandos em ${p.ano_max}</div>
+    </div>
+    <div class="mini-kpi">
+      <div class="mini-kpi-lbl">Áreas de formação</div>
+      <div class="mini-kpi-val">${p.areas_unicas.length}</div>
+      <div class="mini-kpi-sub">distintas no histórico</div>
+    </div>
+  `;
 
-  rows.forEach(r => {
-    const badgeRede = r.rede && r.rede.toLowerCase().includes('p') && r.rede.toLowerCase().includes('blica') ? 'b-pub' : 'b-priv';
-    const hConc = r.total_concluintes > 500 ? 'heat-h' : r.total_concluintes > 100 ? 'heat-m' : '';
-    h += `<tr>
-      <td><strong>${r.nome_ies || '—'}</strong></td>
-      <td><span class="badge ${badgeRede}">${r.rede || '—'}</span></td>
-      <td style="font-size:12px">${r.modalidade_ensino || '—'}</td>
-      <td style="font-size:12px">${r.nome_area_geral || '—'}</td>
-      <td style="font-size:12px">${r.nome_area_especifica || '—'}</td>
-      <td style="font-size:11px;color:var(--gray-text)">${r.nome_area_detalhada || '—'}</td>
-      <td class="nr">${fmtN(r.total_vagas)}</td>
-      <td class="nr">${fmtN(r.total_inscritos)}</td>
-      <td class="nr">${fmtN(r.total_matriculas)}</td>
-      <td class="nr ${hConc}">${fmtN(r.total_concluintes)}</td>
-      <td>${r.ano || '—'}</td>
+  // Insight
+  document.getElementById('b5-insight').innerHTML = `
+    Pipeline acadêmico de <strong>${fmtN(kpis.c24)}</strong> concluintes em ${p.ano_max} distribuídos em
+    <strong>${kpis.ies24}</strong> instituições. Uso recomendado: cruzar áreas em alta com setores elegíveis (Bloco 2-3) para identificar fits naturais.
+  `;
+
+  // Multi-select áreas (top 12 por volume)
+  const areaVol = {};
+  p.rows.forEach(r => {
+    if (r.ano === p.ano_max) areaVol[r.area] = (areaVol[r.area] || 0) + r.conc;
+  });
+  const topAreas = Object.entries(areaVol).sort((a, b) => b[1] - a[1]).slice(0, 12).map(x => x[0]);
+  document.getElementById('b5-area-chips').innerHTML = '<span class="ms-label">Áreas:</span>' +
+    topAreas.map(a =>
+      `<span class="ms-chip ${STATE.b5.areasAtivas.has(a) ? 'active' : ''}" onclick="toggleB5Area('${a.replace(/'/g, "\\'")}')">${a}</span>`
+    ).join('');
+
+  // Multi-select IES (top 10 por volume)
+  const iesVol = {};
+  p.rows.forEach(r => {
+    if (r.ano === p.ano_max) iesVol[r.ies] = (iesVol[r.ies] || 0) + r.conc;
+  });
+  const topIes = Object.entries(iesVol).sort((a, b) => b[1] - a[1]).slice(0, 10).map(x => x[0]);
+  document.getElementById('b5-ies-chips').innerHTML = '<span class="ms-label">IES:</span>' +
+    topIes.map(i =>
+      `<span class="ms-chip ${STATE.b5.iesAtivas.has(i) ? 'active' : ''}" onclick="toggleB5Ies('${i.replace(/'/g, "\\'")}')">${i}</span>`
+    ).join('');
+}
+
+function toggleB5Area(a) {
+  if (STATE.b5.areasAtivas.has(a)) STATE.b5.areasAtivas.delete(a);
+  else STATE.b5.areasAtivas.add(a);
+  STATE.b5.page = 1;
+  renderB5Setup();
+  renderB5();
+}
+function toggleB5Ies(i) {
+  if (STATE.b5.iesAtivas.has(i)) STATE.b5.iesAtivas.delete(i);
+  else STATE.b5.iesAtivas.add(i);
+  STATE.b5.page = 1;
+  renderB5Setup();
+  renderB5();
+}
+
+function filterB5Rows() {
+  const p = STATE.dados.pipeline;
+  return p.rows.filter(r => {
+    if (STATE.b5.areasAtivas.size > 0 && !STATE.b5.areasAtivas.has(r.area)) return false;
+    if (STATE.b5.iesAtivas.size > 0 && !STATE.b5.iesAtivas.has(r.ies)) return false;
+    return true;
+  });
+}
+
+function renderB5() {
+  if (!STATE.dados) return;
+  const p = STATE.dados.pipeline;
+  const filtered = filterB5Rows();
+
+  // Série temporal
+  const porAno = {};
+  filtered.forEach(r => { porAno[r.ano] = (porAno[r.ano] || 0) + r.conc; });
+  const anos = Object.keys(porAno).map(Number).sort();
+  Plotly.react('b5-chart-serie', [{
+    type: 'bar',
+    x: anos,
+    y: anos.map(a => porAno[a]),
+    marker: { color: '#003A79' },
+    text: anos.map(a => fmtN(porAno[a])),
+    textposition: 'outside',
+    hovertemplate: '%{x}<br>%{y:,.0f} concluintes<extra></extra>'
+  }], {
+    margin: { l: 60, r: 20, t: 10, b: 36 },
+    yaxis: { title: 'Concluintes' },
+    xaxis: { type: 'category' },
+    paper_bgcolor: 'white', plot_bgcolor: 'white',
+    height: 250, font: { family: 'Arial', size: 11 }
+  }, { displayModeBar: false });
+
+  // Top IES (último ano)
+  const iesAgg = {};
+  filtered.filter(r => r.ano === p.ano_max).forEach(r => {
+    iesAgg[r.ies] = (iesAgg[r.ies] || 0) + r.conc;
+  });
+  const topIes = Object.entries(iesAgg).sort((a, b) => b[1] - a[1]).slice(0, 8);
+  Plotly.react('b5-chart-ies', [{
+    type: 'bar', orientation: 'h',
+    x: topIes.map(x => x[1]).reverse(),
+    y: topIes.map(x => x[0].length > 40 ? x[0].slice(0, 38) + '…' : x[0]).reverse(),
+    marker: { color: '#008BC9' },
+    hovertemplate: '%{y}<br>%{x:,.0f} concluintes<extra></extra>'
+  }], {
+    margin: { l: 200, r: 20, t: 10, b: 36 },
+    paper_bgcolor: 'white', plot_bgcolor: 'white',
+    height: 250, font: { family: 'Arial', size: 10 }
+  }, { displayModeBar: false });
+
+  // Tabela detalhada (último ano)
+  const last = filtered.filter(r => r.ano === p.ano_max);
+  last.sort((a, b) => {
+    const av = a[STATE.b5.sort.col], bv = b[STATE.b5.sort.col];
+    if (typeof av === 'string') return STATE.b5.sort.dir * av.localeCompare(bv, 'pt');
+    return STATE.b5.sort.dir * ((av || 0) - (bv || 0));
+  });
+  const total = last.length;
+  const totalPages = Math.ceil(total / PAGE_SIZE_BIG);
+  if (STATE.b5.page > totalPages) STATE.b5.page = 1;
+  const slice = last.slice((STATE.b5.page - 1) * PAGE_SIZE_BIG, STATE.b5.page * PAGE_SIZE_BIG);
+
+  document.querySelector('#b5-table tbody').innerHTML = slice.map(r => {
+    const isPub = (r.rede || '').toLowerCase().includes('pública');
+    return `<tr>
+      <td>${r.area}</td>
+      <td><strong>${r.curso}</strong></td>
+      <td>${r.ies}</td>
+      <td><span class="badge ${isPub ? 'badge-pub' : 'badge-priv'}">${r.rede}</span></td>
+      <td class="nr">${fmtN(r.conc)}</td>
     </tr>`;
-  });
-  h += '</tbody></table>';
-  document.getElementById('bc5').innerHTML = h;
-  paginateTable('tbl-form');
+  }).join('');
+  renderPagination('b5-pag', STATE.b5.page, totalPages, total, p2 => { STATE.b5.page = p2; renderB5(); });
 }
 
-// ── BLOCO 6 — SCORE ────────────────────────────────
-function renderScore(s) {
-  document.getElementById('score-val').textContent   = s.score;
-  document.getElementById('score-bar').style.width   = (s.score / 10 * 100) + '%';
-  document.getElementById('score-caption').textContent = s.score + ' de 10 pontos';
+document.querySelectorAll('#b5-table th[data-col]').forEach(th => {
+  th.onclick = () => {
+    const col = th.dataset.col;
+    if (STATE.b5.sort.col === col) STATE.b5.sort.dir *= -1;
+    else { STATE.b5.sort.col = col; STATE.b5.sort.dir = col === 'conc' ? -1 : 1; }
+    renderB5();
+  };
+});
 
-  const dims = Object.values(s.dimensoes);
-  const dimsEls = document.querySelectorAll('.sdim');
-  dims.forEach((d, i) => {
-    const el = dimsEls[i];
-    if (!el) return;
-    el.querySelector('.sdim-name').textContent = d.label;
-    el.querySelector('.sdim-val').textContent  = d.valor + ' / ' + d.max;
-    el.querySelector('.sdim-fill').style.width = (d.valor / d.max * 100) + '%';
-  });
+// ═══════════════════════════════════════════════════════════════════════
+// BLOCO 6 — SCORE DE ATRATIVIDADE
+// ═══════════════════════════════════════════════════════════════════════
+function renderB6Setup() {
+  const score = STATE.dados.score;
+  document.getElementById('b6-tag').textContent = `${score.n} municípios SP · pesos ajustáveis`;
 }
 
-// ── LLM ────────────────────────────────────────────
-async function runLLM() {
-  if (!_req || !_state.perfil) { alert('Execute a análise primeiro.'); return; }
-  document.getElementById('btn-llm').disabled = true;
-  document.getElementById('btn-llm').textContent = 'Gerando...';
-  document.getElementById('llm-out').innerHTML = '<div class="loading"><span class="spin"></span>Claude está analisando os dados...</div>';
+function computeRanking(W1, W2, W3, W4, total) {
+  const div = total > 0 ? total : 100;
+  const cidades = STATE.dados.score.cidades.map(c => ({
+    ...c,
+    score: ((W1 * c.D1 + W2 * c.D2 + W3 * c.D3 + W4 * c.D4) / div) * 100
+  }));
+  cidades.sort((a, b) => b.score - a.score);
+  cidades.forEach((c, i) => c.rank = i + 1);
+  return cidades;
+}
+
+function updateWeights() {
+  const W1 = +document.getElementById('w1').value;
+  const W2 = +document.getElementById('w2').value;
+  const W3 = +document.getElementById('w3').value;
+  const W4 = +document.getElementById('w4').value;
+  const tot = W1 + W2 + W3 + W4;
+  document.getElementById('lw1').textContent = W1 + '%';
+  document.getElementById('lw2').textContent = W2 + '%';
+  document.getElementById('lw3').textContent = W3 + '%';
+  document.getElementById('lw4').textContent = W4 + '%';
+  const tEl = document.getElementById('w-total');
+  tEl.textContent = `Total: ${tot}%${tot === 100 ? '' : ' (normalizado)'}`;
+  tEl.style.color = tot === 100 ? 'var(--aux-turquesa)' : 'var(--aux-laranja)';
+  if (STATE.dados) renderB6All();
+}
+
+function renderB6All() {
+  const W1 = +document.getElementById('w1').value;
+  const W2 = +document.getElementById('w2').value;
+  const W3 = +document.getElementById('w3').value;
+  const W4 = +document.getElementById('w4').value;
+  const tot = W1 + W2 + W3 + W4;
+  const ranked = computeRanking(W1, W2, W3, W4, tot);
+  STATE._b6ranked = ranked;
+
+  // KPIs do bloco
+  const sel = ranked.find(r => r.id === STATE.filtros.municipio);
+  const top = ranked[0];
+  const avg = ranked.reduce((s, r) => s + r.score, 0) / ranked.length;
+  document.getElementById('b6-kpis').innerHTML = `
+    <div class="mini-kpi"><div class="mini-kpi-lbl">Maior score</div><div class="mini-kpi-val">${top.score.toFixed(1)}</div><div class="mini-kpi-sub">${top.nm}</div></div>
+    <div class="mini-kpi"><div class="mini-kpi-lbl">Score médio SP</div><div class="mini-kpi-val">${avg.toFixed(1)}</div><div class="mini-kpi-sub">645 municípios</div></div>
+    <div class="mini-kpi"><div class="mini-kpi-lbl">Município selecionado</div><div class="mini-kpi-val">#${sel.rank}</div><div class="mini-kpi-sub">${sel.nm} · score ${sel.score.toFixed(1)}</div></div>
+    <div class="mini-kpi"><div class="mini-kpi-lbl">Insight</div><div class="mini-kpi-val" style="font-size:13px">${insightDimensao(sel)}</div><div class="mini-kpi-sub">dimensão dominante</div></div>
+  `;
+
+  // Insight bloco
+  document.getElementById('b6-insight').innerHTML = `
+    <strong>${sel.nm}</strong> ocupa o <strong>rank #${sel.rank}</strong> entre 645 municípios SP com os pesos atuais.
+    Score: <strong>${sel.score.toFixed(1)}/100</strong>. Ajuste os pesos para ver como o ranking se reorganiza pela perspectiva do CMO ou da diretoria comercial.
+  `;
+
+  // Top 20 chart
+  const top20 = ranked.slice(0, 20);
+  const colors = top20.map(r => r.id === STATE.filtros.municipio ? '#3BAE96' : '#003A79');
+  Plotly.react('b6-chart-top', [{
+    type: 'bar', orientation: 'h',
+    x: top20.map(r => r.score).reverse(),
+    y: top20.map(r => r.nm).reverse(),
+    marker: { color: [...colors].reverse() },
+    text: top20.map(r => r.score.toFixed(1)).reverse(),
+    textposition: 'outside',
+    hovertemplate: '%{y}<br>Score: %{x:.1f}<extra></extra>'
+  }], {
+    margin: { l: 160, r: 30, t: 10, b: 30 },
+    xaxis: { range: [0, top20[0].score * 1.2], title: 'Score' },
+    yaxis: { tickfont: { size: 10 } },
+    paper_bgcolor: 'white', plot_bgcolor: 'white',
+    height: 340, font: { family: 'Arial' }
+  }, { displayModeBar: false });
+
+  // Radar
+  document.getElementById('b6-radar-title').textContent = sel.nm;
+  const dims = ['D1 Pagamento', 'D2 Mercado', 'D3 Pipeline', 'D4 Dinamismo'];
+  const vals = [sel.D1 * 100, sel.D2 * 100, sel.D3 * 100, sel.D4 * 100];
+  vals.push(vals[0]); dims.push(dims[0]);
+  Plotly.react('b6-chart-radar', [{
+    type: 'scatterpolar', fill: 'toself',
+    r: vals, theta: dims,
+    line: { color: '#003A79' },
+    fillcolor: 'rgba(0, 58, 121, 0.2)',
+    name: sel.nm
+  }], {
+    polar: {
+      radialaxis: { visible: true, range: [0, 100], tickfont: { size: 10 } },
+      angularaxis: { tickfont: { size: 11 } }
+    },
+    margin: { l: 60, r: 60, t: 30, b: 30 },
+    paper_bgcolor: 'white', height: 340, showlegend: false, font: { family: 'Arial' }
+  }, { displayModeBar: false });
+
+  renderB6Table();
+}
+
+function insightDimensao(c) {
+  const ds = [['D1', c.D1], ['D2', c.D2], ['D3', c.D3], ['D4', c.D4]];
+  ds.sort((a, b) => b[1] - a[1]);
+  const lbl = { D1: 'Pagamento', D2: 'Mercado', D3: 'Pipeline', D4: 'Dinamismo' };
+  return `↑ ${lbl[ds[0][0]]} (${(ds[0][1] * 100).toFixed(0)})`;
+}
+
+function renderB6Table() {
+  if (!STATE._b6ranked) return;
+  let rows = STATE._b6ranked.slice();
+  const q = (document.getElementById('b6-search').value || '').toLowerCase();
+  if (q) rows = rows.filter(r => r.nm.toLowerCase().includes(q));
+  rows.sort((a, b) => {
+    const av = a[STATE.b6.sort.col], bv = b[STATE.b6.sort.col];
+    if (typeof av === 'string') return STATE.b6.sort.dir * av.localeCompare(bv, 'pt');
+    return STATE.b6.sort.dir * ((av || 0) - (bv || 0));
+  });
+
+  const total = rows.length;
+  const totalPages = Math.ceil(total / PAGE_SIZE_BIG);
+  if (STATE.b6.page > totalPages) STATE.b6.page = 1;
+  const slice = rows.slice((STATE.b6.page - 1) * PAGE_SIZE_BIG, STATE.b6.page * PAGE_SIZE_BIG);
+
+  document.getElementById('b6-count').textContent = `${total} municípios`;
+  document.querySelector('#b6-table tbody').innerHTML = slice.map(r => `
+    <tr class="${r.id === STATE.filtros.municipio ? 'highlight' : ''}">
+      <td><strong>${r.rank}</strong></td>
+      <td>${r.nm}</td>
+      <td class="nr"><strong>${r.score.toFixed(1)}</strong></td>
+      <td class="nr">${(r.D1 * 100).toFixed(0)}</td>
+      <td class="nr">${(r.D2 * 100).toFixed(0)}</td>
+      <td class="nr">${(r.D3 * 100).toFixed(0)}</td>
+      <td class="nr">${(r.D4 * 100).toFixed(0)}</td>
+      <td class="nr">${r.pop > 0 ? (r.pop / 1000).toFixed(0) + 'k' : '—'}</td>
+      <td class="nr">${r.sal > 0 ? fmtR(r.sal) : '—'}</td>
+      <td class="nr">${r.idhm > 0 ? r.idhm.toFixed(3) : '—'}</td>
+    </tr>`).join('');
+
+  renderPagination('b6-pag', STATE.b6.page, totalPages, total, p => { STATE.b6.page = p; renderB6Table(); });
+}
+
+document.querySelectorAll('#b6-table th[data-col]').forEach(th => {
+  th.onclick = () => {
+    const col = th.dataset.col;
+    if (STATE.b6.sort.col === col) STATE.b6.sort.dir *= -1;
+    else { STATE.b6.sort.col = col; STATE.b6.sort.dir = col === 'nm' ? 1 : (col === 'rank' ? 1 : -1); }
+    renderB6Table();
+  };
+});
+
+// ═══════════════════════════════════════════════════════════════════════
+// BLOCO 7 — NARRATIVA AI
+// ═══════════════════════════════════════════════════════════════════════
+async function gerarNarrativa() {
+  if (!STATE.dados) { showError('Carregue uma análise antes.'); return; }
+  const btn = document.getElementById('btn-llm');
+  const loading = document.getElementById('loading-llm');
+  const area = document.getElementById('narr-area');
+  btn.disabled = true;
+  loading.classList.add('show');
+  area.innerHTML = '';
+  document.getElementById('btn-copy').style.display = 'none';
 
   try {
-    const payload = { ..._req, ..._state };
-    const r = await fetch('/api/analise-llm', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+    const resp = await fetch('/api/analise-llm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id_municipio: STATE.filtros.municipio,
+        sigla_uf: STATE.filtros.uf,
+        produto: STATE.filtros.produto,
+        mensalidade: STATE.filtros.mensalidade,
+        pct_renda: STATE.filtros.pct_renda,
+        perfil: STATE.dados.perfil,
+        mercado_trabalho: STATE.dados.mercado_trabalho,
+        empresas: STATE.dados.empresas,
+        pipeline: STATE.dados.pipeline,
+        score: STATE.dados.score,
+      }),
     });
-    if (!r.ok) throw new Error(await r.text());
-    const d = await r.json();
-    const html = '<div class="llm-narrative">' +
-      d.narrativa.split('\n').filter(l => l.trim()).map(l => `<p>${l}</p>`).join('') +
-      '</div>';
-    document.getElementById('llm-out').innerHTML = html;
-  } catch(e) {
-    document.getElementById('llm-out').innerHTML = '<div class="empty">Erro ao gerar análise: ' + e.message + '</div>';
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.detail || `HTTP ${resp.status}`);
+    }
+    const data = await resp.json();
+    STATE.narrativa = data.narrativa;
+    renderNarrativa(data.narrativa);
+    document.getElementById('btn-copy').style.display = 'inline-flex';
+    if (data.tokens) {
+      document.getElementById('narr-tokens').textContent =
+        `tokens: entrada ${data.tokens.input} · saída ${data.tokens.output}`;
+    }
+  } catch (e) {
+    area.innerHTML = `<div class="alert-error show">Erro ao gerar narrativa: ${e.message}<br>
+      <small style="opacity:0.7">Verifique se ANTHROPIC_API_KEY está configurada em dashboard/.env</small></div>`;
   } finally {
-    document.getElementById('btn-llm').disabled = false;
-    document.getElementById('btn-llm').textContent = '⚡ Gerar análise de mercado';
+    loading.classList.remove('show');
+    btn.disabled = false;
   }
 }
 
-// ── paginação ──────────────────────────────────────
-const _pagState = {};
-const PAGE_SIZE = 15;
-
-function paginateTable(tableId) {
-  const tbl = document.getElementById(tableId);
-  if (!tbl) return;
-  const visibleRows = Array.from(tbl.querySelectorAll('tbody tr')).filter(r => r.style.display !== 'none');
-  _pagState[tableId] = { pageSize: PAGE_SIZE, current: 1, total: visibleRows.length };
-  _applyPage(tableId, 1);
-}
-
-function _applyPage(tableId, p) {
-  const tbl = document.getElementById(tableId);
-  if (!tbl) return;
-  const state = _pagState[tableId];
-  if (!state) return;
-  state.current = p;
-  const allRows = Array.from(tbl.querySelectorAll('tbody tr'));
-  const visibleRows = allRows.filter(r => !r.dataset.pagHidden);
-  const pages = Math.ceil(visibleRows.length / state.pageSize);
-  const start = (p - 1) * state.pageSize;
-
-  visibleRows.forEach((r, i) => {
-    r.style.display = (i >= start && i < start + state.pageSize) ? '' : 'none';
-  });
-
-  const old = document.getElementById(tableId + '-pag');
-  if (old) old.remove();
-  if (pages <= 1) return;
-
-  const ctrl = document.createElement('div');
-  ctrl.id = tableId + '-pag';
-  ctrl.className = 'pag-ctrl';
-  let btns = `<span class="pag-info">Página ${p} de ${pages} · ${visibleRows.length} registros</span>`;
-  for (let i = 1; i <= pages; i++) {
-    btns += `<button class="pag-btn${i === p ? ' pag-active' : ''}" onclick="_applyPage('${tableId}',${i})">${i}</button>`;
+function renderNarrativa(texto) {
+  const partes = texto.split(/\*\*(\d+\.\s+[^\*]+)\*\*/);
+  const area = document.getElementById('narr-area');
+  let html = '';
+  let idx = 0;
+  for (let i = 1; i < partes.length - 1; i += 2) {
+    idx++;
+    const titulo = partes[i].trim();
+    const corpo = partes[i + 1].trim()
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br>');
+    html += `<div class="narr-card c${idx}">
+      <div class="narr-titulo">${titulo}</div>
+      <div class="narr-corpo">${corpo}</div>
+    </div>`;
   }
-  ctrl.innerHTML = btns;
-  tbl.parentNode.appendChild(ctrl);
+  if (!html) html = `<pre style="white-space:pre-wrap;font-size:13px;line-height:1.7">${texto}</pre>`;
+  area.innerHTML = html;
 }
 
-// ── utilitários ────────────────────────────────────
-function fmt(v)  { if (v === null || v === undefined) return '—'; return Number(v).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}); }
-function fmtN(v) { if (v === null || v === undefined) return '—'; return Number(v).toLocaleString('pt-BR'); }
+function copiarNarrativa() {
+  if (!STATE.narrativa) return;
+  navigator.clipboard.writeText(STATE.narrativa);
+  const btn = document.getElementById('btn-copy');
+  const original = btn.textContent;
+  btn.textContent = '✓ Copiado!';
+  setTimeout(() => btn.textContent = original, 2000);
+}
 
-function searchTable(tblId, q) {
-  const qq = q.toLowerCase();
-  const tbl = document.getElementById(tblId);
-  if (!tbl) return;
-  const rows = Array.from(tbl.querySelectorAll('tbody tr'));
-  if (qq === '') {
-    rows.forEach(r => { delete r.dataset.pagHidden; r.style.display = ''; });
-    if (_pagState[tblId]) paginateTable(tblId);
+// ═══════════════════════════════════════════════════════════════════════
+// PAGINATION HELPER (event delegation)
+// ═══════════════════════════════════════════════════════════════════════
+function renderPagination(containerId, page, totalPages, total, onPage) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  let html = '';
+  const max = 7;
+  let start = Math.max(1, page - Math.floor(max / 2));
+  let end = Math.min(totalPages, start + max - 1);
+  if (end - start < max - 1) start = Math.max(1, end - max + 1);
+
+  if (totalPages === 0) {
+    el.innerHTML = '<span style="color:var(--cinza-60)">Nenhum resultado</span>';
     return;
   }
-  rows.forEach(tr => {
-    const match = tr.textContent.toLowerCase().includes(qq);
-    tr.dataset.pagHidden = match ? '' : '1';
-    tr.style.display = match ? '' : 'none';
+
+  if (start > 1) html += `<button data-page="1">1</button><span>…</span>`;
+  for (let p = start; p <= end; p++) {
+    html += `<button class="${p === page ? 'active' : ''}" data-page="${p}">${p}</button>`;
+  }
+  if (end < totalPages) html += `<span>…</span><button data-page="${totalPages}">${totalPages}</button>`;
+  html += `<span style="margin-left:8px;font-size:11px">${total} resultados</span>`;
+  el.innerHTML = html;
+
+  el.querySelectorAll('button[data-page]').forEach(btn => {
+    btn.onclick = () => onPage(+btn.dataset.page);
   });
-  const old = document.getElementById(tblId + '-pag');
-  if (old) old.remove();
 }
-
-function sortTable(tblId, col) {
-  const tbl  = document.getElementById(tblId);
-  const rows = Array.from(tbl.querySelectorAll('tbody tr'));
-  const dir  = tbl.dataset.sortDir === 'asc' ? -1 : 1;
-  tbl.dataset.sortDir = dir === 1 ? 'asc' : 'desc';
-  rows.sort((a, b) => {
-    const va = a.cells[col]?.textContent.replace(/[^\d.,-]/g, '').replace(',', '.') || '';
-    const vb = b.cells[col]?.textContent.replace(/[^\d.,-]/g, '').replace(',', '.') || '';
-    const na = parseFloat(va), nb = parseFloat(vb);
-    if (!isNaN(na) && !isNaN(nb)) return (na - nb) * dir;
-    return va.localeCompare(vb, 'pt-BR') * dir;
-  });
-  rows.forEach(r => tbl.querySelector('tbody').appendChild(r));
-}
-
-function sortEmpresasBy(val) {
-  sortTable('tbl-emp', val === 'cap' ? 5 : 7);
-}
-
-init();
 </script>
+
 </body>
 </html>
