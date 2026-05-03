@@ -393,14 +393,10 @@ def get_pipeline(con, id_municipio: str):
 
     cursos_alta_list = []
     for _, row in agg_curso.iterrows():
-        if row["c24"] < 100:  # mínimo de volume
-            continue
         if row["c20"] > 0 and row["c24"] > row["c20"]:
-            # crescimento direto
             cresc = (row["c24"] - row["c20"]) / row["c20"] * 100
             nota = ""
         elif row["c20"] == 0 and row["area"] in area_baseline and area_baseline[row["area"]] > 0:
-            # curso novo — usa baseline da área (reclassificação)
             base = area_baseline[row["area"]]
             cresc = (row["c24"] - base) / base * 100
             nota = "reclassif."
@@ -408,17 +404,23 @@ def get_pipeline(con, id_municipio: str):
             continue
         if cresc <= 0:
             continue
+        # Calcula share do curso no total de concluintes do município
+        share = (row["c24"] / c24 * 100) if c24 else 0
+        # Metodologia: não basta crescer — precisa ter share ≥ 1% do total
+        if share < 1.0:
+            continue
         cursos_alta_list.append({
             "area": row["area"],
             "curso": row["curso"],
             "c24": int(row["c24"]),
             "c20": int(row["c20"]) if not nota else int(area_baseline.get(row["area"], 0)),
+            "share": round(float(share), 2),
             "cresc": round(float(cresc), 1),
             "nota": nota,
         })
-    # Ordena por (volume × crescimento) para priorizar cursos em alta com massa
-    cursos_alta_list.sort(key=lambda x: (x["c24"] / 1000) * (x["cresc"] / 100), reverse=True)
-    cursos_alta_list = cursos_alta_list[:10]
+    # Ranking: share × crescimento — prioriza cursos com massa + tendência
+    cursos_alta_list.sort(key=lambda x: (x["share"] / 100) * (x["cresc"] / 100), reverse=True)
+    cursos_alta_list = cursos_alta_list[:15]
 
     # Top IES com volume e perfil
     ies_max = df[df["ano"] == ano_max].groupby(["ies", "rede"], as_index=False)["conc"].sum()

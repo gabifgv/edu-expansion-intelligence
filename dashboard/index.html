@@ -37,6 +37,7 @@
   .filter-bar {
     background: var(--branco); padding: 16px 36px; border-bottom: 1px solid var(--cinza-20);
     display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; box-shadow: var(--shadow-sm);
+    position: sticky; top: 76px; z-index: 99;
   }
   .fg { display: flex; flex-direction: column; gap: 4px; }
   .fg label { font-size: 10px; font-weight: 700; color: var(--azul-escuro); text-transform: uppercase; letter-spacing: 0.5px; }
@@ -151,6 +152,39 @@
   .tb-search { border: 1.5px solid var(--cinza-20); border-radius: 4px; padding: 6px 11px; font-family: Arial; font-size: 12px; width: 200px; outline: none; }
   .tb-search:focus { border-color: var(--azul-escuro); }
   .tb-count { font-size: 11px; color: var(--cinza-60); font-weight: 600; }
+
+  /* Searchable single-select (busca com autocomplete) */
+  .ss-wrap { position: relative; min-width: 220px; }
+  .ss-input {
+    width: 100%; border: 1.5px solid var(--cinza-20); border-radius: 4px;
+    padding: 7px 11px; font-family: Arial; font-size: 13px;
+    background: var(--branco); outline: none; transition: border-color 0.15s;
+  }
+  .ss-input:focus { border-color: var(--azul-escuro); }
+  .ss-input::placeholder { color: var(--cinza-60); font-style: italic; }
+  .ss-list {
+    position: absolute; top: calc(100% + 2px); left: 0; right: 0;
+    max-height: 280px; overflow-y: auto;
+    background: var(--branco); border: 1.5px solid var(--azul-escuro);
+    border-radius: 4px; box-shadow: var(--shadow-md);
+    display: none; z-index: 200;
+  }
+  .ss-wrap.open .ss-list { display: block; }
+  .ss-item {
+    padding: 7px 11px; font-size: 12px; cursor: pointer;
+    border-bottom: 1px solid var(--cinza-20);
+  }
+  .ss-item:hover, .ss-item.active { background: var(--bg-alt); color: var(--azul-escuro); font-weight: 600; }
+  .ss-item.selected { background: var(--azul-claro); color: white; }
+  .ss-empty { padding: 14px; color: var(--cinza-60); font-size: 11px; text-align: center; }
+
+  /* Heatmap conditional formatting on table cells */
+  .heat-cell { font-weight: 700; }
+  .heat-low    { background: rgba(155, 10, 81, 0.10);  color: #7a0840; }
+  .heat-mid-l  { background: rgba(226, 146, 0, 0.12);  color: #8c5a00; }
+  .heat-mid    { background: rgba(253, 219, 81, 0.18); color: #6b5500; }
+  .heat-mid-h  { background: rgba(137, 169, 80, 0.14); color: #4a5a30; }
+  .heat-high   { background: rgba(59, 174, 150, 0.18); color: #1F6B57; }
 
   /* Multi-select dropdown */
   .ms-dd { position: relative; display: inline-block; }
@@ -312,7 +346,11 @@
   </div>
   <div class="fg">
     <label>Município</label>
-    <select id="f-municipio"><option value="">Carregando municípios...</option></select>
+    <div class="ss-wrap" id="f-municipio-wrap">
+      <input class="ss-input" id="f-municipio-input" placeholder="Digite ou selecione..." autocomplete="off">
+      <input type="hidden" id="f-municipio">
+      <div class="ss-list"></div>
+    </div>
   </div>
   <div class="filter-divider"></div>
   <div class="fg">
@@ -593,8 +631,23 @@
         </div>
       </div>
 
-      <div class="section-title" style="margin-top:18px">Áreas em alta — volume + crescimento (com tratamento de reclassificação INEP 2024)</div>
-      <div class="areas-grid" id="b5-areas-grid"></div>
+      <div class="section-title" style="margin-top:18px">
+        Cursos em alta &mdash; share + crescimento
+        <span class="tip" data-tip="Cursos em alta combinam SHARE (volume relativo: ≥ 1% dos concluintes do município) e CRESCIMENTO POSITIVO vs 2020. O ranking é por share × crescimento, não por crescimento puro. Por que? Porque um curso com 50 alunos que cresceu 1.000% tem POUCA MASSA REAL — não converte em demanda significativa para uma campanha. Massa importa tanto quanto tendência. Cursos novos consolidados pelo INEP em 2024 (caso TIC) usam baseline da área antecessora (badge reclassif.).">i</span>
+      </div>
+      <div class="table-wrap">
+        <table id="b5-alta-table">
+          <thead><tr>
+            <th data-col="area">Área</th>
+            <th data-col="curso">Curso</th>
+            <th class="nr" data-col="c24">Concluintes</th>
+            <th class="nr" data-col="share">Share</th>
+            <th class="nr" data-col="cresc">Crescimento</th>
+            <th>Nota</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
 
       <div class="section-title" style="margin-top:24px">Tabela detalhada (área &times; curso &times; IES)</div>
       <div class="tb-toolbar">
@@ -821,6 +874,23 @@ function setSortIcon(tableId, col, dir) {
   const th = document.querySelector(`#${tableId} thead th[data-col="${col}"]`);
   if (th) th.classList.add(dir > 0 ? 'sorted-asc' : 'sorted-desc');
 }
+function heatClass(value, breakpoints) {
+  // breakpoints = [low, mid-l, mid, mid-h, high] — 5 thresholds em ordem crescente
+  // Retorna classe de cor conforme em qual faixa o valor cai
+  if (value == null) return '';
+  const v = Number(value);
+  if (v < breakpoints[0]) return 'heat-low';
+  if (v < breakpoints[1]) return 'heat-mid-l';
+  if (v < breakpoints[2]) return 'heat-mid';
+  if (v < breakpoints[3]) return 'heat-mid-h';
+  return 'heat-high';
+}
+function heatCell(value, breakpoints, fmt) {
+  const cls = heatClass(value, breakpoints);
+  const display = fmt ? fmt(value) : (value == null ? '—' : value);
+  return `<td class="nr heat-cell ${cls}">${display}</td>`;
+}
+
 function sortRows(rows, col, dir) {
   return rows.slice().sort((a, b) => {
     let av = a[col], bv = b[col];
@@ -943,15 +1013,53 @@ function attachSortHandlers(tableId, sortState, onSort) {
 // ═══════════════════════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════════════════════
+let MUNICIPIOS = [];
 async function init() {
   try {
     const resp = await fetch('/api/municipios/SP');
-    const muns = await resp.json();
-    const sel = document.getElementById('f-municipio');
-    sel.innerHTML = '<option value="">Selecione o município...</option>' +
-      muns.map(m => `<option value="${m.id_municipio}">${m.nome_municipio}</option>`).join('');
+    MUNICIPIOS = await resp.json();
+    setupMunicipioSelect();
   } catch (e) { showError('Erro ao carregar municípios: ' + e.message); }
   renderB6Weights();
+}
+function setupMunicipioSelect() {
+  const wrap = document.getElementById('f-municipio-wrap');
+  const input = document.getElementById('f-municipio-input');
+  const hidden = document.getElementById('f-municipio');
+  const list = wrap.querySelector('.ss-list');
+
+  function renderList(filter = '') {
+    const f = normalizeStr(filter);
+    const items = MUNICIPIOS.filter(m => normalizeStr(m.nome_municipio).includes(f)).slice(0, 100);
+    if (items.length === 0) {
+      list.innerHTML = '<div class="ss-empty">Nenhum município encontrado</div>';
+      return;
+    }
+    list.innerHTML = items.map(m => `
+      <div class="ss-item ${hidden.value === m.id_municipio ? 'selected' : ''}" data-id="${m.id_municipio}">
+        ${m.nome_municipio}
+      </div>
+    `).join('');
+    list.querySelectorAll('.ss-item').forEach(item => {
+      item.onclick = () => {
+        hidden.value = item.dataset.id;
+        input.value = item.textContent.trim();
+        wrap.classList.remove('open');
+      };
+    });
+  }
+  input.oninput = () => { renderList(input.value); wrap.classList.add('open'); };
+  input.onfocus = () => { renderList(input.value); wrap.classList.add('open'); };
+  input.onkeydown = (e) => {
+    if (e.key === 'Escape') wrap.classList.remove('open');
+    if (e.key === 'Enter') {
+      const items = list.querySelectorAll('.ss-item');
+      if (items.length === 1) items[0].click();
+    }
+  };
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#f-municipio-wrap')) wrap.classList.remove('open');
+  });
 }
 init();
 
@@ -986,7 +1094,7 @@ function renderB6Weights() {
 // ═══════════════════════════════════════════════════════════════════════
 async function loadAnalise() {
   const idMun = document.getElementById('f-municipio').value;
-  if (!idMun) { showError('Selecione um município antes de carregar.'); return; }
+  if (!idMun) { showError('Selecione um município no campo de busca antes de carregar.'); return; }
   STATE.filtros.municipio = idMun;
   STATE.filtros.produto = document.getElementById('f-produto').value;
   STATE.filtros.mensalidade = +document.getElementById('f-mensalidade').value;
@@ -1243,7 +1351,7 @@ function renderB23Setor() {
       <td class="nr">${fmtN(r.vinculos)}</td>
       <td class="nr">${fmtR(r.sal_medio)}</td>
       <td class="nr">${fmtN(r.eleg)}</td>
-      <td class="nr">${fmtPct(r.pct_eleg)}</td>
+      ${heatCell(r.pct_eleg, [10, 25, 45, 65], v => v.toFixed(1) + '%')}
       <td class="nr">${r.sal_eleg ? fmtR(r.sal_eleg) : '—'}</td>
     </tr>`).join('');
   renderPagination('b23-setor-pag', STATE.b23.setorPage, totalPages, total,
@@ -1286,7 +1394,7 @@ function renderB23Cargo() {
       <td class="nr">${fmtN(r.vinculos)}</td>
       <td class="nr">${fmtR(r.sal_medio)}</td>
       <td class="nr">${fmtN(r.eleg)}</td>
-      <td class="nr">${fmtPct(r.pct_eleg)}</td>
+      ${heatCell(r.pct_eleg, [10, 25, 45, 65], v => v.toFixed(1) + '%')}
       <td class="nr">${r.sal_eleg ? fmtR(r.sal_eleg) : '—'}</td>
     </tr>`).join('');
   renderPagination('b23-cargo-pag', STATE.b23.cargoPage, totalPages, total,
@@ -1431,37 +1539,21 @@ function renderB5Kpis() {
     Áreas em alta combinam volume (≥ 100 concluintes) e crescimento positivo vs 2020.
   `;
 
-  // Áreas em alta — cards agrupando cursos
-  const grid = document.getElementById('b5-areas-grid');
-  if (p.areas_alta && p.areas_alta.length > 0) {
-    grid.innerHTML = p.areas_alta.map(a => {
-      const cursosHtml = a.cursos.map(c => `
-        <div class="area-card-curso-row">
-          <div class="area-card-curso-name">
-            <strong>${c.curso}</strong>
-            ${c.nota ? `<span class="badge badge-reclassif" style="margin-left:6px">${c.nota}</span>` : ''}
-          </div>
-          <div class="area-card-curso-stats">
-            ${fmtN(c.c24)} · <span class="${c.cresc >= 0 ? 'pos' : 'neg'}">${c.cresc >= 0 ? '▲' : '▼'} ${Math.abs(c.cresc).toFixed(0)}%</span>
-          </div>
-        </div>
-      `).join('');
-      const growthClass = a.cresc >= 0 ? '' : 'neg';
-      return `<div class="area-card">
-        <div class="area-card-header">
-          <div class="area-card-name">${a.area}</div>
-          <div class="area-card-growth ${growthClass}">${a.cresc >= 0 ? '▲' : '▼'} ${Math.abs(a.cresc).toFixed(1)}%</div>
-        </div>
-        <div class="area-card-volume">${fmtN(a.total_c24)}</div>
-        <div class="area-card-vol-lbl">concluintes em ${p.ano_max} (${a.cursos.length} curso${a.cursos.length > 1 ? 's' : ''})</div>
-        <div class="area-card-cursos">
-          <div class="area-card-cursos-title">Cursos da área</div>
-          ${cursosHtml}
-        </div>
-      </div>`;
-    }).join('');
+  // Cursos em alta — tabela com share + crescimento + heatmap
+  const tbody = document.querySelector('#b5-alta-table tbody');
+  if (p.cursos_alta && p.cursos_alta.length > 0) {
+    tbody.innerHTML = p.cursos_alta.map(c => `
+      <tr>
+        <td>${c.area}</td>
+        <td title="${c.curso}"><strong>${c.curso}</strong></td>
+        <td class="nr">${fmtN(c.c24)}</td>
+        ${heatCell(c.share, [1.5, 3, 5, 8], v => v.toFixed(1) + '%')}
+        ${heatCell(c.cresc, [10, 30, 60, 100], v => '▲ ' + v.toFixed(1) + '%')}
+        <td>${c.nota ? `<span class="badge badge-reclassif">${c.nota}</span>` : ''}</td>
+      </tr>
+    `).join('');
   } else {
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--cinza-60);font-size:12px">Sem áreas em alta para este município no critério (volume ≥ 100 + crescimento positivo).</div>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:18px;color:var(--cinza-60);font-size:12px">Sem cursos em alta para este município no critério (share ≥ 1% + crescimento positivo).</td></tr>';
   }
 }
 
@@ -1488,31 +1580,33 @@ function renderB5() {
     height: 270, font: { family: 'Arial', size: 11 }
   }, { displayModeBar: false });
 
-  // Top IES — eixo ajustado para que o maior valor caiba e rótulos apareçam
+  // Top IES — labels no eixo Y truncadas; valores em texto fora da barra
   const iesAgg = {};
   filtered.filter(r => r.ano === p.ano_max).forEach(r => {
     iesAgg[r.ies] = (iesAgg[r.ies] || 0) + r.conc;
   });
   const topIes = Object.entries(iesAgg).sort((a, b) => b[1] - a[1]).slice(0, 8);
-  const truncIes = nm => nm.length > 32 ? nm.slice(0, 30) + '…' : nm;
+  const truncIes = nm => nm.length > 24 ? nm.slice(0, 22) + '…' : nm;
   const ymaxIes = topIes.length ? Math.max(...topIes.map(x => x[1])) : 1;
   Plotly.react('b5-chart-ies', [{
     type: 'bar', orientation: 'h',
     x: topIes.map(x => x[1]).reverse(),
     y: topIes.map(x => truncIes(x[0])).reverse(),
+    customdata: topIes.map(x => x[0]).reverse(),
     marker: { color: '#008BC9' },
     text: topIes.map(x => fmtN(x[1])).reverse(),
     textposition: 'inside',
     insidetextanchor: 'end',
     textfont: { color: 'white', size: 11, family: 'Arial Black' },
-    hovertemplate: '%{y}<br>%{x:,.0f} concluintes<extra></extra>'
+    hovertemplate: '%{customdata}<br>%{x:,.0f} concluintes<extra></extra>'
   }], {
-    margin: { l: 200, r: 30, t: 20, b: 40 },
-    xaxis: { range: [0, ymaxIes * 1.05], title: 'Concluintes' },
-    yaxis: { tickfont: { size: 10 }, automargin: true },
+    margin: { l: 10, r: 20, t: 20, b: 40 },
+    xaxis: { range: [0, ymaxIes * 1.02], title: 'Concluintes', showgrid: false },
+    yaxis: { tickfont: { size: 10, color: '#003A79' }, automargin: true },
     paper_bgcolor: 'white', plot_bgcolor: 'white',
-    height: 270, font: { family: 'Arial' }
-  }, { displayModeBar: false });
+    height: 270, font: { family: 'Arial' },
+    autosize: true
+  }, { displayModeBar: false, responsive: true });
 
   // Tabela detalhada
   const last = sortRows(filtered.filter(r => r.ano === p.ano_max), STATE.b5.sort.col, STATE.b5.sort.dir);
@@ -1582,39 +1676,43 @@ function renderB6All() {
   Plotly.react('b6-chart-top', [{
     type: 'bar', orientation: 'h',
     x: top20.map(r => r.score).reverse(),
-    y: top20.map(r => r.nm).reverse(),
+    y: top20.map(r => (r.nm.length > 22 ? r.nm.slice(0, 20) + '…' : r.nm)).reverse(),
+    customdata: top20.map(r => r.nm).reverse(),
     marker: { color: [...colors].reverse() },
     text: top20.map(r => r.score.toFixed(1)).reverse(),
     textposition: 'outside',
     textfont: { color: '#003A79', size: 10 },
-    hovertemplate: '%{y}<br>Score: %{x:.1f}<extra></extra>'
+    hovertemplate: '%{customdata}<br>Score: %{x:.1f}<extra></extra>'
   }], {
-    margin: { l: 170, r: 50, t: 20, b: 36 },
-    xaxis: { range: [0, top20[0].score * 1.2], title: 'Score' },
-    yaxis: { tickfont: { size: 10 }, automargin: true },
+    margin: { l: 10, r: 40, t: 20, b: 36 },
+    xaxis: { range: [0, top20[0].score * 1.18], title: 'Score', showgrid: false },
+    yaxis: { tickfont: { size: 10, color: '#003A79' }, automargin: true },
     paper_bgcolor: 'white', plot_bgcolor: 'white',
-    height: 380, font: { family: 'Arial' }
-  }, { displayModeBar: false });
+    height: 380, font: { family: 'Arial' }, autosize: true
+  }, { displayModeBar: false, responsive: true });
 
-  // Radar — margens grandes e fonte menor para não cortar
+  // Radar — margens generosas e fonte pequena para não cortar
   document.getElementById('b6-radar-title').textContent = sel.nm;
-  const dims = ['D1<br>Pagamento', 'D2<br>Mercado', 'D3<br>Pipeline', 'D4<br>Dinamismo'];
+  const dims = ['Pagamento', 'Mercado', 'Pipeline', 'Dinamismo'];
   const vals = [sel.D1 * 100, sel.D2 * 100, sel.D3 * 100, sel.D4 * 100];
   vals.push(vals[0]); dims.push(dims[0]);
   Plotly.react('b6-chart-radar', [{
     type: 'scatterpolar', fill: 'toself', r: vals, theta: dims,
-    line: { color: '#003A79', width: 2 }, fillcolor: 'rgba(0, 58, 121, 0.2)',
-    name: sel.nm, marker: { size: 6, color: '#003A79' }
+    line: { color: '#003A79', width: 2 }, fillcolor: 'rgba(0, 58, 121, 0.25)',
+    name: sel.nm, marker: { size: 8, color: '#003A79' },
+    hovertemplate: '<b>%{theta}</b><br>%{r:.0f}/100<extra></extra>'
   }], {
     polar: {
-      domain: { x: [0.15, 0.85], y: [0.1, 0.9] },
-      radialaxis: { visible: true, range: [0, 100], tickfont: { size: 9 } },
-      angularaxis: { tickfont: { size: 10 } }
+      domain: { x: [0.18, 0.82], y: [0.12, 0.88] },
+      radialaxis: { visible: true, range: [0, 100], tickfont: { size: 9, color: '#88868B' }, gridcolor: '#D7D9DD' },
+      angularaxis: { tickfont: { size: 11, color: '#003A79' }, gridcolor: '#D7D9DD' },
+      bgcolor: 'white'
     },
-    margin: { l: 30, r: 30, t: 30, b: 30 },
+    margin: { l: 20, r: 20, t: 30, b: 30 },
     paper_bgcolor: 'white', height: 380, showlegend: false,
-    font: { family: 'Arial' }
-  }, { displayModeBar: false });
+    font: { family: 'Arial' },
+    autosize: true
+  }, { displayModeBar: false, responsive: true });
 
   renderB6Table();
   renderKPIStrip();
