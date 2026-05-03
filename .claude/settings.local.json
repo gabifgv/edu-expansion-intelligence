@@ -20,7 +20,26 @@
       "Bash(bq show *)",
       "Bash(python3 *)",
       "PowerShell(Get-Content *)",
-      "PowerShell(Get-ChildItem \"C:\\\\edu-expansion-intelligence\\\\dashboard\\\\\" -Force | ForEach-Object { $_.Name })"
+      "PowerShell(Get-ChildItem \"C:\\\\edu-expansion-intelligence\\\\dashboard\\\\\" -Force | ForEach-Object { $_.Name })",
+      "PowerShell(cd \"C:\\\\edu-expansion-intelligence\\\\dashboard\"; $env:ANTHROPIC_API_KEY = \"sk-ant-placeholder-replace-with-real-key\"; .\\\\uvicorn app:app --reload --host 0.0.0.0 --port 8000 2>&1)",
+      "Bash(uvicorn app:app --reload --host 127.0.0.1 --port 8000)",
+      "Bash(del data\\\\teste_b2.py data\\\\teste_b2a.py data\\\\teste_b2b.py data\\\\teste_b3.py data\\\\teste_b1_taxa.py data\\\\preview_b3.py data\\\\preview_b3.html data\\\\diagnostico_estab_2022.py)",
+      "Bash(dir data\\\\teste_*.py)",
+      "Bash(Get-Process -Name python)",
+      "Bash(Format-Table Id, ProcessName, StartTime -AutoSize)",
+      "PowerShell(Get-Process *)",
+      "PowerShell(Stop-Process *)",
+      "PowerShell(Start-Process \"C:\\\\edu-expansion-intelligence\\\\data\\\\preview_b6.html\")",
+      "PowerShell(Start-Process \"C:\\\\edu-expansion-intelligence\\\\data\\\\preview_b7.html\")",
+      "Bash(pip list *)",
+      "PowerShell(Get-NetTCPConnection *)",
+      "PowerShell($resp = Invoke-WebRequest -Uri \"http://127.0.0.1:8001/api/municipios/SP\" -UseBasicParsing; Write-Host \"Status: $\\($resp.StatusCode\\)\"; $j = $resp.Content | ConvertFrom-Json; Write-Host \"Municipios: $\\($j.Count\\)\"; Write-Host \"Top 3:\"; $j[0..2] | Format-Table)",
+      "PowerShell(Start-Process \"http://127.0.0.1:8001/\")",
+      "PowerShell($resp = Invoke-WebRequest -Uri \"http://127.0.0.1:8001/\" -UseBasicParsing -TimeoutSec 10; Write-Host \"HTML status: $\\($resp.StatusCode\\), $\\([math]::Round\\($resp.Content.Length / 1024, 1\\)\\) KB\")",
+      "PowerShell($resp = Invoke-WebRequest -Uri \"http://127.0.0.1:8001/\" -UseBasicParsing -TimeoutSec 10; Write-Host \"HTML status: $\\($resp.StatusCode\\), $\\([math]::Round\\($resp.Content.Length / 1024, 1\\)\\) KB\"; Start-Process \"http://127.0.0.1:8001/\")",
+      "PowerShell($resp = Invoke-WebRequest -Uri \"http://127.0.0.1:8001/\" -UseBasicParsing -TimeoutSec 10; Write-Host \"HTML: $\\([math]::Round\\($resp.Content.Length / 1024, 1\\)\\) KB\"; Start-Process \"http://127.0.0.1:8001/\")",
+      "PowerShell(pip install *)",
+      "PowerShell(python -m playwright install chromium 2>&1 | Select-Object -Last 5)"
     ]
   }
 }
