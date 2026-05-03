@@ -1,5 +1,6 @@
 import duckdb
 import pandas as pd
+import urllib.request, json
 
 con = duckdb.connect("data/sp_mvp.duckdb")
 
@@ -7,8 +8,28 @@ mensalidade = 1200.0
 pct_renda   = 9.0
 renda_min   = mensalidade / (pct_renda / 100)
 
+# Deflator RAIS 2022 → atual (BCB série 433, ref dez/2022)
+try:
+    url = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=json&dataInicial=01/12/2022"
+    with urllib.request.urlopen(url, timeout=10) as r:
+        dados = json.loads(r.read())
+    ipca_2022 = 1.0
+    for d in dados:
+        ipca_2022 *= (1 + float(d["valor"]) / 100)
+    ipca_ref = dados[-1]["data"]
+except Exception:
+    ipca_2022 = 1.1727
+    ipca_ref  = "mar/2026"
+
+def deflacionar(v):
+    """Aplica deflator RAIS 2022 e retorna None se valor for None/0."""
+    if v is None or v == 0:
+        return None
+    return round(float(v) * ipca_2022, 0)
+
 print(f"=== BLOCO 2+3: Mercado de Trabalho e Tecido Empresarial - Campinas/SP ===")
-print(f"Renda minima: R${renda_min:,.2f} | Empregos: 2022 | Estabs: 2024\n")
+print(f"Renda minima: R${renda_min:,.2f} | Empregos: 2022 | Estabs: 2024")
+print(f"Salarios em valores de {ipca_ref} (IPCA x{ipca_2022:.4f}, fonte BCB)\n")
 
 # ── TABELA 1: Por Setor ───────────────────────────────────────────────────────
 df_setor = con.execute(f"""
@@ -52,8 +73,9 @@ print(f"{'Setor':<42} {'Estabs':>7} {'Func/emp':>8} {'Vinculos':>9} {'Sal.medio'
 print("-" * 108)
 for _, r in df_setor.iterrows():
     fe = f"{float(r['func_por_empresa']):,.0f}" if r['func_por_empresa'] and float(r['func_por_empresa']) > 0 else "-"
-    sm = f"R${int(r['sal_medio_total']):,}"
-    se = f"R${int(r['sal_medio_eleg']):,}" if r['sal_medio_eleg'] and r['sal_medio_eleg'] > 0 else "-"
+    sm = f"R${int(deflacionar(r['sal_medio_total'])):,}" if r['sal_medio_total'] else "-"
+    se_val = deflacionar(r['sal_medio_eleg']) if r['sal_medio_eleg'] and r['sal_medio_eleg'] > 0 else None
+    se = f"R${int(se_val):,}" if se_val else "-"
     print(f"  {str(r['setor'])[:42]:<42} {int(r['estabs']):>7,} {fe:>8} {int(r['vinculos']):>9,} {sm:>11} {int(r['elegiveis']):>7,} {float(r['pct_eleg']):>5.1f}% {se:>11}")
 
 # ── TABELA 2: Por Cargo ───────────────────────────────────────────────────────
@@ -88,8 +110,9 @@ print(f"\nTABELA 2 — Por Cargo (filtro de setor no dashboard | {len(setores_di
 print(f"{'Cargo':<40} {'Vinculos':>9} {'Sal.medio':>11} {'Eleg.':>7} {'%eleg':>6} {'Sal.eleg':>11}")
 print("-" * 90)
 for _, r in df_cargo.head(20).iterrows():
-    sm = f"R${int(r['sal_medio_total']):,}"
-    se = f"R${int(r['sal_medio_eleg']):,}" if r["sal_medio_eleg"] and r["sal_medio_eleg"] > 0 else "-"
+    sm = f"R${int(deflacionar(r['sal_medio_total'])):,}"
+    se_val = deflacionar(r["sal_medio_eleg"]) if r["sal_medio_eleg"] and r["sal_medio_eleg"] > 0 else None
+    se = f"R${int(se_val):,}" if se_val else "-"
     print(f"  {str(r['cargo'])[:40]:<40} {int(r['vinculos']):>9,} {sm:>11} {int(r['elegiveis']):>7,} {float(r['pct_eleg']):>5.1f}% {se:>11}")
 print(f"  ... top 20 de {len(df_cargo)} cargos com elegíveis")
 

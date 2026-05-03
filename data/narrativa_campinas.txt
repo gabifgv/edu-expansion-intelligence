@@ -1,0 +1,50 @@
+# Relatório de Inteligência de Mercado — Campinas/SP
+## Produto: MBA Executivo FGV (R$ 1.200/mês)
+
+---
+
+### 1. Perfil da Cidade
+
+Campinas apresenta o perfil socioeconômico mais favorável do interior paulista para educação executiva premium: IDHM de 0,805 (faixa muito alta), com sub-índice de renda em 0,829 e escolaridade em 0,731 — combinação que sinaliza praça madura, com classe média consolidada e ainda com headroom educacional para captação de pós-graduação. A população de 1,08 milhão de habitantes, dos quais 21,3% acima de 25 anos possuem ensino superior, gera uma base instalada de aproximadamente 230 mil potenciais demandantes de pós, número expressivo para uma única praça. O Gini de 0,560 indica concentração de renda relevante — o que, para o produto MBA Executivo, é positivo: a fatia superior da pirâmide tem capacidade de pagamento real, mesmo com proporção de pobreza baixa (3,2%). É praça de mercado maduro, não de massificação — o posicionamento FGV se encaixa.
+
+### 2. Mercado de Trabalho
+
+O mercado formal de Campinas tem 451.234 vínculos, dos quais 180.013 (39,9%) são elegíveis ao MBA Executivo (salário ≥ R$ 4.000) — taxa de elegibilidade muito acima da média nacional. O salário médio dos elegíveis é R$ 9.512/mês, o que torna a mensalidade de R$ 1.200 equivalente a 12,6% da renda — bem abaixo do teto de 30%, ou seja, **ticket folgado** com espaço inclusive para variantes premium (R$ 1.500–1.800). A maior demanda latente está concentrada em três blocos: (i) **Comércio/Administração de Imóveis e Serviços Técnicos** com 45.054 elegíveis — o maior pool absoluto; (ii) **Ensino** com 24.734 elegíveis e (iii) **Administração Pública Direta** com 21.185 elegíveis (88,6% do setor é elegível, indicador de servidores estáveis e com poder de compra). Por cargo, o destaque é **Analista de Desenvolvimento de Sistemas** (12.236 elegíveis a R$ 9.896 médios) — perfil tech ávido por progressão para gestão, e **Administrador** (5.305 elegíveis a R$ 8.499) — público-alvo natural de MBA generalista.
+
+### 3. Cursos Recomendados
+
+**CAMADA 1 — Setor → Pós (fit imediato no portfólio FGV):**
+- **Comércio/Serviços Técnicos** (45.054 elegíveis): *MBA em Gestão Empresarial*, *MBA em Gestão Comercial*, *MBA com ênfase em Gestão Estratégica de Marketing* e *MBA em Varejo e Consumo* — alinhamento direto.
+- **Ensino** (24.734 elegíveis): *MBA em Liderança e Gestão Estratégica de Pessoas* e *MBA em Gestão Estratégica de Recursos Humanos* — coordenadores e diretores escolares são compradores naturais.
+- **Administração Pública** (21.185 elegíveis, 88,6% de elegibilidade — anomalia muito favorável): *MBA em Administração Pública e Gestão Fiscal*, *MBA em Políticas Públicas e Gestão Governamental*, *Pós-graduação em Administração Pública – CIPAD* e *MBA Executivo em Avaliação Econômica de Políticas Públicas*. **Este é o setor com maior conversão potencial por elegibilidade**.
+- **Transportes e Comunicações** (12.430 elegíveis): *MBA em Logística e Supply Chain Management*.
+- **Indústria de Alimentos** (9.924 elegíveis): *MBA com ênfase em Gestão Industrial* e *MBA em Gestão da Inovação e Capacidade Tecnológica*.
+
+**CAMADA 2 — Graduação → Pós (priorizando cursos em alta no Bloco 5):**
+A composição do pipeline acadêmico é fortemente enviesada para **saúde**: Promoção/Prevenção/Reabilitação (884 conc., +31%), Medicina (577, +46%), Psicologia (636, +15%), Tecnologia de Diagnóstico (363, +585%), Farmácia (342, +73%) e Odontologia (276, +64%) — somam mais de 3.000 formandos/ano em saúde com forte crescimento. Progressão natural: *MBA em Gestão de Saúde*, *MBA em Administração: Gestão de Clínicas, Hospitais e Indústrias da Saúde*, *MBA com ênfase em Serviços de Saúde* e *MBA Executivo em Administração: Gestão de Saúde*. **Saúde é o vetor de crescimento mais forte do pipeline de Campinas e deve ser tratado como prioridade número 1 de captação.** Para os 12.236 Analistas de Desenvolvimento de Sistemas: *MBA em Gestão: Tecnologia da Informação*, *MBA em Cibersegurança*, *MBA em Inteligência Artificial e Analytics Aplicadas a Negócios* e *MBA com ênfase em Transformação Digital*.
+
+**CAMADA 3 — Gaps de portfólio (concorrentes sem equivalente FGV):**
+- **ESPM | MASTER EM NEUROMARKETING E NEUROCIENCIA DO CONSUMIDOR** e **PUCRS Online | NEUROCIENCIA CONSUMO E MARKETING** — FGV tem *MBA em Economia Comportamental* e *Marketing e Customer Insights*, mas **não há produto explícito de neuromarketing/neurociência do consumo**, tema com forte apelo no mercado de varejo/consumo de Campinas.
+- **IBMEC | MBA GESTAO EM OFTALMOLOGIA** e **PUC Minas | MBA EM GESTAO DE CLINICAS E CONSULTORIOS** — dado o boom de Odontologia (+64%), Medicina (+46%) e Tecnologia Médica (+585%) em Campinas, **falta no portfólio FGV um produto de "Gestão de Clínicas e Consultórios"** específico para profissionais liberais da saúde — gap material.
+- **Mackenzie São Paulo Higienópolis | MBA EM SUPPLY CHAIN ENGINEERING** — versão técnico-engenheirizada que complementaria o atual *MBA em Logística e Supply Chain Management* da FGV, relevante para a base industrial regional.
+- **ESPM | MASTER IN BUSINESS TRANSFORMATION** com formato internacional executivo — gap de produto bilíngue/global premium.
+
+### 4. Prospecção Corporativa
+
+**ITAU UNIBANCO HOLDING S.A.** (Instituições de Crédito | Capital R$ 124,06 bi) — duas unidades em Campinas. Prioritária para turma fechada in-company nas trilhas de *MBA em Bancos e Instituições Financeiras*, *MBA em Finanças: Investments* e *MBA em Private Equity, Venture Capital e Investimentos em Startups*. **Modelo de abordagem**: contato com RH Corporativo Itaú via canal nacional FGV (relação preexistente), proposta de cohort dedicado de 25-30 gerentes regionais, formato híbrido com módulos no campus FGV-SP e residência em Campinas.
+
+**PLATAFORMA BRADESCO PRINCIPAL CAMPINAS** e **BRADESCO AG BARÃO GERALDO** (Capital R$ 87,1 bi cada) — concentração geográfica relevante (3 unidades Bradesco no top 5). Mesmo perfil de demanda do Itaú: *MBA em Bancos e Instituições Financeiras*, *MBA em Finanças: Corporate Finance* e *Pós-Graduação em Investimentos Financeiros*. **Modelo**: workshop executivo gratuito ("FGV Insights — Tendências do Setor Financeiro 2025") como porta de entrada B2B, segmentando supervisores e gerentes; conversão para turma fechada exclusiva Bradesco-Campinas. A presença de **Barão Geraldo** (entorno Unicamp) sinaliza concentração de quadros qualificados — abordagem deve mirar diretamente os hubs de tecnologia financeira.
+
+A consolidação do top 5 em **um único setor (financeiro)** é alerta estratégico: a base de capital social de grande porte em Campinas é menos diversificada do que aparenta — a prospecção corporativa precisa ser ampliada para empresas de médio/grande porte fora do top 5 (indústria alimentícia e tecnológica) para diluir risco.
+
+### 5. Parcerias Acadêmicas
+
+**UNIVERSIDADE ESTADUAL DE CAMPINAS — Unicamp** (2.309 conc./2024, pública): a parceria mais estratégica em termos de marca e qualidade de pipeline. Egressos da Unicamp em Engenharia, Economia, Administração e Saúde são o cliente ideal do MBA Executivo FGV em ticket pleno. **Modelo**: programa de continuidade acadêmica com desconto institucional para ex-alunos Unicamp, eventos conjuntos no campus de Barão Geraldo.
+
+**PONTIFÍCIA UNIVERSIDADE CATÓLICA DE CAMPINAS — PUC-Campinas** (2.189 conc., privada): força em Direito, Saúde e Administração. Pipeline qualificado já com perfil de pagador (egressos de privada premium). **Modelo**: co-marketing em cursos do FGV LL.M e MBA em Gestão de Saúde, parcerias com coordenações de curso para palestras de carreira no último ano.
+
+**Universidade Pitágoras Unopar Anhanguera** (2.612 conc., maior volume): pipeline de massa, mas perfil socioeconômico mais sensível a preço. **Modelo**: ainda assim relevante para volume — proposta de funil estruturado com produto Pós FGV de entrada (*Pós-Graduação em Gestão Financeira*, *Pós-Graduação em Administração de Empresas*) e condições de financiamento dedicadas, aproveitando o volume bruto de 2.612 formandos/ano.
+
+### 6. Veredito Estratégico
+
+**Prioridade: ALTA.** Campinas combina (i) base de 180 mil profissionais elegíveis com salário médio de R$ 9.512 — o ticket de R$ 1.200/mês representa apenas 12,6% da renda, **folga material para captação e até para upsell**; (ii) pipeline acadêmico de 16.867 concluintes/ano com forte crescimento em saúde (vetor onde FGV tem portfólio robusto e onde o gap competitivo de "Gestão de Clínicas" precisa ser fechado); (iii) presença ancorada de Itaú e Bradesco viabilizando estratégia B2B de turmas fechadas no setor financeiro, segmento de margem alta. O score 42,5/100 (rank #4 em SP) é deprimido pelo D2 Tamanho de Mercado (12/100) — limitação real de volume absoluto frente à capital — mas D1 Capacidade de Pagamento (57) e D3 Pipeline Acadêmico (59) sustentam tese de **praça premium e não de volume**. Recomendação: entrada com portfólio enxuto e curado (Saúde + Finanças + Gestão Pública + TI/Transformação Digital), modelo híbrido com âncora presencial em Barão Geraldo, e estratégia B2B prioritária com Itaú/Bradesco no primeiro ciclo.
