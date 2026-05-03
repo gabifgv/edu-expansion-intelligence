@@ -345,7 +345,7 @@ render();
 </body>
 </html>"""
 
-out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "preview_b4.html")
+out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "previews", "preview_bloco4-empresas-alvo.html")
 with open(out, "w", encoding="utf-8") as f:
     f.write(html)
 print(f"Preview gerado: {out}")

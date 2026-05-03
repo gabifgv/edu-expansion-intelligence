@@ -280,8 +280,8 @@ def get_mercado_trabalho(con, id_municipio: str, renda_min: float, ano_emp: int)
     }
 
 # ── BLOCO 4: Empresas-Alvo ────────────────────────────────────────────────────
-def get_empresas(con, id_municipio: str, capital_min: float = 500_000,
-                 lat_polo: float = None, lon_polo: float = None, limit: int = 200):
+def get_empresas(con, id_municipio: str, capital_min: float = 0,
+                 lat_polo: float = None, lon_polo: float = None, limit: int = 1000):
     # Distância haversine direto no SQL se houver polo (fallback rápido sem OSRM no dashboard)
     if lat_polo is not None and lon_polo is not None:
         dist_expr = f"""ROUND(2 * 6371 * ASIN(SQRT(
@@ -312,6 +312,7 @@ def get_empresas(con, id_municipio: str, capital_min: float = 500_000,
             COALESCE('(' || e.ddd || ') ' || e.telefone, '-') AS telefone,
             COALESCE(e.email, '-') AS email,
             e.capital_social,
+            CAST(FLOOR(datediff('day', CAST(e.data_inicio_atividade AS DATE), CURRENT_DATE) / 365.25) AS INTEGER) AS idade_anos,
             {dist_expr} AS distancia_km
         FROM fct_empresas e
         {join_coords}
@@ -501,7 +502,7 @@ def get_score_estado(con, sigla_uf: str, ano_emp: int):
         WHERE d.sigla_uf = '{sigla_uf}'
     """).df()
 
-    # D3
+    # D3 (Pipeline Acadêmico + Penetração IES Privadas)
     df_d3 = con.execute(f"""
         WITH conc AS (
             SELECT id_municipio,
@@ -509,14 +510,17 @@ def get_score_estado(con, sigla_uf: str, ano_emp: int):
                     'Negócios, administração e direito',
                     'Tecnologias da informação e comunicação',
                     'Engenharia, produção e construção'
-                ) THEN total_concluintes ELSE 0 END) AS c_alvo
+                ) THEN total_concluintes ELSE 0 END) AS c_alvo,
+                SUM(CASE WHEN LOWER(rede) LIKE '%privad%' THEN total_concluintes ELSE 0 END) * 1.0
+                    / NULLIF(SUM(total_concluintes), 0) AS pct_privada
             FROM fct_mercado_superior
             WHERE sigla_uf = '{sigla_uf}' AND ano = (SELECT MAX(ano) FROM fct_mercado_superior)
             GROUP BY 1
         )
         SELECT d.id_municipio,
             COALESCE(d.taxa_superior_25_mais, 0) AS taxa_sup,
-            COALESCE(c.c_alvo,0) * 1000.0 / NULLIF(d.populacao_total,0) AS conc_per_1k
+            COALESCE(c.c_alvo,0) * 1000.0 / NULLIF(d.populacao_total,0) AS conc_per_1k,
+            COALESCE(c.pct_privada, 0) AS pct_privada
         FROM dim_municipio d
         LEFT JOIN conc c ON c.id_municipio = d.id_municipio
         WHERE d.sigla_uf = '{sigla_uf}'
@@ -544,7 +548,7 @@ def get_score_estado(con, sigla_uf: str, ano_emp: int):
                 .merge(df_d3, on="id_municipio", how="left") \
                 .merge(df_d4, on="id_municipio", how="left")
 
-    cols = ["avg_sal", "pct_3sm", "vinculos", "grandes_per_1k", "taxa_sup", "conc_per_1k", "idhm", "cresc"]
+    cols = ["avg_sal", "pct_3sm", "vinculos", "grandes_per_1k", "taxa_sup", "conc_per_1k", "pct_privada", "idhm", "cresc"]
     df[cols] = df[cols].fillna(0)
 
     def norm(s):
@@ -557,12 +561,13 @@ def get_score_estado(con, sigla_uf: str, ano_emp: int):
     df["d2b"] = norm(df["grandes_per_1k"])
     df["d3a"] = norm(df["taxa_sup"])
     df["d3b"] = norm(df["conc_per_1k"])
+    df["d3c"] = norm(df["pct_privada"])
     df["d4a"] = norm(df["idhm"])
     df["d4b"] = norm(df["cresc"])
 
     df["D1"] = ((df["d1a"] + df["d1b"]) / 2).round(4)
     df["D2"] = ((df["d2a"] + df["d2b"]) / 2).round(4)
-    df["D3"] = ((df["d3a"] + df["d3b"]) / 2).round(4)
+    df["D3"] = ((df["d3a"] + df["d3b"] + df["d3c"]) / 3).round(4)
     df["D4"] = ((df["d4a"] + df["d4b"]) / 2).round(4)
 
     cidades = []

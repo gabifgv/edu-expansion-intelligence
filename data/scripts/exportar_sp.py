@@ -8,7 +8,7 @@ import duckdb
 from google.cloud import bigquery
 
 PROJECT = "project-a8f8452a-3033-4dd8-99a"
-DB_PATH = os.path.join(os.path.dirname(__file__), "sp_mvp.duckdb")
+DB_PATH = os.path.join(os.path.dirname(__file__), "..", "sp_mvp.duckdb")
 
 client = bigquery.Client(project=PROJECT)
 

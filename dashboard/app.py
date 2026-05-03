@@ -67,10 +67,22 @@ def geocodificar_cep(cep: str) -> Optional[tuple]:
     return None
 
 
-# ── Página principal ──────────────────────────────────────────────────────────
+# ── Páginas ───────────────────────────────────────────────────────────────────
 @app.get("/")
 def index():
     return FileResponse(str(DASHBOARD_DIR / "index.html"))
+
+@app.get("/comparativo")
+def index_comparativo():
+    return FileResponse(str(DASHBOARD_DIR / "comparativo.html"))
+
+@app.get("/dev")
+def index_dev():
+    return FileResponse(str(DASHBOARD_DIR / "dev" / "index.html"))
+
+@app.get("/dev/comparativo")
+def index_dev_comparativo():
+    return FileResponse(str(DASHBOARD_DIR / "dev" / "comparativo.html"))
 
 
 # ── Filtros: UFs e municípios ─────────────────────────────────────────────────

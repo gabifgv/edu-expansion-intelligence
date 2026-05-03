@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FGV — Comparativo entre Cidades</title>
+<link rel="stylesheet" href="/static/dev/styles.css">
+<style>
+  /* Comparativo: nada congelado acima da tabela. Só o thead. */
+  .fgv-header { position: static; }
+  .filter-bar { position: static; }
+  .compare-table tbody tr.analysis-row td { padding: 14px; background: var(--bg-alt); border-top: 2px solid var(--azul-claro); }
+  .compare-table tbody tr.analysis-row td.val-cell { vertical-align: top; text-align: left; white-space: normal; line-height: 1.45; font-size: 12px; font-weight: 400; color: var(--cinza-80); max-width: 300px; }
+  .compare-table tbody tr.analysis-row td:first-child { font-weight: 700; color: var(--azul-escuro); font-size: 12px; }
+  .var-pos { color: var(--aux-turquesa); font-weight: 700; }
+  .var-neg { color: var(--aux-vinho); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<header class="fgv-header">
+  <div class="brand">
+    <div class="brand-fgv">FGV</div>
+    <div class="brand-divider"></div>
+    <div class="brand-product">
+      <h1>Inteligência de Mercado</h1>
+      <p>DICOM MARKET</p>
+    </div>
+  </div>
+  <span class="header-tag">MVP &middot; SP</span>
+</header>
+
+<nav class="page-nav">
+  <span class="page-nav-label">Navegação</span>
+  <a href="/dev">Visão por município</a>
+  <a href="/dev/comparativo" class="active">Comparativo entre cidades</a>
+</nav>
+
+<!-- Filtros globais -->
+<section class="filter-bar">
+  <div class="fg">
+    <label>Produto</label>
+    <select id="f-produto">
+      <option value="MBA">MBA</option>
+      <option value="Pós-Graduação">Pós-Graduação</option>
+    </select>
+  </div>
+  <div class="fg">
+    <label>Mensalidade (R$/mês)</label>
+    <input type="number" id="f-mensalidade" value="1200" step="100" min="0">
+  </div>
+  <div class="fg">
+    <label>% renda destinada</label>
+    <input type="number" id="f-pct" value="30" step="1" min="1" max="100">
+  </div>
+  <div class="filter-divider"></div>
+  <div class="fg">
+    <label>Setor (Mercado)</label>
+    <div class="ms-dd" id="f-setor"></div>
+  </div>
+  <div class="fg">
+    <label>Área (Educação)</label>
+    <div class="ms-dd" id="f-area"></div>
+  </div>
+  <div class="fg">
+    <label>Rede (Educação)</label>
+    <select id="f-rede">
+      <option value="">Todas</option>
+      <option value="publica">Pública</option>
+      <option value="privada">Privada</option>
+    </select>
+  </div>
+  <button class="btn-clear-filter" onclick="clearAllDimensionFilters()" title="Limpar todos os filtros de dimensão">Limpar filtros</button>
+</section>
+
+<!-- Pesos do Score -->
+<section class="weights-bar">
+  <div class="weights-bar-label">Pesos do Score</div>
+  <div class="weights-bar-grid">
+    <div class="weight-item">
+      <label>D1 Tamanho do Mercado Elegível <span class="tip" data-tip="Mede QUANTOS PODEM PAGAR. Combina vínculos formais e empresas grandes (capital > R$1M) por mil vínculos. Identifica massa crítica para fazer turma.">i</span><span class="wval" id="lw1">40%</span></label>
+      <input type="range" id="w1" min="0" max="100" value="40" oninput="updateWeights()">
+    </div>
+    <div class="weight-item">
+      <label>D2 Pipeline Acadêmico <span class="tip" data-tip="Mede a OFERTA DE TALENTOS. Combina % superior 25+, concluintes em áreas-alvo por mil hab. e penetração de IES privadas.">i</span><span class="wval" id="lw2">35%</span></label>
+      <input type="range" id="w2" min="0" max="100" value="35" oninput="updateWeights()">
+    </div>
+    <div class="weight-item">
+      <label>D3 Dinamismo Econômico <span class="tip" data-tip="Mede o MOMENTUM. Combina IDHM e crescimento dos vínculos formais entre 2020 e 2024. Capta praças em expansão econômica.">i</span><span class="wval" id="lw3">25%</span></label>
+      <input type="range" id="w3" min="0" max="100" value="25" oninput="updateWeights()">
+    </div>
+  </div>
+  <div class="weight-total" id="w-total">Total: 100%</div>
+</section>
+
+<!-- City selector -->
+<section class="city-selector">
+  <div class="city-selector-title">Cidades para comparar (até 5)</div>
+  <div class="city-selector-row">
+    <div class="city-search-wrap" id="city-search-wrap">
+      <input type="text" id="city-search-input" placeholder="Buscar cidade para adicionar..." autocomplete="off">
+      <div class="city-search-list" id="city-search-list"></div>
+    </div>
+    <div class="city-chips" id="city-chips"></div>
+  </div>
+</section>
+
+<section class="compare-action-row">
+  <div class="compare-status" id="compare-status">Selecione ao menos 2 cidades para comparar.</div>
+  <button class="btn-primary" id="btn-compare" onclick="loadCompare()" disabled>Comparar →</button>
+</section>
+
+<main>
+  <div class="alert-error" id="alert-error"></div>
+
+  <div class="compare-wrap">
+    <div id="compare-content">
+      <div class="compare-empty">
+        <h2>Compare municípios paulistas lado a lado</h2>
+        <p>Selecione de 2 a 5 cidades acima e clique em <strong>Comparar</strong>.</p>
+        <p>O tabelão mostra 29 indicadores agrupados em 5 categorias colapsáveis (Perfil, Mercado, Empresarial, Pipeline e Score) + uma análise comparativa final automática.</p>
+        <p style="font-size:11px;margin-top:18px;color:var(--cinza-60)">Os filtros globais e pesos do Score acima refletem em todas as cidades selecionadas.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="fgv-footer">
+  <div><strong>FGV</strong> &middot; FUNDAÇÃO GETULIO VARGAS</div>
+  <div style="margin-top:6px">DICOM MARKET &middot; Inteligência de Mercado para Decisões de Expansão &middot; MVP &middot; 645 municípios SP</div>
+</footer>
+
+<div id="tooltip-container"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════
+// CONSTANTES
+// ═══════════════════════════════════════════════════════════════════════
+const CITY_COLORS = ['#008BC9', '#3BAE96', '#9B0A51', '#9C64A2', '#89A950'];
+const MAX_CITIES = 5;
+const STORAGE_KEY = 'comparativo_state_v1';
+
+// ═══════════════════════════════════════════════════════════════════════
+// STATE (persistido em localStorage)
+// ═══════════════════════════════════════════════════════════════════════
+const STATE = {
+  filters: {
+    produto: 'MBA',
+    mensalidade: 1200,
+    pct_renda: 30,
+    setores: new Set(),
+    areas: new Set(),
+    rede: '',
+  },
+  weights: { d1: 40, d2: 35, d3: 25 },
+  cities: [],
+  cityData: {},
+  collapsed: new Set(),
+};
+
+let MUNICIPIOS = [];
+
+function saveState() {
+  try {
+    const obj = {
+      filters: { ...STATE.filters,
+        setores: [...STATE.filters.setores],
+        areas: [...STATE.filters.areas],
+      },
+      weights: STATE.weights,
+      cities: STATE.cities,
+      collapsed: [...STATE.collapsed],
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+  } catch (e) { /* ignore */ }
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const obj = JSON.parse(raw);
+    if (obj.filters) {
+      STATE.filters.produto = obj.filters.produto || 'MBA';
+      STATE.filters.mensalidade = obj.filters.mensalidade || 1200;
+      STATE.filters.pct_renda = obj.filters.pct_renda || 30;
+      STATE.filters.setores = new Set(obj.filters.setores || []);
+      STATE.filters.areas = new Set(obj.filters.areas || []);
+      STATE.filters.rede = obj.filters.rede || '';
+    }
+    if (obj.weights) STATE.weights = obj.weights;
+    if (Array.isArray(obj.cities)) STATE.cities = obj.cities;
+    if (Array.isArray(obj.collapsed)) STATE.collapsed = new Set(obj.collapsed);
+  } catch (e) { /* ignore */ }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════════════════
+function normalizeStr(s) { return (s || '').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+
+function fmtNum(n) {
+  if (n == null || isNaN(n)) return null;
+  if (Math.abs(n) >= 1e6) return (n / 1e6).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + 'M';
+  if (Math.abs(n) >= 1e3) return (n / 1e3).toLocaleString('pt-BR', { maximumFractionDigits: 0 }) + 'k';
+  return n.toLocaleString('pt-BR', { maximumFractionDigits: 0 });
+}
+function fmtCurrency(n) { return n == null || isNaN(n) ? null : 'R$ ' + Number(n).toLocaleString('pt-BR', { maximumFractionDigits: 0 }); }
+function fmtPct(n) { return n == null || isNaN(n) ? null : Number(n).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + '%'; }
+function fmtPctSigned(n) {
+  if (n == null || isNaN(n)) return null;
+  const sign = n > 0 ? '+' : '';
+  return sign + Number(n).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + '%';
+}
+function fmtIdx3(n) { return n == null || isNaN(n) ? null : Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 }); }
+function fmtNum1(n) { return n == null || isNaN(n) ? null : Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }); }
+function fmtRank(n) { return n == null ? null : '#' + n; }
+
+const FORMATTERS = {
+  'num': fmtNum, 'currency': fmtCurrency, 'pct': fmtPct, 'pct_signed': fmtPctSigned,
+  'idx3': fmtIdx3, 'num1': fmtNum1, 'rank': fmtRank, 'text': v => v,
+};
+
+// ═══════════════════════════════════════════════════════════════════════
+// EXTRATORES
+// ═══════════════════════════════════════════════════════════════════════
+function findRow(rows, partial) {
+  if (!rows) return null;
+  const r = rows.find(r => normalizeStr(r.metrica).includes(normalizeStr(partial)));
+  return r ? r.cidade : null;
+}
+
+function weightedSal(rows, salKey) {
+  const v = rows.reduce((s, r) => s + (r.vinculos || 0), 0);
+  if (v === 0) return null;
+  const t = rows.reduce((s, r) => s + (r[salKey] || 0) * (r.vinculos || 0), 0);
+  return t / v;
+}
+
+function filterMT(d, f) {
+  const mt = d.mercado_trabalho;
+  const setoresActive = f.setores && f.setores.size > 0;
+  if (!setoresActive) {
+    return {
+      vinculos: mt.kpis.total_vinculos,
+      eleg: mt.kpis.elegiveis,
+      pct_eleg: mt.kpis.pct_elegiveis,
+      sal_eleg: mt.kpis.sal_eleg_medio,
+      sal_medio: weightedSal(mt.por_setor || [], 'sal_medio'),
+      por_setor: mt.por_setor || [],
+    };
+  }
+  const filtered = (mt.por_setor || []).filter(r => f.setores.has(r.setor));
+  const vinculos = filtered.reduce((s, r) => s + (r.vinculos || 0), 0);
+  const eleg = filtered.reduce((s, r) => s + (r.eleg || 0), 0);
+  const elegRows = filtered.filter(r => (r.eleg || 0) > 0 && r.sal_eleg);
+  const sal_eleg_total = elegRows.reduce((s, r) => s + r.sal_eleg * r.eleg, 0);
+  const sal_eleg_count = elegRows.reduce((s, r) => s + r.eleg, 0);
+  return {
+    vinculos, eleg,
+    pct_eleg: vinculos > 0 ? (eleg / vinculos * 100) : null,
+    sal_eleg: sal_eleg_count > 0 ? sal_eleg_total / sal_eleg_count : null,
+    sal_medio: weightedSal(filtered, 'sal_medio'),
+    por_setor: filtered,
+  };
+}
+
+function topSetorBy(d, f, sortKey) {
+  const mt = d.mercado_trabalho;
+  let rows = mt.por_setor || [];
+  if (f.setores && f.setores.size > 0) rows = rows.filter(r => f.setores.has(r.setor));
+  if (rows.length === 0) return null;
+  return rows.slice().sort((a, b) => (b[sortKey] || 0) - (a[sortKey] || 0))[0].setor;
+}
+
+function lastEstab(d) {
+  const serie = (d.mercado_trabalho.estab_serie || []).filter(r => r.ano !== 2022);
+  return serie.length ? serie[serie.length - 1].estabs : null;
+}
+function varEstab(d) {
+  const serie = (d.mercado_trabalho.estab_serie || []).filter(r => r.ano !== 2022);
+  const e2020 = serie.find(r => r.ano === 2020);
+  const e2024 = serie.find(r => r.ano === 2024);
+  if (!e2020 || !e2024 || !e2020.estabs) return null;
+  return (e2024.estabs - e2020.estabs) / e2020.estabs * 100;
+}
+
+function filterPipeRows(d, f) {
+  let rows = (d.pipeline.rows || []).slice();
+  if (f.areas && f.areas.size > 0) rows = rows.filter(r => f.areas.has(r.area));
+  if (f.rede === 'publica') rows = rows.filter(r => !/privad/i.test(r.rede || ''));
+  if (f.rede === 'privada') rows = rows.filter(r => /privad/i.test(r.rede || ''));
+  return rows;
+}
+
+function filterPipe(d, f) {
+  const ano_max = d.pipeline.ano_max;
+  const rows = filterPipeRows(d, f);
+  const c24 = rows.filter(r => r.ano === ano_max).reduce((s, r) => s + r.conc, 0);
+  const c20 = rows.filter(r => r.ano === 2020).reduce((s, r) => s + r.conc, 0);
+  const c23 = rows.filter(r => r.ano === ano_max - 1).reduce((s, r) => s + r.conc, 0);
+  const var20 = c20 > 0 ? (c24 - c20) / c20 * 100 : null;
+  const var23 = c23 > 0 ? (c24 - c23) / c23 * 100 : null;
+  const rows24 = rows.filter(r => r.ano === ano_max);
+  const c24_priv = rows24.filter(r => /privad/i.test(r.rede || '')).reduce((s, r) => s + r.conc, 0);
+  const pct_priv = c24 > 0 ? (c24_priv / c24 * 100) : null;
+  const ies = new Set(rows24.map(r => r.ies)).size;
+  return { c24, c23, c20, var20, var23, pct_priv, ies };
+}
+
+function topPipeBy(d, f, key) {
+  const rows = filterPipeRows(d, f);
+  const ano_max = d.pipeline.ano_max;
+  const rows24 = rows.filter(r => r.ano === ano_max);
+  if (rows24.length === 0) return null;
+  const agg = {};
+  rows24.forEach(r => { const k = r[key]; if (k) agg[k] = (agg[k] || 0) + r.conc; });
+  const top = Object.entries(agg).sort((a, b) => b[1] - a[1])[0];
+  return top ? top[0] : null;
+}
+
+function scoreCityLookup(d, cityId) {
+  const w = STATE.weights;
+  const tot = (w.d1 + w.d2 + w.d3) || 100;
+  const cidades = (d.score.cidades || []).map(c => ({
+    ...c,
+    score: ((w.d1 * c.D2 + w.d2 * c.D3 + w.d3 * c.D4) / tot) * 100
+  }));
+  cidades.sort((a, b) => b.score - a.score);
+  cidades.forEach((c, i) => c.rank = i + 1);
+  return cidades.find(c => c.id === cityId);
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// TIPS — descrições para tooltips
+// ═══════════════════════════════════════════════════════════════════════
+const TIPS = {
+  'População total': 'População residente do município (IBGE Atlas ADH 2010, projeção).',
+  'IDHM': 'Índice de Desenvolvimento Humano Municipal (0-1). Combina educação, longevidade e renda. Acima de 0,800 = muito alto. Atlas ADH/PNUD.',
+  'Renda per capita': 'Renda domiciliar mensal média por habitante. Atlas ADH 2010, deflacionada IPCA-IBGE.',
+  'Renda média RAIS': 'Salário médio mensal dos vínculos formais ativos (RAIS-MTE), corrigido pelo IPCA.',
+  'Índice de Gini': 'Mede concentração de renda (0 = total igualdade, 1 = total concentração). Atlas ADH 2010.',
+  '% Pop 25+ com superior': '% da população com 25 anos ou mais que possui ensino superior completo.',
+  '% em pobreza': '% de pessoas com renda domiciliar abaixo da linha de pobreza (Atlas ADH).',
+  'Vínculos formais': 'Total de vínculos formais ativos em 31/12 do último ano (RAIS-MTE).',
+  'Vínculos elegíveis': 'Vínculos com salário ≥ mensalidade ÷ (% renda destinada). Mercado endereçável.',
+  '% elegíveis': '% dos vínculos formais com renda compatível com a mensalidade configurada.',
+  'Salário médio elegível': 'Salário médio (R$) entre vínculos elegíveis. Ponderado pelo nº de vínculos.',
+  'Salário médio geral': 'Salário médio (R$) entre todos os vínculos formais. Ponderado pelo nº de vínculos.',
+  'Top setor (por elegíveis)': 'Setor com maior número absoluto de vínculos elegíveis no município.',
+  'Estabelecimentos (último ano)': 'Total de estabelecimentos formais no último ano (RAIS Estabs). 2022 excluído (broken na fonte).',
+  'Variação estab. 2020→2024': 'Variação % do total de estabelecimentos entre 2020 e 2024.',
+  'Top setor (por estabs)': 'Setor com maior número de estabelecimentos no município.',
+  'Concluintes (último ano)': 'Total de concluintes no ano mais recente (INEP Censo Superior).',
+  'Variação 2020→2024': 'Variação % de concluintes entre 2020 e 2024 (no escopo dos filtros).',
+  'Variação 2023→2024': 'Variação % de concluintes entre 2023 e 2024.',
+  '% rede privada': '% dos concluintes formados em IES privadas no último ano.',
+  'Total de IES': 'Quantidade de instituições com cursos ativos no município.',
+  'Top área': 'Área de conhecimento com maior número de concluintes.',
+  'Top curso': 'Curso com maior número de concluintes no último ano.',
+  'Top IES': 'IES com maior número de concluintes no último ano.',
+  'Curso de maior crescimento 2024 vs 2020': 'Curso com maior variação % de concluintes entre 2020 e 2024 (mínimo 1 concluinte em 2020). Mostra o crescimento entre parênteses.',
+  'Curso de maior crescimento 2024 vs 2023': 'Curso com maior variação % de concluintes entre 2023 e 2024. Mostra o crescimento entre parênteses.',
+  'Score final (0-100)': 'Score composto do município. Calculado com os pesos D1/D2/D3 ajustáveis. Min-max normalization dentro do estado.',
+  'Rank em SP (645 mun.)': 'Posição do município no ranking de score em SP (entre 645 municípios). Quanto menor, melhor.',
+  'D1 — Tamanho Mercado Elegível': 'Mede QUANTOS PODEM PAGAR. Combina vínculos formais e empresas grandes (capital > R$1M) por mil vínculos.',
+  'D2 — Pipeline Acadêmico': 'Mede a OFERTA DE TALENTOS. Combina % superior 25+, concluintes em áreas-alvo por mil hab. e penetração de IES privadas.',
+  'D3 — Dinamismo Econômico': 'Mede o MOMENTUM. Combina IDHM e crescimento dos vínculos formais entre 2020 e 2024.',
+};
+
+// ═══════════════════════════════════════════════════════════════════════
+// LISTA DE INDICADORES
+// ═══════════════════════════════════════════════════════════════════════
+const CATEGORIES = [
+  { id: 'perfil',     label: 'Perfil Socioeconômico' },
+  { id: 'mercado',    label: 'Mercado de Trabalho' },
+  { id: 'empresa',    label: 'Tecido Empresarial' },
+  { id: 'pipeline',   label: 'Pipeline Acadêmico' },
+  { id: 'score',      label: 'Score de Atratividade' },
+];
+
+const INDICATORS = [
+  // Perfil (7)
+  { cat: 'perfil',   label: 'População total',           get: (d) => d.perfil.populacao,                              fmt: 'num',         dir: 'higher' },
+  { cat: 'perfil',   label: 'IDHM',                      get: (d) => findRow(d.perfil.rows, 'IDHM'),                  fmt: 'idx3',        dir: 'higher' },
+  { cat: 'perfil',   label: 'Renda per capita',          get: (d) => findRow(d.perfil.rows, 'Renda per capita'),      fmt: 'currency',    dir: 'higher' },
+  { cat: 'perfil',   label: 'Renda média RAIS',          get: (d) => findRow(d.perfil.rows, 'RAIS'),                  fmt: 'currency',    dir: 'higher' },
+  { cat: 'perfil',   label: 'Índice de Gini',            get: (d) => findRow(d.perfil.rows, 'Gini'),                  fmt: 'idx3',        dir: 'higher' },
+  { cat: 'perfil',   label: '% Pop 25+ com superior',    get: (d) => findRow(d.perfil.rows, 'superior'),              fmt: 'pct',         dir: 'higher' },
+  { cat: 'perfil',   label: '% em pobreza',              get: (d) => findRow(d.perfil.rows, 'pobreza'),               fmt: 'pct',         dir: 'lower'  },
+  // Mercado (6)
+  { cat: 'mercado',  label: 'Vínculos formais',          get: (d, f) => filterMT(d, f).vinculos,                      fmt: 'num',         dir: 'higher' },
+  { cat: 'mercado',  label: 'Vínculos elegíveis',        get: (d, f) => filterMT(d, f).eleg,                          fmt: 'num',         dir: 'higher' },
+  { cat: 'mercado',  label: '% elegíveis',               get: (d, f) => filterMT(d, f).pct_eleg,                      fmt: 'pct',         dir: 'higher' },
+  { cat: 'mercado',  label: 'Salário médio elegível',    get: (d, f) => filterMT(d, f).sal_eleg,                      fmt: 'currency',    dir: 'higher' },
+  { cat: 'mercado',  label: 'Salário médio geral',       get: (d, f) => filterMT(d, f).sal_medio,                     fmt: 'currency',    dir: 'higher' },
+  { cat: 'mercado',  label: 'Top setor (por elegíveis)', get: (d, f) => topSetorBy(d, f, 'eleg'),                     fmt: 'text',        dir: 'none'   },
+  // Empresa (3)
+  { cat: 'empresa',  label: 'Estabelecimentos (último ano)', get: (d) => lastEstab(d),                                fmt: 'num',         dir: 'higher' },
+  { cat: 'empresa',  label: 'Variação estab. 2020→2024',  get: (d) => varEstab(d),                                    fmt: 'pct_signed',  dir: 'higher' },
+  { cat: 'empresa',  label: 'Top setor (por estabs)',    get: (d, f) => topSetorBy(d, f, 'estabs'),                   fmt: 'text',        dir: 'none'   },
+  // Pipeline (10) — adiciona 2 cursos de maior crescimento
+  { cat: 'pipeline', label: 'Concluintes (último ano)',  get: (d, f) => filterPipe(d, f).c24,                         fmt: 'num',         dir: 'higher' },
+  { cat: 'pipeline', label: 'Variação 2020→2024',         get: (d, f) => filterPipe(d, f).var20,                      fmt: 'pct_signed',  dir: 'higher' },
+  { cat: 'pipeline', label: 'Variação 2023→2024',         get: (d, f) => filterPipe(d, f).var23,                      fmt: 'pct_signed',  dir: 'higher' },
+  { cat: 'pipeline', label: '% rede privada',             get: (d, f) => filterPipe(d, f).pct_priv,                   fmt: 'pct',         dir: 'higher' },
+  { cat: 'pipeline', label: 'Total de IES',              get: (d, f) => filterPipe(d, f).ies,                         fmt: 'num',         dir: 'higher' },
+  { cat: 'pipeline', label: 'Top área',                  get: (d, f) => topPipeBy(d, f, 'area'),                      fmt: 'text',        dir: 'none'   },
+  { cat: 'pipeline', label: 'Top curso',                 get: (d, f) => topPipeBy(d, f, 'curso'),                     fmt: 'text',        dir: 'none'   },
+  { cat: 'pipeline', label: 'Top IES',                   get: (d, f) => topPipeBy(d, f, 'ies'),                       fmt: 'text',        dir: 'none'   },
+  // Score (5)
+  { cat: 'score',    label: 'Score final (0-100)',       get: (d, f, c) => { const s = scoreCityLookup(d, c.id); return s ? s.score : null; },           fmt: 'num1',  dir: 'higher' },
+  { cat: 'score',    label: 'Rank em SP (645 mun.)',     get: (d, f, c) => { const s = scoreCityLookup(d, c.id); return s ? s.rank : null; },             fmt: 'rank',  dir: 'lower'  },
+  { cat: 'score',    label: 'D1 — Tamanho Mercado Elegível', get: (d, f, c) => { const s = scoreCityLookup(d, c.id); return s ? s.D2 * 100 : null; },     fmt: 'num1',  dir: 'higher' },
+  { cat: 'score',    label: 'D2 — Pipeline Acadêmico',   get: (d, f, c) => { const s = scoreCityLookup(d, c.id); return s ? s.D3 * 100 : null; },         fmt: 'num1',  dir: 'higher' },
+  { cat: 'score',    label: 'D3 — Dinamismo Econômico',  get: (d, f, c) => { const s = scoreCityLookup(d, c.id); return s ? s.D4 * 100 : null; },         fmt: 'num1',  dir: 'higher' },
+];
+
+// ═══════════════════════════════════════════════════════════════════════
+// MULTI-SELECT
+// ═══════════════════════════════════════════════════════════════════════
+function createMultiSelect(containerId, label, options, selected, onChange) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.classList.add('ms-dd');
+  const selSet = selected instanceof Set ? selected : new Set(selected || []);
+  function updateLabel() {
+    const span = container.querySelector('.ms-dd-label');
+    const count = container.querySelector('.ms-dd-count');
+    span.textContent = label;
+    if (selSet.size > 0) { count.textContent = selSet.size; count.style.display = 'inline-block'; }
+    else { count.style.display = 'none'; }
+  }
+  container.innerHTML = `
+    <button class="ms-dd-trigger" type="button">
+      <span><span class="ms-dd-label">${label}</span><span class="ms-dd-count" style="display:none">0</span></span>
+    </button>
+    <div class="ms-dd-menu">
+      <input class="ms-dd-search" placeholder="Buscar (sem acentos)..." />
+      <div class="ms-dd-list"></div>
+      <div class="ms-dd-actions">
+        <button type="button" class="ms-clear">Limpar</button>
+        <button type="button" class="ms-close">Fechar</button>
+      </div>
+    </div>
+  `;
+  const trigger = container.querySelector('.ms-dd-trigger');
+  const search = container.querySelector('.ms-dd-search');
+  const list = container.querySelector('.ms-dd-list');
+  function renderList(filterText = '') {
+    const f = normalizeStr(filterText);
+    const filtered = options.filter(o => normalizeStr(o).includes(f));
+    if (filtered.length === 0) {
+      list.innerHTML = '<div style="padding:12px;color:var(--cinza-60);font-size:11px;text-align:center">Nenhum resultado</div>';
+      return;
+    }
+    list.innerHTML = filtered.map(o => {
+      const safe = (o + '').replace(/</g, '&lt;');
+      return `<label class="ms-dd-item" data-val-idx="${options.indexOf(o)}"><input type="checkbox" ${selSet.has(o) ? 'checked' : ''} /><span>${safe}</span></label>`;
+    }).join('');
+    list.querySelectorAll('.ms-dd-item').forEach(label => {
+      const idx = +label.dataset.valIdx;
+      const opt = options[idx];
+      const cb = label.querySelector('input[type=checkbox]');
+      cb.onchange = () => {
+        if (cb.checked) selSet.add(opt); else selSet.delete(opt);
+        updateLabel();
+        if (onChange) onChange(selSet);
+      };
+    });
+  }
+  trigger.onclick = () => container.classList.toggle('open');
+  search.oninput = () => renderList(search.value);
+  container.querySelector('.ms-clear').onclick = () => {
+    selSet.clear(); search.value = ''; renderList();
+    updateLabel(); if (onChange) onChange(selSet);
+  };
+  container.querySelector('.ms-close').onclick = () => container.classList.remove('open');
+  document.addEventListener('click', e => { if (!container.contains(e.target)) container.classList.remove('open'); });
+  renderList();
+  updateLabel();
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// TOOLTIPS
+// ═══════════════════════════════════════════════════════════════════════
+(function setupTooltips() {
+  const tt = document.getElementById('tooltip-container');
+  document.body.addEventListener('mouseover', (e) => {
+    const t = e.target.closest('.tip');
+    if (!t) return;
+    tt.textContent = t.dataset.tip;
+    tt.style.display = 'block';
+    const rect = t.getBoundingClientRect();
+    let left = rect.left + rect.width / 2 - tt.offsetWidth / 2;
+    let top = rect.top - tt.offsetHeight - 10;
+    if (top < 10) top = rect.bottom + 10;
+    if (left < 10) left = 10;
+    if (left + tt.offsetWidth > window.innerWidth - 10) left = window.innerWidth - tt.offsetWidth - 10;
+    tt.style.left = left + 'px'; tt.style.top = top + 'px';
+  });
+  document.body.addEventListener('mouseout', (e) => {
+    const t = e.target.closest('.tip'); if (t) tt.style.display = 'none';
+  });
+})();
+
+// ═══════════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════════
+async function init() {
+  loadState();  // restaura do localStorage
+  // Aplica valores no DOM
+  document.getElementById('f-produto').value = STATE.filters.produto;
+  document.getElementById('f-mensalidade').value = STATE.filters.mensalidade;
+  document.getElementById('f-pct').value = STATE.filters.pct_renda;
+  document.getElementById('f-rede').value = STATE.filters.rede;
+  document.getElementById('w1').value = STATE.weights.d1;
+  document.getElementById('w2').value = STATE.weights.d2;
+  document.getElementById('w3').value = STATE.weights.d3;
+  syncWeightLabels();
+
+  try {
+    const resp = await fetch('/api/municipios/SP');
+    MUNICIPIOS = await resp.json();
+    setupCitySearch();
+    setupFilters();
+    renderChips();
+    updateCompareButton();
+    // Se já há cidades persistidas, recarrega dados automaticamente
+    if (STATE.cities.length >= 2) loadCompare();
+  } catch (e) { showError('Erro ao carregar municípios: ' + e.message); }
+}
+
+function showError(msg) {
+  const el = document.getElementById('alert-error');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 5000);
+}
+
+function setupCitySearch() {
+  const wrap = document.getElementById('city-search-wrap');
+  const input = document.getElementById('city-search-input');
+  const list = document.getElementById('city-search-list');
+  function render(filter = '') {
+    const f = normalizeStr(filter);
+    const selectedIds = new Set(STATE.cities.map(c => c.id));
+    const items = MUNICIPIOS
+      .filter(m => normalizeStr(m.nome_municipio).includes(f))
+      .filter(m => !selectedIds.has(m.id_municipio));
+    if (items.length === 0) {
+      list.innerHTML = '<div class="ss-item" style="cursor:default;color:var(--cinza-60)">Nenhum município encontrado</div>';
+      return;
+    }
+    list.innerHTML = items.map(m => `<div class="ss-item" data-id="${m.id_municipio}" data-nome="${m.nome_municipio}">${m.nome_municipio}</div>`).join('');
+    list.querySelectorAll('.ss-item').forEach(el => {
+      el.onclick = () => {
+        addCity(el.dataset.id, el.dataset.nome);
+        input.value = '';
+        list.classList.remove('open');
+      };
+    });
+  }
+  input.oninput = () => { render(input.value); list.classList.add('open'); };
+  input.onfocus = () => { render(input.value); list.classList.add('open'); };
+  document.addEventListener('click', e => {
+    if (!wrap.contains(e.target)) list.classList.remove('open');
+  });
+}
+
+function setupFilters() {
+  document.getElementById('f-produto').onchange = (e) => {
+    STATE.filters.produto = e.target.value; saveState();
+    if (Object.keys(STATE.cityData).length > 0) loadCompare();
+  };
+  document.getElementById('f-mensalidade').onchange = (e) => {
+    STATE.filters.mensalidade = +e.target.value || 1200; saveState();
+    if (Object.keys(STATE.cityData).length > 0) loadCompare();
+  };
+  document.getElementById('f-pct').onchange = (e) => {
+    STATE.filters.pct_renda = +e.target.value || 30; saveState();
+    if (Object.keys(STATE.cityData).length > 0) loadCompare();
+  };
+  document.getElementById('f-rede').onchange = (e) => {
+    STATE.filters.rede = e.target.value; saveState();
+    if (Object.keys(STATE.cityData).length > 0) renderTable();
+  };
+  buildDimensionMultiSelects();
+}
+
+function buildDimensionMultiSelects() {
+  const opts = extractDimensionOptions();
+  createMultiSelect('f-setor', 'Setores', opts.setores, STATE.filters.setores, (sel) => {
+    STATE.filters.setores = sel; saveState();
+    if (Object.keys(STATE.cityData).length > 0) renderTable();
+  });
+  createMultiSelect('f-area', 'Áreas', opts.areas, STATE.filters.areas, (sel) => {
+    STATE.filters.areas = sel; saveState();
+    if (Object.keys(STATE.cityData).length > 0) renderTable();
+  });
+}
+
+function extractDimensionOptions() {
+  const setores = new Set(), areas = new Set();
+  Object.values(STATE.cityData).forEach(d => {
+    (d.mercado_trabalho.setores_unicos || []).forEach(s => setores.add(s));
+    (d.pipeline.rows || []).forEach(r => { if (r.area) areas.add(r.area); });
+  });
+  return {
+    setores: [...setores].sort(),
+    areas: [...areas].sort(),
+  };
+}
+
+function clearAllDimensionFilters() {
+  STATE.filters.setores = new Set();
+  STATE.filters.areas = new Set();
+  STATE.filters.rede = '';
+  document.getElementById('f-rede').value = '';
+  saveState();
+  buildDimensionMultiSelects();
+  if (Object.keys(STATE.cityData).length > 0) renderTable();
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// WEIGHTS
+// ═══════════════════════════════════════════════════════════════════════
+function syncWeightLabels() {
+  document.getElementById('lw1').textContent = STATE.weights.d1 + '%';
+  document.getElementById('lw2').textContent = STATE.weights.d2 + '%';
+  document.getElementById('lw3').textContent = STATE.weights.d3 + '%';
+  const tot = STATE.weights.d1 + STATE.weights.d2 + STATE.weights.d3;
+  const tEl = document.getElementById('w-total');
+  tEl.textContent = `Total: ${tot}%${tot === 100 ? '' : ' (norm.)'}`;
+  tEl.style.color = tot === 100 ? 'var(--aux-turquesa)' : 'var(--aux-laranja)';
+}
+
+function updateWeights() {
+  STATE.weights.d1 = +document.getElementById('w1').value;
+  STATE.weights.d2 = +document.getElementById('w2').value;
+  STATE.weights.d3 = +document.getElementById('w3').value;
+  syncWeightLabels();
+  saveState();
+  if (Object.keys(STATE.cityData).length > 0) renderTable();
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// CITY SELECTION
+// ═══════════════════════════════════════════════════════════════════════
+function addCity(id, nome) {
+  if (STATE.cities.length >= MAX_CITIES) {
+    showError(`Máximo de ${MAX_CITIES} cidades. Remova uma antes de adicionar outra.`);
+    return;
+  }
+  if (STATE.cities.find(c => c.id === id)) return;
+  const usedColors = new Set(STATE.cities.map(c => c.color));
+  const color = CITY_COLORS.find(col => !usedColors.has(col)) || CITY_COLORS[0];
+  STATE.cities.push({ id, nome, color });
+  saveState();
+  renderChips();
+  updateCompareButton();
+}
+
+function removeCity(id) {
+  STATE.cities = STATE.cities.filter(c => c.id !== id);
+  delete STATE.cityData[id];
+  saveState();
+  renderChips();
+  updateCompareButton();
+  if (STATE.cities.length >= 2 && Object.keys(STATE.cityData).length > 0) {
+    buildDimensionMultiSelects();
+    renderTable();
+  } else if (STATE.cities.length < 2) {
+    document.getElementById('compare-content').innerHTML = `
+      <div class="compare-empty">
+        <h2>Compare municípios paulistas lado a lado</h2>
+        <p>Selecione de 2 a 5 cidades acima e clique em <strong>Comparar</strong>.</p>
+      </div>`;
+  }
+}
+
+function renderChips() {
+  const wrap = document.getElementById('city-chips');
+  if (STATE.cities.length === 0) {
+    wrap.innerHTML = '<span style="font-size:12px;color:var(--cinza-60);font-style:italic;align-self:center">Nenhuma cidade selecionada</span>';
+    return;
+  }
+  wrap.innerHTML = STATE.cities.map(c => `
+    <div class="city-chip">
+      <div class="city-chip-color" style="background:${c.color}"></div>
+      <div class="city-chip-name">${c.nome}</div>
+      <button class="city-chip-x" onclick="removeCity('${c.id}')" title="Remover">×</button>
+    </div>
+  `).join('');
+}
+
+function updateCompareButton() {
+  const btn = document.getElementById('btn-compare');
+  const status = document.getElementById('compare-status');
+  if (STATE.cities.length < 2) {
+    btn.disabled = true;
+    status.textContent = `${STATE.cities.length}/5 cidades selecionadas. Mínimo 2.`;
+  } else {
+    btn.disabled = false;
+    status.textContent = `${STATE.cities.length}/5 cidades · clique em Comparar para gerar o tabelão.`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// LOAD COMPARE
+// ═══════════════════════════════════════════════════════════════════════
+async function loadCompare() {
+  if (STATE.cities.length < 2) return;
+  document.getElementById('compare-content').innerHTML = `
+    <div class="compare-loading"><div class="spinner"></div>Carregando dados de ${STATE.cities.length} cidades...</div>`;
+  document.getElementById('btn-compare').disabled = true;
+
+  STATE.filters.mensalidade = +document.getElementById('f-mensalidade').value || 1200;
+  STATE.filters.pct_renda = +document.getElementById('f-pct').value || 30;
+  STATE.filters.produto = document.getElementById('f-produto').value;
+  saveState();
+
+  try {
+    const promises = STATE.cities.map(c =>
+      fetch('/api/analise', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id_municipio: c.id, sigla_uf: 'SP', produto: STATE.filters.produto,
+          mensalidade: STATE.filters.mensalidade,
+          pct_renda: STATE.filters.pct_renda,
+          cep_polo: null, capital_min: 0,
+        }),
+      }).then(r => { if (!r.ok) throw new Error(`HTTP ${r.status} para ${c.nome}`); return r.json(); })
+    );
+    const results = await Promise.all(promises);
+    STATE.cityData = {};
+    STATE.cities.forEach((c, i) => { STATE.cityData[c.id] = results[i]; });
+    buildDimensionMultiSelects();
+    renderTable();
+  } catch (e) {
+    showError('Erro: ' + e.message);
+    document.getElementById('compare-content').innerHTML = '<div class="compare-empty"><p>Erro ao carregar dados.</p></div>';
+  } finally {
+    document.getElementById('btn-compare').disabled = false;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// ANÁLISE COMPARATIVA (gerada client-side, sem LLM)
+// ═══════════════════════════════════════════════════════════════════════
+function generateAnalysis(d, c) {
+  const score = scoreCityLookup(d, c.id);
+  if (!score) return '—';
+  const mt = filterMT(d, STATE.filters);
+  const pipe = filterPipe(d, STATE.filters);
+  const vEstab = varEstab(d);
+
+  const dims = [
+    { lbl: 'tamanho de mercado', val: score.D2 * 100 },
+    { lbl: 'pipeline acadêmico', val: score.D3 * 100 },
+    { lbl: 'dinamismo econômico', val: score.D4 * 100 },
+  ].sort((a, b) => b.val - a.val);
+
+  const parts = [];
+  parts.push(`<strong>Score ${score.score.toFixed(1)}/100</strong> · rank #${score.rank} entre 645.`);
+  parts.push(`Mais forte em <strong>${dims[0].lbl}</strong> (${dims[0].val.toFixed(0)} pts); mais fraco em ${dims[2].lbl} (${dims[2].val.toFixed(0)} pts).`);
+
+  const sinais = [];
+  if (pipe.var20 != null) {
+    const cls = pipe.var20 >= 0 ? 'var-pos' : 'var-neg';
+    const sg = pipe.var20 > 0 ? '+' : '';
+    sinais.push(`pipeline <span class="${cls}">${sg}${pipe.var20.toFixed(0)}%</span>`);
+  }
+  if (vEstab != null) {
+    const cls = vEstab >= 0 ? 'var-pos' : 'var-neg';
+    const sg = vEstab > 0 ? '+' : '';
+    sinais.push(`estabs <span class="${cls}">${sg}${vEstab.toFixed(0)}%</span>`);
+  }
+  if (sinais.length > 0) parts.push(`Variações 2020→2024: ${sinais.join(' · ')}.`);
+
+  if (mt.pct_eleg != null) {
+    if (mt.pct_eleg >= 30) parts.push(`Mercado elegível premium (${mt.pct_eleg.toFixed(0)}% dos vínculos).`);
+    else if (mt.pct_eleg < 15) parts.push(`Mercado mais sensível a preço (${mt.pct_eleg.toFixed(0)}% elegíveis).`);
+    else parts.push(`${mt.pct_eleg.toFixed(0)}% dos vínculos são elegíveis.`);
+  }
+
+  if (pipe.pct_priv != null && pipe.pct_priv >= 70) {
+    parts.push(`Oferta universitária dominada por IES privadas (${pipe.pct_priv.toFixed(0)}%).`);
+  } else if (pipe.pct_priv != null && pipe.pct_priv < 30) {
+    parts.push(`Oferta universitária ancorada em IES públicas (privadas ${pipe.pct_priv.toFixed(0)}%).`);
+  }
+
+  return parts.join(' ');
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// RENDER TABLE
+// ═══════════════════════════════════════════════════════════════════════
+function renderTable() {
+  if (STATE.cities.length < 2 || Object.keys(STATE.cityData).length < STATE.cities.length) return;
+
+  const ths = STATE.cities.map(c => `
+    <th class="city-col">
+      <div class="city-col-inner" style="border-top-color:${c.color}">
+        <div class="city-name">${c.nome}</div>
+        <div class="city-meta">SP</div>
+      </div>
+    </th>
+  `).join('');
+
+  const bodyRows = [];
+  CATEGORIES.forEach(cat => {
+    const isCollapsed = STATE.collapsed.has(cat.id);
+    bodyRows.push(`
+      <tr class="cat-row ${isCollapsed ? 'collapsed' : ''}" data-cat="${cat.id}" onclick="toggleCategory('${cat.id}')">
+        <td colspan="${STATE.cities.length + 1}">
+          <span class="cat-arrow">▼</span> ${cat.label}
+        </td>
+      </tr>
+    `);
+    if (isCollapsed) return;
+    const indicators = INDICATORS.filter(ind => ind.cat === cat.id);
+    indicators.forEach(ind => {
+      const rawValues = STATE.cities.map(c => {
+        try { return ind.get(STATE.cityData[c.id], STATE.filters, c); }
+        catch (e) { return null; }
+      });
+      let bestIdx = -1;
+      if (ind.dir !== 'none') {
+        const numericVals = rawValues
+          .map((v, i) => ({ v, i }))
+          .filter(x => x.v != null && !isNaN(x.v) && typeof x.v === 'number');
+        if (numericVals.length > 0) {
+          numericVals.sort((a, b) => ind.dir === 'higher' ? b.v - a.v : a.v - b.v);
+          bestIdx = numericVals[0].i;
+        }
+      }
+      const cells = rawValues.map((val, i) => {
+        const fmt = FORMATTERS[ind.fmt] || (v => v);
+        let formatted = fmt(val);
+        if (formatted == null) return `<td class="val-cell empty-cell">—</td>`;
+        // Cor para variações: verde (positivo) / vinho (negativo)
+        if (ind.fmt === 'pct_signed' && typeof val === 'number' && !isNaN(val)) {
+          const cls = val > 0 ? 'var-pos' : (val < 0 ? 'var-neg' : '');
+          if (cls) formatted = `<span class="${cls}">${formatted}</span>`;
+        }
+        const isBest = i === bestIdx;
+        const isText = ind.fmt === 'text';
+        const cls = `val-cell ${isText ? 'text-cell' : ''} ${isBest ? 'best' : ''}`;
+        const mark = isBest ? `<span class="best-mark" style="color:${STATE.cities[i].color}">●</span>` : '';
+        return `<td class="${cls}">${mark}${formatted}</td>`;
+      }).join('');
+      const tip = TIPS[ind.label] ? ` <span class="tip" data-tip="${TIPS[ind.label].replace(/"/g, '&quot;')}">i</span>` : '';
+      bodyRows.push(`<tr class="ind-row" data-cat="${cat.id}"><td>${ind.label}${tip}</td>${cells}</tr>`);
+    });
+  });
+
+  // Linha final: análise comparativa por cidade
+  const analysisCells = STATE.cities.map(c => {
+    const txt = generateAnalysis(STATE.cityData[c.id], c);
+    return `<td class="val-cell text-cell" style="border-top-color:${c.color}">${txt}</td>`;
+  }).join('');
+  bodyRows.push(`
+    <tr class="cat-row" style="background:var(--azul-escuro)">
+      <td colspan="${STATE.cities.length + 1}" style="color:var(--branco);border-color:var(--azul-claro)">📋 Análise comparativa</td>
+    </tr>
+    <tr class="ind-row analysis-row">
+      <td>Síntese</td>
+      ${analysisCells}
+    </tr>
+  `);
+
+  document.getElementById('compare-content').innerHTML = `
+    <div class="compare-table-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th class="first-col">Indicador</th>
+            ${ths}
+          </tr>
+        </thead>
+        <tbody>${bodyRows.join('')}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function toggleCategory(catId) {
+  if (STATE.collapsed.has(catId)) STATE.collapsed.delete(catId);
+  else STATE.collapsed.add(catId);
+  saveState();
+  renderTable();
+}
+
+init();
+</script>
+
+</body>
+</html>
