@@ -7,9 +7,7 @@
 <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
 <style>
   /* ═══════════════════════════════════════════════════════════════════════
-     IDENTIDADE VISUAL FGV — Manual de Marca v1.2
-     Paleta dominante: Azul Escuro #003A79 (60-70% do peso visual)
-     Fonte: Arial em todas as variações
+     Identidade visual FGV — Manual de Marca v1.2
      ═══════════════════════════════════════════════════════════════════════ */
   :root {
     --azul-marinho: #002D4D;
@@ -23,131 +21,73 @@
     --cinza-20:     #D7D9DD;
     --branco:       #FFFFFF;
     --bg:           #F4F6F9;
-
+    --bg-alt:       #EFF4FB;
     --aux-amarelo:  #FDDB51;
     --aux-laranja:  #E29200;
     --aux-vinho:    #9B0A51;
+    --aux-roxo:     #9C64A2;
     --aux-turquesa: #3BAE96;
     --aux-oliva:    #89A950;
-
     --shadow-sm: 0 1px 3px rgba(0, 58, 121, 0.08);
     --shadow-md: 0 2px 8px rgba(0, 58, 121, 0.12);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { font-family: Arial, sans-serif; }
-  body { background: var(--bg); color: #1A1A2E; font-size: 14px; line-height: 1.5; }
+  body { background: var(--bg); color: #1A1A2E; font-size: 13px; line-height: 1.5; }
 
-  /* ═══════════════ HEADER (Azul Escuro dominante) ═══════════════ */
+  /* ═══════════════ HEADER ═══════════════ */
   header.fgv-header {
     background: var(--azul-escuro);
     color: var(--branco);
-    padding: 18px 40px;
+    padding: 16px 36px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 4px solid var(--azul-claro);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    position: sticky; top: 0; z-index: 100;
     box-shadow: var(--shadow-md);
   }
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-  }
-  .brand-fgv {
-    font-family: Arial Black, Arial, sans-serif;
-    font-size: 28px;
-    font-weight: 900;
-    letter-spacing: 4px;
-    color: var(--branco);
-  }
-  .brand-divider {
-    width: 1px;
-    height: 38px;
-    background: rgba(255,255,255,0.3);
-  }
-  .brand-product h1 {
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-  }
+  .brand { display: flex; align-items: center; gap: 18px; }
+  .brand-fgv { font-family: Arial Black, Arial; font-size: 26px; font-weight: 900; letter-spacing: 4px; }
+  .brand-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.3); }
+  .brand-product h1 { font-size: 15px; font-weight: 700; }
   .brand-product p {
-    font-size: 11px;
-    opacity: 0.75;
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    margin-top: 2px;
+    font-size: 10px; opacity: 0.75; text-transform: uppercase;
+    letter-spacing: 1.2px; margin-top: 2px;
   }
   .header-tag {
-    background: var(--azul-claro);
-    color: var(--branco);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 5px 14px;
-    border-radius: 16px;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
+    background: var(--azul-claro); color: var(--branco);
+    font-size: 10px; font-weight: 700; padding: 5px 14px;
+    border-radius: 16px; letter-spacing: 0.4px; text-transform: uppercase;
   }
 
   /* ═══════════════ FILTER BAR ═══════════════ */
   .filter-bar {
     background: var(--branco);
-    padding: 18px 40px;
+    padding: 16px 36px;
     border-bottom: 1px solid var(--cinza-20);
-    display: flex;
-    gap: 14px;
-    align-items: flex-end;
-    flex-wrap: wrap;
+    display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;
+    box-shadow: var(--shadow-sm);
   }
-  .fg {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
+  .fg { display: flex; flex-direction: column; gap: 4px; }
   .fg label {
-    font-size: 10px;
-    font-weight: 700;
-    color: var(--azul-escuro);
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
+    font-size: 10px; font-weight: 700; color: var(--azul-escuro);
+    text-transform: uppercase; letter-spacing: 0.5px;
   }
   .fg select, .fg input {
-    border: 1.5px solid var(--cinza-20);
-    border-radius: 4px;
-    padding: 8px 12px;
-    font-family: Arial, sans-serif;
-    font-size: 13px;
-    color: #1A1A2E;
-    background: var(--branco);
-    outline: none;
-    transition: border-color 0.15s;
-    min-width: 150px;
+    border: 1.5px solid var(--cinza-20); border-radius: 4px;
+    padding: 7px 11px; font-family: Arial; font-size: 13px;
+    background: var(--branco); outline: none;
+    transition: border-color 0.15s; min-width: 130px;
   }
-  .fg select:focus, .fg input:focus {
-    border-color: var(--azul-escuro);
-  }
-  .filter-divider {
-    width: 1px;
-    height: 36px;
-    background: var(--cinza-20);
-    align-self: flex-end;
-    margin: 0 6px;
-  }
+  .fg select:focus, .fg input:focus { border-color: var(--azul-escuro); }
+  .filter-divider { width: 1px; height: 32px; background: var(--cinza-20); align-self: flex-end; margin: 0 4px; }
   .btn-primary {
-    background: var(--azul-escuro);
-    color: var(--branco);
-    border: none;
-    border-radius: 4px;
-    padding: 9px 24px;
-    font-family: Arial, sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.4px;
-    cursor: pointer;
-    height: 38px;
+    background: var(--azul-escuro); color: var(--branco); border: none;
+    border-radius: 4px; padding: 8px 22px;
+    font-family: Arial; font-size: 13px; font-weight: 700;
+    letter-spacing: 0.4px; cursor: pointer; height: 36px;
     transition: background 0.15s;
   }
   .btn-primary:hover { background: var(--azul-medio); }
@@ -155,502 +95,320 @@
 
   /* ═══════════════ KPI STRIP ═══════════════ */
   .kpi-strip {
-    background: var(--azul-escuro);
-    padding: 18px 40px;
-    display: none;
-    gap: 0;
-    border-bottom: 4px solid var(--azul-claro);
+    background: var(--azul-escuro); padding: 16px 36px;
+    display: none; gap: 0; border-bottom: 4px solid var(--azul-claro);
   }
   .kpi-strip.show { display: flex; }
   .kpi {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 8px 16px;
-    border-right: 1px solid rgba(255,255,255,0.15);
-    text-align: center;
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    padding: 6px 14px; border-right: 1px solid rgba(255,255,255,0.15); text-align: center;
   }
   .kpi:last-child { border-right: none; }
-  .kpi-val {
-    font-family: Arial Black, Arial, sans-serif;
-    font-size: 28px;
-    font-weight: 900;
-    color: var(--azul-celeste);
-    line-height: 1;
-  }
+  .kpi-val { font-family: Arial Black, Arial; font-size: 24px; color: var(--azul-celeste); line-height: 1; }
   .kpi-lbl {
-    font-size: 11px;
-    color: rgba(255,255,255,0.75);
-    margin-top: 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
+    font-size: 10px; color: rgba(255,255,255,0.75);
+    margin-top: 5px; text-transform: uppercase; letter-spacing: 0.5px;
   }
-  .kpi-sub {
-    font-size: 11px;
-    margin-top: 3px;
-    color: rgba(255,255,255,0.55);
-  }
+  .kpi-sub { font-size: 10px; margin-top: 2px; color: rgba(255,255,255,0.55); }
 
   /* ═══════════════ NAV PILLS ═══════════════ */
   .nav-bar {
-    background: var(--branco);
-    border-bottom: 1px solid var(--cinza-20);
-    padding: 12px 40px;
-    display: none;
-    gap: 8px;
-    flex-wrap: wrap;
+    background: var(--branco); border-bottom: 1px solid var(--cinza-20);
+    padding: 10px 36px; display: none; gap: 6px; flex-wrap: wrap;
   }
   .nav-bar.show { display: flex; }
   .nav-pill {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--azul-escuro);
-    background: var(--bg);
-    border: 1px solid var(--cinza-20);
-    padding: 5px 14px;
-    border-radius: 16px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.15s;
+    font-size: 11px; font-weight: 600; color: var(--azul-escuro);
+    background: var(--bg); border: 1px solid var(--cinza-20);
+    padding: 4px 12px; border-radius: 14px; cursor: pointer;
+    text-decoration: none; transition: all 0.15s;
   }
   .nav-pill:hover {
-    background: var(--azul-escuro);
-    color: var(--branco);
-    border-color: var(--azul-escuro);
+    background: var(--azul-escuro); color: var(--branco); border-color: var(--azul-escuro);
   }
 
-  /* ═══════════════ MAIN CONTAINER ═══════════════ */
-  main {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 24px 40px 48px;
-  }
+  main { max-width: 1400px; margin: 0 auto; padding: 22px 36px 48px; }
 
   /* ═══════════════ EMPTY STATE ═══════════════ */
   .empty-state {
-    background: var(--branco);
-    border-radius: 8px;
-    padding: 80px 40px;
-    text-align: center;
-    box-shadow: var(--shadow-sm);
+    background: var(--branco); border-radius: 8px; padding: 80px 40px;
+    text-align: center; box-shadow: var(--shadow-sm);
     border-left: 5px solid var(--azul-claro);
-    margin-top: 24px;
   }
-  .empty-state h2 {
-    font-family: Arial Black, Arial, sans-serif;
-    font-size: 32px;
-    color: var(--azul-escuro);
-    margin-bottom: 16px;
-  }
-  .empty-state p {
-    font-size: 15px;
-    color: var(--cinza-80);
-    max-width: 600px;
-    margin: 0 auto 8px;
-  }
-  .empty-state .empty-mark {
-    font-size: 40px;
-    color: var(--azul-claro);
-    margin-bottom: 20px;
-    font-weight: 900;
-  }
+  .empty-state .empty-mark { font-size: 36px; color: var(--azul-claro); margin-bottom: 20px; font-weight: 900; }
+  .empty-state h2 { font-family: Arial Black, Arial; font-size: 26px; color: var(--azul-escuro); margin-bottom: 14px; }
+  .empty-state p { font-size: 14px; color: var(--cinza-80); max-width: 580px; margin: 0 auto 8px; }
 
   /* ═══════════════ BLOCK STRUCTURE ═══════════════ */
   .block {
-    background: var(--branco);
-    border-radius: 8px;
-    margin-bottom: 24px;
-    box-shadow: var(--shadow-sm);
-    overflow: hidden;
-    display: none;
+    background: var(--branco); border-radius: 8px; margin-bottom: 22px;
+    box-shadow: var(--shadow-sm); overflow: hidden; display: none;
   }
   .block.show { display: block; }
   .block-header {
-    background: var(--azul-escuro);
-    padding: 14px 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    background: var(--azul-escuro); padding: 14px 22px;
+    display: flex; align-items: center; gap: 12px;
     border-left: 5px solid var(--azul-claro);
   }
   .block-num {
-    background: var(--azul-claro);
-    color: var(--branco);
-    font-family: Arial Black, Arial, sans-serif;
-    font-weight: 900;
-    font-size: 13px;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+    background: var(--azul-claro); color: var(--branco);
+    font-family: Arial Black, Arial; font-size: 12px;
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
   .block-header h2 {
-    color: var(--branco);
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
+    color: var(--branco); font-size: 13px; font-weight: 700;
+    letter-spacing: 0.4px; text-transform: uppercase;
   }
   .block-tag {
-    margin-left: auto;
-    font-size: 11px;
-    color: rgba(255,255,255,0.55);
-    font-style: italic;
+    margin-left: auto; font-size: 10px;
+    color: rgba(255,255,255,0.6); font-style: italic;
   }
   .block-insight {
-    background: #EFF4FB;
-    border-left: 4px solid var(--azul-claro);
-    padding: 12px 24px;
-    font-size: 13px;
-    color: var(--cinza-80);
-    line-height: 1.7;
+    background: var(--bg-alt); border-left: 4px solid var(--azul-claro);
+    padding: 12px 22px; font-size: 13px; color: var(--cinza-80); line-height: 1.7;
   }
-  .block-insight strong { color: var(--azul-escuro); }
-  .block-body { padding: 22px 24px; }
+  .block-insight strong { color: var(--azul-escuro); font-weight: 700; }
+  .block-body { padding: 20px 22px; }
+  .section-title {
+    font-size: 11px; font-weight: 700; color: var(--azul-escuro);
+    text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid var(--azul-claro);
+  }
 
   /* ═══════════════ TABLES ═══════════════ */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-  }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--cinza-20); border-radius: 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
   thead th {
-    background: var(--bg);
-    color: var(--azul-escuro);
-    font-weight: 700;
-    padding: 10px 12px;
-    text-align: left;
-    border-bottom: 2px solid var(--cinza-20);
-    white-space: nowrap;
-    font-size: 12px;
-    letter-spacing: 0.3px;
-    cursor: pointer;
-    user-select: none;
+    background: var(--bg); color: var(--azul-escuro); font-weight: 700;
+    padding: 9px 11px; text-align: left;
+    border-bottom: 2px solid var(--cinza-20); white-space: nowrap;
+    font-size: 11px; letter-spacing: 0.3px; cursor: pointer; user-select: none;
+    text-transform: uppercase; position: relative;
   }
   thead th:hover { background: var(--cinza-20); }
-  thead th.sorted { background: var(--azul-claro); color: var(--branco); }
+  thead th.sorted-asc::after { content: ' ▲'; color: var(--azul-claro); }
+  thead th.sorted-desc::after { content: ' ▼'; color: var(--azul-claro); }
   tbody td {
-    padding: 9px 12px;
-    border-bottom: 1px solid var(--cinza-20);
+    padding: 8px 11px; border-bottom: 1px solid var(--cinza-20);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 280px;
   }
   tbody tr:hover { background: var(--bg); }
-  tbody tr.highlight {
-    background: rgba(0, 139, 201, 0.08);
-    font-weight: 700;
-  }
+  tbody tr.highlight { background: rgba(0, 139, 201, 0.1); font-weight: 700; }
   .nr { text-align: right; font-variant-numeric: tabular-nums; }
 
-  /* ═══════════════ STATUS BADGES ═══════════════ */
+  /* badges */
   .badge {
-    display: inline-block;
-    padding: 2px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
+    display: inline-block; padding: 2px 9px; border-radius: 12px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.3px;
   }
   .badge-up    { background: rgba(59, 174, 150, 0.18); color: #1F6B57; }
-  .badge-down  { background: rgba(155, 10, 81, 0.15);  color: var(--aux-vinho); }
+  .badge-down  { background: rgba(155, 10, 81, 0.15); color: var(--aux-vinho); }
   .badge-neutral { background: var(--cinza-20); color: var(--cinza-80); }
   .badge-pub   { background: var(--azul-escuro); color: var(--branco); }
   .badge-priv  { background: var(--azul-claro); color: var(--branco); }
+  .badge-reclassif { background: var(--aux-amarelo); color: #6B5500; font-style: italic; }
 
   /* ═══════════════ TABLE TOOLBAR ═══════════════ */
   .tb-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-    gap: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px; flex-wrap: wrap; gap: 10px;
   }
   .tb-search {
-    border: 1.5px solid var(--cinza-20);
-    border-radius: 4px;
-    padding: 6px 12px;
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-    width: 220px;
-    outline: none;
+    border: 1.5px solid var(--cinza-20); border-radius: 4px;
+    padding: 6px 11px; font-family: Arial; font-size: 12px;
+    width: 200px; outline: none;
   }
   .tb-search:focus { border-color: var(--azul-escuro); }
-  .tb-count { font-size: 12px; color: var(--cinza-60); }
+  .tb-count { font-size: 11px; color: var(--cinza-60); font-weight: 600; }
 
-  /* ═══════════════ MULTI-SELECT BAR ═══════════════ */
-  .ms-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 14px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--cinza-20);
+  /* ═══════════════ MULTI-SELECT DROPDOWN ═══════════════ */
+  .ms-dd { position: relative; display: inline-block; }
+  .ms-dd-trigger {
+    border: 1.5px solid var(--cinza-20); border-radius: 4px;
+    padding: 7px 11px; font-family: Arial; font-size: 12px;
+    background: var(--branco); cursor: pointer; min-width: 180px;
+    text-align: left; display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; transition: border-color 0.15s;
   }
-  .ms-chip {
-    font-size: 11px;
-    color: var(--azul-escuro);
-    background: var(--bg);
-    border: 1.5px solid var(--cinza-20);
-    padding: 4px 12px;
-    border-radius: 14px;
-    cursor: pointer;
-    user-select: none;
-    transition: all 0.15s;
-    font-weight: 600;
+  .ms-dd-trigger:hover { border-color: var(--azul-medio); }
+  .ms-dd.open .ms-dd-trigger { border-color: var(--azul-escuro); }
+  .ms-dd-trigger::after { content: '▾'; color: var(--azul-escuro); font-size: 11px; }
+  .ms-dd-menu {
+    position: absolute; top: calc(100% + 4px); left: 0; min-width: 280px;
+    max-width: 380px; background: var(--branco);
+    border: 1.5px solid var(--cinza-20); border-radius: 4px;
+    box-shadow: var(--shadow-md); padding: 8px;
+    max-height: 280px; overflow-y: auto; z-index: 50; display: none;
   }
-  .ms-chip:hover { background: var(--cinza-20); }
-  .ms-chip.active {
-    background: var(--azul-escuro);
-    color: var(--branco);
-    border-color: var(--azul-escuro);
+  .ms-dd.open .ms-dd-menu { display: block; }
+  .ms-dd-search {
+    width: 100%; padding: 6px 10px; border: 1px solid var(--cinza-20);
+    border-radius: 4px; font-size: 12px; margin-bottom: 6px; outline: none;
   }
-  .ms-label {
-    font-size: 11px;
-    color: var(--cinza-80);
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    font-weight: 700;
-    margin-right: 8px;
-    align-self: center;
+  .ms-dd-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 8px; font-size: 12px; cursor: pointer; border-radius: 3px;
+  }
+  .ms-dd-item:hover { background: var(--bg); }
+  .ms-dd-item input[type=checkbox] { accent-color: var(--azul-escuro); cursor: pointer; }
+  .ms-dd-actions {
+    display: flex; gap: 6px; padding-top: 6px; border-top: 1px solid var(--cinza-20); margin-top: 4px;
+  }
+  .ms-dd-actions button {
+    flex: 1; font-size: 11px; padding: 4px 8px; border: 1px solid var(--cinza-20);
+    background: var(--branco); border-radius: 3px; cursor: pointer; color: var(--azul-escuro); font-weight: 600;
+  }
+  .ms-dd-actions button:hover { background: var(--bg); }
+  .ms-dd-count {
+    background: var(--azul-claro); color: var(--branco);
+    font-size: 10px; font-weight: 700; padding: 1px 7px;
+    border-radius: 8px; margin-left: 4px;
   }
 
   /* ═══════════════ PAGINATION ═══════════════ */
   .pagination {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    margin-top: 14px;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+    display: flex; gap: 4px; align-items: center;
+    margin-top: 14px; flex-wrap: wrap; justify-content: center;
   }
   .pagination button {
-    padding: 5px 11px;
-    border: 1px solid var(--cinza-20);
-    border-radius: 4px;
-    background: var(--branco);
-    color: var(--azul-escuro);
-    cursor: pointer;
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    min-width: 32px;
+    padding: 5px 11px; border: 1px solid var(--cinza-20);
+    border-radius: 4px; background: var(--branco);
+    color: var(--azul-escuro); cursor: pointer;
+    font-family: Arial; font-size: 12px; font-weight: 600; min-width: 32px;
   }
   .pagination button.active {
-    background: var(--azul-escuro);
-    color: var(--branco);
-    border-color: var(--azul-escuro);
+    background: var(--azul-escuro); color: var(--branco); border-color: var(--azul-escuro);
   }
   .pagination button:hover:not(.active) { background: var(--bg); }
   .pagination span { color: var(--cinza-60); padding: 0 4px; }
 
-  /* ═══════════════ MINI KPIs (within block) ═══════════════ */
+  /* ═══════════════ MINI KPIs ═══════════════ */
   .mini-kpis {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-    margin-bottom: 18px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px; margin-bottom: 18px;
   }
   .mini-kpi {
-    background: var(--bg);
-    border-left: 4px solid var(--azul-claro);
-    padding: 12px 16px;
-    border-radius: 4px;
+    background: var(--bg); border-left: 4px solid var(--azul-claro);
+    padding: 12px 16px; border-radius: 4px;
   }
+  .mini-kpi.acc { border-left-color: var(--aux-turquesa); }
+  .mini-kpi.warn { border-left-color: var(--aux-laranja); }
+  .mini-kpi.alt { border-left-color: var(--aux-roxo); }
   .mini-kpi-lbl {
-    font-size: 10px;
-    color: var(--cinza-80);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 700;
+    font-size: 10px; color: var(--cinza-80);
+    text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700;
   }
   .mini-kpi-val {
-    font-family: Arial Black, Arial, sans-serif;
-    font-size: 22px;
-    color: var(--azul-escuro);
-    margin-top: 4px;
+    font-family: Arial Black, Arial; font-size: 22px; color: var(--azul-escuro); margin-top: 4px;
   }
   .mini-kpi-sub { font-size: 11px; color: var(--cinza-60); margin-top: 2px; }
 
   /* ═══════════════ TWO-COLUMN ═══════════════ */
   .two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-    margin-bottom: 16px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 18px; margin-bottom: 16px;
   }
   @media (max-width: 1000px) { .two-col { grid-template-columns: 1fr; } }
+  .chart-container {
+    background: var(--branco); border: 1px solid var(--cinza-20);
+    border-radius: 6px; padding: 14px;
+  }
+  .chart-title {
+    font-size: 11px; color: var(--azul-escuro); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 8px; padding-bottom: 6px; border-bottom: 2px solid var(--azul-claro);
+  }
 
   /* ═══════════════ SLIDERS (Block 6) ═══════════════ */
   .weights-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-bottom: 20px;
-    padding: 16px;
-    background: var(--bg);
-    border-radius: 6px;
-    border-left: 4px solid var(--azul-claro);
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    margin-bottom: 20px; padding: 16px; background: var(--bg);
+    border-radius: 6px; border-left: 4px solid var(--azul-claro);
   }
   @media (max-width: 900px) { .weights-grid { grid-template-columns: 1fr 1fr; } }
   .witem label {
-    font-size: 12px;
-    color: var(--azul-escuro);
-    font-weight: 700;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 4px;
+    font-size: 12px; color: var(--azul-escuro); font-weight: 700;
+    display: flex; justify-content: space-between; margin-bottom: 4px;
   }
-  .witem .wval {
-    font-family: Arial Black, Arial, sans-serif;
-    color: var(--azul-claro);
-  }
-  .witem input[type=range] {
-    width: 100%;
-    accent-color: var(--azul-escuro);
-  }
-  .witem .wsub {
-    font-size: 10px;
-    color: var(--cinza-60);
-    margin-top: 4px;
-  }
+  .witem .wval { font-family: Arial Black, Arial; color: var(--azul-claro); }
+  .witem input[type=range] { width: 100%; accent-color: var(--azul-escuro); }
+  .witem .wsub { font-size: 10px; color: var(--cinza-60); margin-top: 4px; }
   .w-total {
-    text-align: right;
-    font-size: 11px;
-    margin-top: 6px;
-    grid-column: 1 / -1;
-    font-weight: 700;
+    text-align: right; font-size: 11px; margin-top: 6px;
+    grid-column: 1 / -1; font-weight: 700;
   }
 
   /* ═══════════════ NARRATIVA AI (Block 7) ═══════════════ */
   .narr-card {
-    border-left: 5px solid var(--azul-escuro);
-    padding: 16px 20px;
-    margin-bottom: 14px;
-    background: var(--bg);
-    border-radius: 0 6px 6px 0;
+    border-left: 5px solid var(--azul-escuro); padding: 18px 22px;
+    margin-bottom: 14px; background: var(--bg); border-radius: 0 6px 6px 0;
   }
   .narr-card.c1 { border-left-color: var(--azul-escuro); }
   .narr-card.c2 { border-left-color: var(--azul-medio); }
   .narr-card.c3 { border-left-color: var(--azul-claro); }
   .narr-card.c4 { border-left-color: var(--aux-turquesa); }
   .narr-card.c5 { border-left-color: var(--aux-oliva); }
-  .narr-card.c6 { border-left-color: var(--aux-vinho); }
+  .narr-card.c6 { border-left-color: var(--aux-vinho); background: #FFF8FB; }
   .narr-titulo {
-    font-family: Arial Black, Arial, sans-serif;
-    font-size: 14px;
-    color: var(--azul-escuro);
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
+    font-family: Arial Black, Arial; font-size: 13px;
+    color: var(--azul-escuro); margin-bottom: 10px;
+    text-transform: uppercase; letter-spacing: 0.4px;
   }
+  .narr-card.c6 .narr-titulo { color: var(--aux-vinho); }
   .narr-corpo {
-    font-size: 13px;
-    color: #2C2C3E;
-    line-height: 1.75;
-    white-space: pre-wrap;
+    font-size: 13px; color: #2C2C3E; line-height: 1.8;
   }
   .narr-corpo strong { color: var(--azul-escuro); font-weight: 700; }
+  .narr-card.c6 .narr-corpo strong { color: var(--aux-vinho); }
+  .narr-corpo em { font-style: italic; color: var(--cinza-80); }
+  .narr-corpo p { margin-bottom: 10px; }
+  .narr-corpo p:last-child { margin-bottom: 0; }
   .narr-actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 18px;
-    gap: 8px;
-    flex-wrap: wrap;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 18px; gap: 8px; flex-wrap: wrap;
+    padding: 14px 16px; background: var(--bg-alt); border-radius: 6px;
   }
   .btn-llm {
-    background: var(--azul-escuro);
-    color: var(--branco);
-    border: none;
-    padding: 11px 24px;
-    border-radius: 4px;
-    font-family: Arial, sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+    background: var(--azul-escuro); color: var(--branco); border: none;
+    padding: 11px 22px; border-radius: 4px;
+    font-family: Arial; font-size: 13px; font-weight: 700;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
     transition: background 0.15s;
   }
   .btn-llm:hover { background: var(--azul-medio); }
   .btn-llm:disabled { background: var(--cinza-40); cursor: not-allowed; }
   .btn-secondary {
-    background: var(--branco);
-    color: var(--azul-escuro);
-    border: 1.5px solid var(--cinza-20);
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-size: 12px;
-    cursor: pointer;
-    font-weight: 600;
+    background: var(--branco); color: var(--azul-escuro);
+    border: 1.5px solid var(--cinza-20); padding: 8px 16px;
+    border-radius: 4px; font-size: 12px; cursor: pointer; font-weight: 600;
   }
   .btn-secondary:hover { background: var(--bg); }
-  .loading {
-    display: none;
-    padding: 40px;
-    text-align: center;
-    color: var(--cinza-80);
-  }
+
+  .loading { display: none; padding: 40px; text-align: center; color: var(--cinza-80); }
   .loading.show { display: block; }
   .spinner {
-    display: inline-block;
-    width: 28px;
-    height: 28px;
-    border: 3px solid var(--cinza-20);
-    border-top-color: var(--azul-escuro);
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
+    display: inline-block; width: 28px; height: 28px;
+    border: 3px solid var(--cinza-20); border-top-color: var(--azul-escuro);
+    border-radius: 50%; animation: spin 0.7s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
   /* ═══════════════ FOOTER ═══════════════ */
   footer.fgv-footer {
-    background: var(--azul-escuro);
-    color: rgba(255,255,255,0.7);
-    padding: 24px 40px;
-    font-size: 11px;
-    text-align: center;
-    letter-spacing: 0.5px;
-    margin-top: 40px;
+    background: var(--azul-escuro); color: rgba(255,255,255,0.7);
+    padding: 22px 40px; font-size: 11px; text-align: center;
+    letter-spacing: 0.5px; margin-top: 40px;
   }
   footer.fgv-footer strong { color: var(--branco); letter-spacing: 1px; }
 
-  /* ═══════════════ ALERT ═══════════════ */
   .alert-error {
-    background: #FFE5EE;
-    border-left: 4px solid var(--aux-vinho);
-    padding: 12px 18px;
-    margin: 16px 0;
-    color: var(--aux-vinho);
-    border-radius: 4px;
-    font-size: 13px;
-    display: none;
+    background: #FFE5EE; border-left: 4px solid var(--aux-vinho);
+    padding: 12px 18px; margin: 16px 0; color: var(--aux-vinho);
+    border-radius: 4px; font-size: 13px; display: none;
   }
   .alert-error.show { display: block; }
 
-  /* ═══════════════ CHART CONTAINERS ═══════════════ */
-  .chart-container {
-    background: var(--branco);
-    border: 1px solid var(--cinza-20);
-    border-radius: 6px;
-    padding: 14px;
-  }
-  .chart-title {
-    font-size: 12px;
-    color: var(--azul-escuro);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 8px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid var(--azul-claro);
-  }
-
-  /* responsive */
   @media (max-width: 768px) {
     .filter-bar, header.fgv-header, main { padding-left: 16px; padding-right: 16px; }
     .kpi-strip { padding-left: 16px; padding-right: 16px; }
@@ -691,7 +449,6 @@
   <div class="fg">
     <label>Produto</label>
     <select id="f-produto">
-      <option value="MBA Executivo">MBA Executivo</option>
       <option value="MBA">MBA</option>
       <option value="Pós-Graduação">Pós-Graduação</option>
     </select>
@@ -712,7 +469,7 @@
   <button class="btn-primary" id="btn-analisar" onclick="loadAnalise()">Carregar análise</button>
 </section>
 
-<!-- KPI STRIP (aparece após análise) -->
+<!-- KPI STRIP -->
 <section class="kpi-strip" id="kpi-strip">
   <div class="kpi"><div class="kpi-val" id="kpi-pop">—</div><div class="kpi-lbl">População</div><div class="kpi-sub" id="kpi-pop-sub">—</div></div>
   <div class="kpi"><div class="kpi-val" id="kpi-eleg">—</div><div class="kpi-lbl">Vínculos elegíveis</div><div class="kpi-sub" id="kpi-eleg-sub">—</div></div>
@@ -722,56 +479,52 @@
   <div class="kpi"><div class="kpi-val" id="kpi-rank">—</div><div class="kpi-lbl">Rank em SP</div><div class="kpi-sub" id="kpi-rank-sub">—</div></div>
 </section>
 
-<!-- NAV PILLS -->
+<!-- NAV -->
 <nav class="nav-bar" id="nav-bar">
   <a class="nav-pill" href="#b1">1. Perfil da Cidade</a>
-  <a class="nav-pill" href="#b23">2-3. Mercado de Trabalho</a>
+  <a class="nav-pill" href="#b23">2-3. Mercado e Tecido Empresarial</a>
   <a class="nav-pill" href="#b4">4. Empresas-Alvo</a>
   <a class="nav-pill" href="#b5">5. Pipeline Universitário</a>
   <a class="nav-pill" href="#b6">6. Score de Atratividade</a>
   <a class="nav-pill" href="#b7">7. Análise AI</a>
 </nav>
 
-<!-- MAIN -->
 <main>
 
-  <!-- EMPTY STATE -->
   <div class="empty-state" id="empty-state">
     <div class="empty-mark">↑</div>
     <h2>Selecione um município de São Paulo</h2>
     <p>Esta plataforma cruza dados de RAIS, INEP, IBGE e Receita Federal para 645 municípios paulistas.</p>
-    <p>Escolha a cidade no filtro acima e clique em <strong>Carregar análise</strong> para ver os 7 blocos populados em tempo real.</p>
+    <p>Escolha a cidade no filtro acima e clique em <strong>Carregar análise</strong> para popular os 7 blocos em tempo real.</p>
   </div>
 
   <div class="alert-error" id="alert-error"></div>
 
-  <!-- BLOCO 1 — PERFIL SOCIOECONÔMICO -->
+  <!-- BLOCO 1 -->
   <section class="block" id="b1">
     <div class="block-header">
       <div class="block-num">1</div>
       <h2>Perfil Socioeconômico</h2>
-      <span class="block-tag">cidade vs média ponderada da UF</span>
+      <span class="block-tag" id="b1-tag">cidade vs média ponderada da UF</span>
     </div>
     <div class="block-insight" id="b1-insight"></div>
     <div class="block-body">
-      <div style="overflow-x:auto">
+      <div class="table-wrap">
         <table id="b1-table">
-          <thead>
-            <tr>
-              <th>Indicador</th>
-              <th class="nr">Cidade</th>
-              <th class="nr">Média SP</th>
-              <th class="nr">Δ %</th>
-              <th>Status</th>
-            </tr>
-          </thead>
+          <thead><tr>
+            <th data-col="metrica">Indicador</th>
+            <th class="nr" data-col="cidade">Cidade</th>
+            <th class="nr" data-col="uf">Média SP</th>
+            <th class="nr" data-col="delta">Variação</th>
+            <th>Status</th>
+          </tr></thead>
           <tbody></tbody>
         </table>
       </div>
     </div>
   </section>
 
-  <!-- BLOCO 2+3 — MERCADO DE TRABALHO + TECIDO EMPRESARIAL -->
+  <!-- BLOCO 2+3 -->
   <section class="block" id="b23">
     <div class="block-header">
       <div class="block-num">2-3</div>
@@ -781,41 +534,52 @@
     <div class="block-insight" id="b23-insight"></div>
     <div class="block-body">
 
-      <h3 style="font-size:13px;font-weight:700;color:var(--azul-escuro);text-transform:uppercase;margin-bottom:12px;letter-spacing:0.4px">Tabela 1 — Por Setor</h3>
-      <div style="overflow-x:auto">
+      <div class="chart-container" style="margin-bottom:18px">
+        <div class="chart-title">Evolução do número de estabelecimentos no município</div>
+        <div id="b23-chart-estab" style="height:240px"></div>
+      </div>
+
+      <div class="section-title">Tabela 1 — Mercado por setor</div>
+      <div class="tb-toolbar">
+        <div class="tb-count" id="b23-setor-count">—</div>
+      </div>
+      <div class="table-wrap">
         <table id="b23-setor-table">
-          <thead>
-            <tr>
-              <th data-col="setor">Setor</th>
-              <th class="nr" data-col="estabs">Estabs</th>
-              <th class="nr" data-col="func_por_emp">Func/emp</th>
-              <th class="nr" data-col="vinculos">Vínculos</th>
-              <th class="nr" data-col="sal_medio">Sal. médio</th>
-              <th class="nr" data-col="eleg">Elegíveis</th>
-              <th class="nr" data-col="pct_eleg">% eleg.</th>
-              <th class="nr" data-col="sal_eleg">Sal. eleg.</th>
-            </tr>
-          </thead>
+          <thead><tr>
+            <th data-col="setor">Setor</th>
+            <th class="nr" data-col="estabs">Estabs</th>
+            <th class="nr" data-col="func_por_emp">Func/emp</th>
+            <th class="nr" data-col="vinculos">Vínculos</th>
+            <th class="nr" data-col="sal_medio">Sal. médio</th>
+            <th class="nr" data-col="eleg">Elegíveis</th>
+            <th class="nr" data-col="pct_eleg">% eleg.</th>
+            <th class="nr" data-col="sal_eleg">Sal. eleg.</th>
+          </tr></thead>
           <tbody></tbody>
         </table>
       </div>
+      <div class="pagination" id="b23-setor-pag"></div>
 
-      <h3 style="font-size:13px;font-weight:700;color:var(--azul-escuro);text-transform:uppercase;margin:24px 0 12px;letter-spacing:0.4px">Tabela 2 — Por Cargo (multi-select de setor)</h3>
-      <div class="ms-bar" id="b23-setor-chips">
-        <span class="ms-label">Setores:</span>
+      <div class="section-title" style="margin-top:24px">Tabela 2 — Mercado por cargo</div>
+      <div class="tb-toolbar">
+        <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+          <div class="fg">
+            <label>Filtrar por setor</label>
+            <div class="ms-dd" id="b23-ms-setor"></div>
+          </div>
+        </div>
+        <div class="tb-count" id="b23-cargo-count">—</div>
       </div>
-      <div style="overflow-x:auto">
+      <div class="table-wrap">
         <table id="b23-cargo-table">
-          <thead>
-            <tr>
-              <th data-col="cargo">Cargo</th>
-              <th class="nr" data-col="vinculos">Vínculos</th>
-              <th class="nr" data-col="sal_medio">Sal. médio</th>
-              <th class="nr" data-col="eleg">Elegíveis</th>
-              <th class="nr" data-col="pct_eleg">% eleg.</th>
-              <th class="nr" data-col="sal_eleg">Sal. eleg.</th>
-            </tr>
-          </thead>
+          <thead><tr>
+            <th data-col="cargo">Cargo</th>
+            <th class="nr" data-col="vinculos">Vínculos</th>
+            <th class="nr" data-col="sal_medio">Sal. médio</th>
+            <th class="nr" data-col="eleg">Elegíveis</th>
+            <th class="nr" data-col="pct_eleg">% eleg.</th>
+            <th class="nr" data-col="sal_eleg">Sal. eleg.</th>
+          </tr></thead>
           <tbody></tbody>
         </table>
       </div>
@@ -823,7 +587,7 @@
     </div>
   </section>
 
-  <!-- BLOCO 4 — EMPRESAS-ALVO -->
+  <!-- BLOCO 4 -->
   <section class="block" id="b4">
     <div class="block-header">
       <div class="block-num">4</div>
@@ -834,7 +598,7 @@
     <div class="block-body">
 
       <div class="tb-toolbar">
-        <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap">
+        <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
           <div class="fg">
             <label>Capital social mínimo</label>
             <select id="b4-cap-min">
@@ -847,28 +611,28 @@
               <option value="10000000">Acima de R$ 10M</option>
             </select>
           </div>
-          <button class="btn-secondary" onclick="reloadEmpresas()">Aplicar filtro</button>
+          <div class="fg">
+            <label>Filtrar por setor</label>
+            <div class="ms-dd" id="b4-ms-setor"></div>
+          </div>
+          <button class="btn-secondary" onclick="loadAnalise()">Aplicar capital</button>
         </div>
-        <input class="tb-search" id="b4-search" placeholder="Buscar empresa ou setor..." oninput="renderB4()">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div class="tb-count" id="b4-count">—</div>
+          <input class="tb-search" id="b4-search" placeholder="Buscar empresa..." oninput="renderB4()">
+        </div>
       </div>
 
-      <div class="ms-bar" id="b4-setor-chips">
-        <span class="ms-label">Setores:</span>
-      </div>
-
-      <div style="overflow-x:auto">
+      <div class="table-wrap">
         <table id="b4-table">
-          <thead>
-            <tr>
-              <th data-col="nome_empresa">Empresa</th>
-              <th data-col="setor">Setor</th>
-              <th class="nr" data-col="capital_social">Capital</th>
-              <th class="nr" data-col="distancia_km">Distância</th>
-              <th data-col="cep">CEP</th>
-              <th data-col="telefone">Telefone</th>
-              <th data-col="email">Email</th>
-            </tr>
-          </thead>
+          <thead><tr>
+            <th data-col="nome_empresa">Empresa</th>
+            <th data-col="setor">Setor</th>
+            <th class="nr" data-col="capital_social">Capital</th>
+            <th class="nr" data-col="distancia_km">Distância</th>
+            <th data-col="cep">CEP</th>
+            <th data-col="telefone">Telefone</th>
+          </tr></thead>
           <tbody></tbody>
         </table>
       </div>
@@ -876,7 +640,7 @@
     </div>
   </section>
 
-  <!-- BLOCO 5 — PIPELINE UNIVERSITÁRIO -->
+  <!-- BLOCO 5 -->
   <section class="block" id="b5">
     <div class="block-header">
       <div class="block-num">5</div>
@@ -888,33 +652,54 @@
 
       <div class="mini-kpis" id="b5-kpis"></div>
 
-      <h3 style="font-size:12px;color:var(--cinza-80);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;font-weight:700">Filtros</h3>
-      <div class="ms-bar" id="b5-area-chips"><span class="ms-label">Áreas:</span></div>
-      <div class="ms-bar" id="b5-ies-chips"><span class="ms-label">IES:</span></div>
-
       <div class="two-col">
         <div class="chart-container">
-          <div class="chart-title">Série temporal de concluintes</div>
-          <div id="b5-chart-serie" style="height:260px"></div>
+          <div class="chart-title">Evolução de concluintes</div>
+          <div id="b5-chart-serie" style="height:280px"></div>
         </div>
         <div class="chart-container">
           <div class="chart-title">Top IES por concluintes (último ano)</div>
-          <div id="b5-chart-ies" style="height:260px"></div>
+          <div id="b5-chart-ies" style="height:280px"></div>
         </div>
       </div>
 
-      <h3 style="font-size:12px;color:var(--cinza-80);text-transform:uppercase;letter-spacing:0.5px;margin:18px 0 8px;font-weight:700">Tabela detalhada (área &times; curso &times; IES)</h3>
-      <div style="overflow-x:auto">
+      <div class="section-title" style="margin-top:18px">Cursos em alta — volume + crescimento (com tratamento de reclassificação INEP)</div>
+      <div class="table-wrap">
+        <table id="b5-alta-table">
+          <thead><tr>
+            <th data-col="area">Área</th>
+            <th data-col="curso">Curso</th>
+            <th class="nr" data-col="c24">Concluintes</th>
+            <th class="nr" data-col="cresc">Crescimento</th>
+            <th>Nota</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="section-title" style="margin-top:24px">Tabela detalhada (área &times; curso &times; IES)</div>
+      <div class="tb-toolbar">
+        <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+          <div class="fg">
+            <label>Filtrar áreas</label>
+            <div class="ms-dd" id="b5-ms-area"></div>
+          </div>
+          <div class="fg">
+            <label>Filtrar IES</label>
+            <div class="ms-dd" id="b5-ms-ies"></div>
+          </div>
+        </div>
+        <div class="tb-count" id="b5-count">—</div>
+      </div>
+      <div class="table-wrap">
         <table id="b5-table">
-          <thead>
-            <tr>
-              <th data-col="area">Área</th>
-              <th data-col="curso">Curso</th>
-              <th data-col="ies">IES</th>
-              <th data-col="rede">Rede</th>
-              <th class="nr" data-col="conc">Concluintes</th>
-            </tr>
-          </thead>
+          <thead><tr>
+            <th data-col="area">Área</th>
+            <th data-col="curso">Curso</th>
+            <th data-col="ies">IES</th>
+            <th data-col="rede">Rede</th>
+            <th class="nr" data-col="conc">Concluintes</th>
+          </tr></thead>
           <tbody></tbody>
         </table>
       </div>
@@ -922,7 +707,7 @@
     </div>
   </section>
 
-  <!-- BLOCO 6 — SCORE DE ATRATIVIDADE -->
+  <!-- BLOCO 6 -->
   <section class="block" id="b6">
     <div class="block-header">
       <div class="block-num">6</div>
@@ -953,7 +738,7 @@
           <input type="range" id="w4" min="0" max="100" value="15" oninput="updateWeights()">
           <div class="wsub">IDHM &middot; crescimento empregos 20→24</div>
         </div>
-        <div class="w-total" id="w-total" style="color:var(--aux-turquesa)">Total: 100%</div>
+        <div class="w-total" id="w-total">Total: 100%</div>
       </div>
 
       <div class="mini-kpis" id="b6-kpis"></div>
@@ -961,11 +746,11 @@
       <div class="two-col">
         <div class="chart-container">
           <div class="chart-title">Top 20 municípios</div>
-          <div id="b6-chart-top" style="height:340px"></div>
+          <div id="b6-chart-top" style="height:380px"></div>
         </div>
         <div class="chart-container">
           <div class="chart-title">Perfil dimensional &mdash; <span id="b6-radar-title" style="color:var(--azul-claro);font-weight:700">cidade selecionada</span></div>
-          <div id="b6-chart-radar" style="height:340px"></div>
+          <div id="b6-chart-radar" style="height:380px"></div>
         </div>
       </div>
 
@@ -973,22 +758,20 @@
         <div class="tb-count" id="b6-count">—</div>
         <input class="tb-search" id="b6-search" placeholder="Buscar município..." oninput="renderB6Table()">
       </div>
-      <div style="overflow-x:auto">
+      <div class="table-wrap">
         <table id="b6-table">
-          <thead>
-            <tr>
-              <th data-col="rank">#</th>
-              <th data-col="nm">Município</th>
-              <th class="nr" data-col="score">Score</th>
-              <th class="nr" data-col="D1">D1</th>
-              <th class="nr" data-col="D2">D2</th>
-              <th class="nr" data-col="D3">D3</th>
-              <th class="nr" data-col="D4">D4</th>
-              <th class="nr" data-col="pop">Pop.</th>
-              <th class="nr" data-col="sal">Sal. médio</th>
-              <th class="nr" data-col="idhm">IDHM</th>
-            </tr>
-          </thead>
+          <thead><tr>
+            <th data-col="rank">#</th>
+            <th data-col="nm">Município</th>
+            <th class="nr" data-col="score">Score</th>
+            <th class="nr" data-col="D1">D1</th>
+            <th class="nr" data-col="D2">D2</th>
+            <th class="nr" data-col="D3">D3</th>
+            <th class="nr" data-col="D4">D4</th>
+            <th class="nr" data-col="pop">Pop.</th>
+            <th class="nr" data-col="sal">Sal. médio</th>
+            <th class="nr" data-col="idhm">IDHM</th>
+          </tr></thead>
           <tbody></tbody>
         </table>
       </div>
@@ -996,7 +779,7 @@
     </div>
   </section>
 
-  <!-- BLOCO 7 — NARRATIVA AI -->
+  <!-- BLOCO 7 -->
   <section class="block" id="b7">
     <div class="block-header">
       <div class="block-num">7</div>
@@ -1004,12 +787,12 @@
       <span class="block-tag">Claude opus-4-7 &middot; ~15s &middot; ~R$ 0,30 por análise</span>
     </div>
     <div class="block-insight">
-      <strong>Síntese executiva</strong> em 6 seções: perfil da cidade, mercado de trabalho, cursos recomendados (com cruzamento setor→pós e graduação→pós), prospecção corporativa, parcerias acadêmicas e veredito estratégico (Prioridade Alta/Média/Baixa).
+      <strong>Síntese executiva</strong> em 6 seções: perfil da cidade, mercado de trabalho, cursos recomendados (cruzamento setor→pós e graduação→pós), prospecção corporativa, parcerias acadêmicas e veredito estratégico (Prioridade Alta/Média/Baixa).
     </div>
     <div class="block-body">
 
       <div class="narr-actions">
-        <div style="font-size:13px;color:var(--cinza-80)">
+        <div style="font-size:13px;color:var(--cinza-80);max-width:60%">
           A IA recebe os dados dos blocos 1–6 + portfólio FGV + cursos de concorrentes e devolve recomendação acionável.
         </div>
         <div style="display:flex;gap:8px">
@@ -1031,7 +814,6 @@
 
 </main>
 
-<!-- FOOTER -->
 <footer class="fgv-footer">
   <div><strong>FGV</strong> &middot; FUNDAÇÃO GETULIO VARGAS</div>
   <div style="margin-top:6px">Plataforma de Inteligência de Mercado para Decisões de Expansão &middot; MVP &middot; 645 municípios SP</div>
@@ -1042,17 +824,15 @@
 // STATE
 // ═══════════════════════════════════════════════════════════════════════
 const STATE = {
-  filtros: { uf: 'SP', municipio: null, produto: 'MBA Executivo', mensalidade: 1200, pct_renda: 30, cep: '' },
+  filtros: { uf: 'SP', municipio: null, produto: 'MBA', mensalidade: 1200, pct_renda: 30, cep: '' },
   dados: null,
   narrativa: null,
-  // estado por bloco
-  b23: { setoresAtivos: new Set(), cargoSort: { col: 'eleg', dir: -1 }, cargoPage: 1 },
+  b23: { setoresAtivos: new Set(), setorSort: { col: 'eleg', dir: -1 }, setorPage: 1, cargoSort: { col: 'eleg', dir: -1 }, cargoPage: 1 },
   b4:  { setoresAtivos: new Set(), sort: { col: 'capital_social', dir: -1 }, page: 1 },
   b5:  { areasAtivas: new Set(), iesAtivas: new Set(), sort: { col: 'conc', dir: -1 }, page: 1 },
   b6:  { sort: { col: 'rank', dir: 1 }, page: 1 },
 };
-const PAGE_SIZE = 15;
-const PAGE_SIZE_BIG = 20;
+const PAGE_SIZE = 10;
 
 // ═══════════════════════════════════════════════════════════════════════
 // HELPERS
@@ -1060,7 +840,19 @@ const PAGE_SIZE_BIG = 20;
 const fmtN = n => n == null ? '—' : Number(n).toLocaleString('pt-BR');
 const fmtR = n => n == null ? '—' : 'R$ ' + Number(n).toLocaleString('pt-BR', { maximumFractionDigits: 0 });
 const fmtPct = n => n == null ? '—' : Number(n).toFixed(1) + '%';
-const fmtPctNoSign = n => n == null ? '—' : (n > 0 ? '+' : '') + Number(n).toFixed(1) + '%';
+
+function fmtDelta(value, dtype) {
+  if (value == null) return '—';
+  const v = Number(value);
+  const sign = v >= 0 ? '+' : '';
+  if (dtype === 'pp') return `${sign}${v.toFixed(1)} pp`;
+  return `${sign}${v.toFixed(1)}%`;
+}
+function fmtSimplePct(v) {
+  if (v == null) return '—';
+  const sign = v >= 0 ? '+' : '';
+  return `${sign}${Number(v).toFixed(1)}%`;
+}
 
 function showError(msg) {
   const el = document.getElementById('alert-error');
@@ -1069,14 +861,156 @@ function showError(msg) {
   setTimeout(() => el.classList.remove('show'), 6000);
 }
 
-function statusBadge(status, delta) {
-  if (status === 'above') return `<span class="badge badge-up">▲ ${fmtPctNoSign(delta)}</span>`;
-  if (status === 'below') return `<span class="badge badge-down">▼ ${fmtPctNoSign(delta)}</span>`;
+function statusBadge(status, value, dtype) {
+  if (status === 'above') return `<span class="badge badge-up">▲ ${fmtDelta(value, dtype)}</span>`;
+  if (status === 'below') return `<span class="badge badge-down">▼ ${fmtDelta(value, dtype)}</span>`;
   return '<span class="badge badge-neutral">—</span>';
 }
 
+function setSortIcon(tableId, col, dir) {
+  document.querySelectorAll(`#${tableId} thead th`).forEach(th => th.classList.remove('sorted-asc', 'sorted-desc'));
+  const th = document.querySelector(`#${tableId} thead th[data-col="${col}"]`);
+  if (th) th.classList.add(dir > 0 ? 'sorted-asc' : 'sorted-desc');
+}
+
+function sortRows(rows, col, dir) {
+  return rows.slice().sort((a, b) => {
+    let av = a[col], bv = b[col];
+    if (av == null && bv == null) return 0;
+    if (av == null) return 1;
+    if (bv == null) return -1;
+    if (typeof av === 'string') return dir * av.localeCompare(bv, 'pt');
+    return dir * (av - bv);
+  });
+}
+
 // ═══════════════════════════════════════════════════════════════════════
-// INIT — carrega municípios SP
+// MULTI-SELECT DROPDOWN COMPONENT
+// ═══════════════════════════════════════════════════════════════════════
+function createMultiSelect(containerId, label, options, selected, onChange) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.classList.add('ms-dd');
+  const selSet = selected instanceof Set ? selected : new Set(selected || []);
+
+  function updateLabel() {
+    const trigger = container.querySelector('.ms-dd-trigger');
+    if (!trigger) return;
+    const span = trigger.querySelector('.ms-dd-label');
+    const count = trigger.querySelector('.ms-dd-count');
+    span.textContent = selSet.size === 0 ? label : `${label}`;
+    if (selSet.size > 0) {
+      count.textContent = selSet.size;
+      count.style.display = 'inline-block';
+    } else {
+      count.style.display = 'none';
+    }
+  }
+
+  container.innerHTML = `
+    <button class="ms-dd-trigger" type="button">
+      <span><span class="ms-dd-label">${label}</span><span class="ms-dd-count" style="display:none">0</span></span>
+    </button>
+    <div class="ms-dd-menu">
+      <input class="ms-dd-search" placeholder="Buscar..." />
+      <div class="ms-dd-list"></div>
+      <div class="ms-dd-actions">
+        <button type="button" class="ms-clear">Limpar</button>
+        <button type="button" class="ms-close">Fechar</button>
+      </div>
+    </div>
+  `;
+
+  const trigger = container.querySelector('.ms-dd-trigger');
+  const menu = container.querySelector('.ms-dd-menu');
+  const search = container.querySelector('.ms-dd-search');
+  const list = container.querySelector('.ms-dd-list');
+
+  function renderList(filter = '') {
+    const f = (filter || '').toLowerCase();
+    const filtered = options.filter(o => (o + '').toLowerCase().includes(f));
+    list.innerHTML = filtered.map(o => `
+      <label class="ms-dd-item">
+        <input type="checkbox" value="${o.replace(/"/g, '&quot;')}" ${selSet.has(o) ? 'checked' : ''} />
+        <span>${o}</span>
+      </label>
+    `).join('');
+    list.querySelectorAll('input[type=checkbox]').forEach(cb => {
+      cb.onchange = () => {
+        const v = cb.value.replace(/&quot;/g, '"');
+        if (cb.checked) selSet.add(v); else selSet.delete(v);
+        updateLabel();
+        onChange(selSet);
+      };
+    });
+  }
+  renderList();
+  updateLabel();
+
+  trigger.onclick = e => {
+    e.stopPropagation();
+    document.querySelectorAll('.ms-dd.open').forEach(el => { if (el !== container) el.classList.remove('open'); });
+    container.classList.toggle('open');
+  };
+  search.oninput = () => renderList(search.value);
+  container.querySelector('.ms-clear').onclick = () => {
+    selSet.clear();
+    renderList(search.value);
+    updateLabel();
+    onChange(selSet);
+  };
+  container.querySelector('.ms-close').onclick = () => container.classList.remove('open');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.ms-dd')) {
+    document.querySelectorAll('.ms-dd.open').forEach(el => el.classList.remove('open'));
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════════
+// PAGINATION
+// ═══════════════════════════════════════════════════════════════════════
+function renderPagination(containerId, page, totalPages, total, onPage) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (totalPages === 0) { el.innerHTML = '<span style="color:var(--cinza-60)">Nenhum resultado</span>'; return; }
+  let html = '';
+  const max = 7;
+  let start = Math.max(1, page - Math.floor(max / 2));
+  let end = Math.min(totalPages, start + max - 1);
+  if (end - start < max - 1) start = Math.max(1, end - max + 1);
+
+  html += `<button data-page="${Math.max(1, page-1)}" ${page === 1 ? 'disabled' : ''}>‹</button>`;
+  if (start > 1) html += `<button data-page="1">1</button><span>…</span>`;
+  for (let p = start; p <= end; p++) {
+    html += `<button class="${p === page ? 'active' : ''}" data-page="${p}">${p}</button>`;
+  }
+  if (end < totalPages) html += `<span>…</span><button data-page="${totalPages}">${totalPages}</button>`;
+  html += `<button data-page="${Math.min(totalPages, page+1)}" ${page === totalPages ? 'disabled' : ''}>›</button>`;
+  html += `<span style="margin-left:10px;font-size:11px">${total} resultados &middot; ${PAGE_SIZE}/pág</span>`;
+  el.innerHTML = html;
+  el.querySelectorAll('button[data-page]').forEach(btn => {
+    btn.onclick = () => { if (!btn.disabled) onPage(+btn.dataset.page); };
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// SORT HANDLERS — instala em todas as tabelas com data-col
+// ═══════════════════════════════════════════════════════════════════════
+function attachSortHandlers(tableId, sortState, onSort) {
+  document.querySelectorAll(`#${tableId} thead th[data-col]`).forEach(th => {
+    th.style.cursor = 'pointer';
+    th.onclick = () => {
+      const col = th.dataset.col;
+      if (sortState.col === col) sortState.dir *= -1;
+      else { sortState.col = col; sortState.dir = -1; }
+      onSort();
+    };
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// INIT
 // ═══════════════════════════════════════════════════════════════════════
 async function init() {
   try {
@@ -1085,19 +1019,16 @@ async function init() {
     const sel = document.getElementById('f-municipio');
     sel.innerHTML = '<option value="">Selecione o município...</option>' +
       muns.map(m => `<option value="${m.id_municipio}">${m.nome_municipio}</option>`).join('');
-  } catch (e) {
-    showError('Erro ao carregar municípios: ' + e.message);
-  }
+  } catch (e) { showError('Erro ao carregar municípios: ' + e.message); }
 }
 init();
 
 // ═══════════════════════════════════════════════════════════════════════
-// LOAD ANÁLISE — chama /api/analise e popula tudo
+// LOAD ANÁLISE
 // ═══════════════════════════════════════════════════════════════════════
 async function loadAnalise() {
   const idMun = document.getElementById('f-municipio').value;
   if (!idMun) { showError('Selecione um município antes de carregar.'); return; }
-
   STATE.filtros.municipio = idMun;
   STATE.filtros.produto = document.getElementById('f-produto').value;
   STATE.filtros.mensalidade = +document.getElementById('f-mensalidade').value;
@@ -1112,37 +1043,27 @@ async function loadAnalise() {
   try {
     const capMin = +(document.getElementById('b4-cap-min')?.value || 500000);
     const resp = await fetch('/api/analise', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        id_municipio: idMun,
-        sigla_uf: STATE.filtros.uf,
-        produto: STATE.filtros.produto,
-        mensalidade: STATE.filtros.mensalidade,
-        pct_renda: STATE.filtros.pct_renda,
-        cep_polo: STATE.filtros.cep || null,
-        capital_min: capMin,
+        id_municipio: idMun, sigla_uf: STATE.filtros.uf, produto: STATE.filtros.produto,
+        mensalidade: STATE.filtros.mensalidade, pct_renda: STATE.filtros.pct_renda,
+        cep_polo: STATE.filtros.cep || null, capital_min: capMin,
       }),
     });
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     STATE.dados = await resp.json();
 
-    // Reseta estados e renderiza
+    // reset
     STATE.b23.setoresAtivos = new Set();
     STATE.b4.setoresAtivos = new Set();
     STATE.b5.areasAtivas = new Set();
     STATE.b5.iesAtivas = new Set();
-    STATE.b23.cargoPage = 1;
-    STATE.b4.page = 1;
-    STATE.b5.page = 1;
-    STATE.b6.page = 1;
+    STATE.b23.cargoPage = STATE.b23.setorPage = STATE.b4.page = STATE.b5.page = STATE.b6.page = 1;
 
     renderAll();
     document.getElementById('kpi-strip').classList.add('show');
     document.getElementById('nav-bar').classList.add('show');
     document.querySelectorAll('.block').forEach(b => b.classList.add('show'));
-
-    // Reset bloco 7
     document.getElementById('narr-area').innerHTML = '';
     document.getElementById('btn-copy').style.display = 'none';
     document.getElementById('narr-tokens').textContent = '';
@@ -1153,11 +1074,6 @@ async function loadAnalise() {
     btn.disabled = false;
     btn.textContent = 'Carregar análise';
   }
-}
-
-async function reloadEmpresas() {
-  // Reusa o fluxo loadAnalise para recarregar tudo com o novo filtro de capital
-  if (STATE.dados) loadAnalise();
 }
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -1172,7 +1088,6 @@ function renderAll() {
   renderB4();
   renderB5Setup();
   renderB5();
-  renderB6Setup();
   renderB6All();
 }
 
@@ -1181,33 +1096,23 @@ function renderAll() {
 // ═══════════════════════════════════════════════════════════════════════
 function renderKPIStrip() {
   const d = STATE.dados;
-  const perfil = d.perfil;
-  const mt = d.mercado_trabalho;
-  const emp = d.empresas;
-  const pipe = d.pipeline;
-
+  const perfil = d.perfil, mt = d.mercado_trabalho, emp = d.empresas, pipe = d.pipeline;
   document.getElementById('kpi-pop').textContent = (perfil.populacao / 1000).toFixed(0) + 'k';
   document.getElementById('kpi-pop-sub').textContent = perfil.cidade_nome;
-
   document.getElementById('kpi-eleg').textContent = (mt.kpis.elegiveis / 1000).toFixed(0) + 'k';
   document.getElementById('kpi-eleg-sub').textContent = mt.kpis.pct_elegiveis.toFixed(1) + '% do mercado formal';
-
   document.getElementById('kpi-sal').textContent = fmtR(mt.kpis.sal_eleg_medio);
   const ticket = STATE.filtros.mensalidade / mt.kpis.sal_eleg_medio * 100;
   document.getElementById('kpi-sal-sub').textContent = 'mensalidade = ' + ticket.toFixed(1) + '% renda';
-
   document.getElementById('kpi-emp').textContent = fmtN(emp.total);
   const capMin = +(document.getElementById('b4-cap-min').value || 500000);
   document.getElementById('kpi-emp-sub').textContent = 'capital ≥ ' + fmtR(capMin);
-
   document.getElementById('kpi-conc').textContent = fmtN(pipe.kpis.c24);
-  document.getElementById('kpi-conc-sub').textContent = pipe.kpis.delta_23 != null ? `vs ${pipe.ano_max - 1}: ${fmtPctNoSign(pipe.kpis.delta_23)}` : '—';
+  document.getElementById('kpi-conc-sub').textContent =
+    pipe.kpis.delta_23 != null ? `vs ${pipe.ano_max - 1}: ${fmtSimplePct(pipe.kpis.delta_23)}` : '—';
 
-  // Rank
-  const W1 = +document.getElementById('w1').value;
-  const W2 = +document.getElementById('w2').value;
-  const W3 = +document.getElementById('w3').value;
-  const W4 = +document.getElementById('w4').value;
+  const W1 = +document.getElementById('w1').value, W2 = +document.getElementById('w2').value;
+  const W3 = +document.getElementById('w3').value, W4 = +document.getElementById('w4').value;
   const tot = W1 + W2 + W3 + W4 || 100;
   const rk = computeRanking(W1, W2, W3, W4, tot);
   const sel = rk.find(r => r.id === STATE.filtros.municipio);
@@ -1218,58 +1123,99 @@ function renderKPIStrip() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════
-// BLOCO 1 — PERFIL SOCIOECONÔMICO
+// BLOCO 1
 // ═══════════════════════════════════════════════════════════════════════
 function renderB1() {
   const perfil = STATE.dados.perfil;
-  const eleg = perfil.rows.find(r => r.metrica.includes('Elegíveis'));
-  const sup = perfil.rows.find(r => r.metrica.includes('superior'));
+  document.getElementById('b1-tag').textContent = `Renda corrigida pelo IPCA (×${perfil.ipca_2010} Atlas / ×${perfil.ipca_2022} RAIS)`;
+
+  const eleg = perfil.rows.find(r => r.metrica === 'Elegíveis / vínculos');
+  const sup = perfil.rows.find(r => r.metrica === 'Pop. 25+ com superior');
   const insightHtml = `
-    Em <strong>${perfil.cidade_nome}</strong>,
-    <strong>${eleg ? eleg.cidade.toFixed(1) + '%' : '—'}</strong> dos profissionais formais ganham acima do limiar de elegibilidade
-    para o produto configurado.
-    Comparando com a média ponderada de SP, o município está ${eleg && eleg.delta > 0 ? '<strong>acima</strong>' : 'em linha'}
-    ${eleg ? '(' + (eleg.delta > 0 ? '+' : '') + eleg.delta.toFixed(1) + '%)' : ''}.
+    Em <strong>${perfil.cidade_nome}</strong>, <strong>${eleg ? eleg.cidade.toFixed(1) + '%' : '—'}</strong> dos profissionais formais têm renda elegível ao produto.
+    Diferença vs. média SP (ponderada por população): <strong>${eleg && eleg.delta != null ? fmtDelta(eleg.delta, 'pp') : '—'}</strong>.
     Pop. 25+ com superior: <strong>${sup ? sup.cidade.toFixed(1) + '%' : '—'}</strong>.
   `;
   document.getElementById('b1-insight').innerHTML = insightHtml;
 
   const tbody = document.querySelector('#b1-table tbody');
   tbody.innerHTML = perfil.rows.map(r => {
-    const isCurrency = r.metrica.includes('Renda per');
-    const isPct = r.metrica.includes('%') || r.metrica.includes('Gini') || r.metrica.includes('IDHM');
-    const fmtV = v => v == null ? '—' : (isCurrency ? fmtR(v) : (isPct ? Number(v).toFixed(3).replace(/\.?0+$/, '') : fmtN(Math.round(v))));
+    const isCurrency = r.metrica.includes('Renda');
+    const isPct = r.delta_type === 'pp';
+    const fmtV = v => v == null ? '—' :
+      (isCurrency ? fmtR(v) : (isPct ? Number(v).toFixed(1) + '%' : Number(v).toFixed(3).replace(/\.?0+$/, '')));
     return `<tr>
       <td><strong>${r.metrica}</strong></td>
       <td class="nr">${fmtV(r.cidade)}</td>
       <td class="nr">${fmtV(r.uf)}</td>
-      <td class="nr">${r.delta != null ? fmtPctNoSign(r.delta) : '—'}</td>
-      <td>${statusBadge(r.status, r.delta)}</td>
+      <td class="nr">${r.delta != null ? fmtDelta(r.delta, r.delta_type) : '—'}</td>
+      <td>${statusBadge(r.status, r.delta, r.delta_type)}</td>
     </tr>`;
   }).join('');
 }
 
 // ═══════════════════════════════════════════════════════════════════════
-// BLOCO 2+3 — MERCADO DE TRABALHO + TECIDO EMPRESARIAL
+// BLOCO 2+3
 // ═══════════════════════════════════════════════════════════════════════
 function renderB23() {
   const mt = STATE.dados.mercado_trabalho;
-  document.getElementById('b23-ano-tag').textContent = `Empregos ${mt.ano} · Renda mín. ${fmtR(mt.renda_min)}`;
+  document.getElementById('b23-ano-tag').textContent = `Empregos ${mt.ano} · Renda mín. ${fmtR(mt.renda_min)} · Salários corrigidos pelo IPCA`;
 
   // Insight
   const top1 = mt.por_setor[0];
   const adm = mt.por_setor.find(r => (r.setor || '').includes('Administração Pública'));
-  const insightHtml = `
-    Top setor por elegíveis: <strong>${top1 ? top1.setor : '—'}</strong>
-    com <strong>${top1 ? fmtN(top1.eleg) : '—'}</strong> profissionais.
+  document.getElementById('b23-insight').innerHTML = `
+    Top setor por elegíveis: <strong>${top1 ? top1.setor : '—'}</strong> com <strong>${top1 ? fmtN(top1.eleg) : '—'}</strong> profissionais.
     ${adm ? `Administração Pública apresenta <strong>${adm.pct_eleg}%</strong> de elegibilidade — o maior índice setorial.` : ''}
     Salário médio dos elegíveis: <strong>${fmtR(mt.kpis.sal_eleg_medio)}</strong>/mês.
   `;
-  document.getElementById('b23-insight').innerHTML = insightHtml;
 
-  // Tabela 1: por setor
-  const tbody1 = document.querySelector('#b23-setor-table tbody');
-  tbody1.innerHTML = mt.por_setor.map(r => `
+  // Série temporal de estabelecimentos (categórica para tratar 2022 quebrado)
+  const serie = (mt.estab_serie || []).filter(r => r.estabs > 1000);  // remove 2022 outlier (~150)
+  Plotly.react('b23-chart-estab', [{
+    type: 'bar',
+    x: serie.map(r => String(r.ano)),
+    y: serie.map(r => r.estabs),
+    marker: { color: '#003A79' },
+    text: serie.map(r => fmtN(r.estabs)),
+    textposition: 'outside',
+    textfont: { color: '#003A79', size: 11 },
+    hovertemplate: '%{x}<br>%{y:,.0f} estabelecimentos<extra></extra>'
+  }], {
+    margin: { l: 70, r: 30, t: 30, b: 36 },
+    yaxis: { title: 'Estabelecimentos', tickformat: ',d', range: [0, Math.max(...serie.map(r => r.estabs)) * 1.18] },
+    xaxis: { type: 'category' },
+    paper_bgcolor: 'white', plot_bgcolor: 'white',
+    height: 240, font: { family: 'Arial', size: 11 }
+  }, { displayModeBar: false });
+
+  // Setor table — sortável e paginada (10 linhas)
+  renderB23Setor();
+
+  // Multi-select de setor
+  createMultiSelect('b23-ms-setor', 'Setores', mt.setores_unicos, STATE.b23.setoresAtivos, sel => {
+    STATE.b23.setoresAtivos = sel;
+    STATE.b23.cargoPage = 1;
+    renderB23Cargo();
+  });
+
+  renderB23Cargo();
+  attachSortHandlers('b23-setor-table', STATE.b23.setorSort, () => { STATE.b23.setorPage = 1; renderB23Setor(); });
+  attachSortHandlers('b23-cargo-table', STATE.b23.cargoSort, () => { STATE.b23.cargoPage = 1; renderB23Cargo(); });
+}
+
+function renderB23Setor() {
+  const mt = STATE.dados.mercado_trabalho;
+  const rows = sortRows(mt.por_setor, STATE.b23.setorSort.col, STATE.b23.setorSort.dir);
+  const total = rows.length;
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+  if (STATE.b23.setorPage > totalPages) STATE.b23.setorPage = 1;
+  const slice = rows.slice((STATE.b23.setorPage - 1) * PAGE_SIZE, STATE.b23.setorPage * PAGE_SIZE);
+
+  document.getElementById('b23-setor-count').textContent = `${total} setores`;
+  setSortIcon('b23-setor-table', STATE.b23.setorSort.col, STATE.b23.setorSort.dir);
+
+  document.querySelector('#b23-setor-table tbody').innerHTML = slice.map(r => `
     <tr>
       <td><strong>${r.setor}</strong></td>
       <td class="nr">${fmtN(r.estabs)}</td>
@@ -1281,21 +1227,8 @@ function renderB23() {
       <td class="nr">${r.sal_eleg ? fmtR(r.sal_eleg) : '—'}</td>
     </tr>`).join('');
 
-  // Multi-select de setores
-  const chipsBar = document.getElementById('b23-setor-chips');
-  chipsBar.innerHTML = '<span class="ms-label">Setores:</span>' +
-    mt.setores_unicos.map(s =>
-      `<span class="ms-chip ${STATE.b23.setoresAtivos.has(s) ? 'active' : ''}" onclick="toggleB23Setor('${s.replace(/'/g, "\\'")}')">${s}</span>`
-    ).join('');
-
-  renderB23Cargo();
-}
-
-function toggleB23Setor(s) {
-  if (STATE.b23.setoresAtivos.has(s)) STATE.b23.setoresAtivos.delete(s);
-  else STATE.b23.setoresAtivos.add(s);
-  STATE.b23.cargoPage = 1;
-  renderB23();
+  renderPagination('b23-setor-pag', STATE.b23.setorPage, totalPages, total,
+    p => { STATE.b23.setorPage = p; renderB23Setor(); });
 }
 
 function renderB23Cargo() {
@@ -1304,7 +1237,6 @@ function renderB23Cargo() {
   if (STATE.b23.setoresAtivos.size === 0) {
     rows = mt.por_cargo.slice();
   } else {
-    // Agrega cargo_setor com filtro
     const filtered = mt.cargo_setor.filter(r => STATE.b23.setoresAtivos.has(r.setor));
     const agg = {};
     filtered.forEach(r => {
@@ -1315,29 +1247,24 @@ function renderB23Cargo() {
       agg[r.cargo].sumSalE += (r.sal_eleg || 0) * (r.eleg || 0);
     });
     rows = Object.values(agg).map(o => ({
-      cargo: o.cargo,
-      vinculos: o.vinculos,
+      cargo: o.cargo, vinculos: o.vinculos,
       sal_medio: o.vinculos > 0 ? Math.round(o.sumSalT / o.vinculos) : null,
       eleg: o.eleg,
       pct_eleg: o.vinculos > 0 ? +(o.eleg / o.vinculos * 100).toFixed(1) : 0,
       sal_eleg: o.eleg >= 5 ? Math.round(o.sumSalE / o.eleg) : null,
     })).filter(r => r.eleg > 0);
   }
-
-  // Sort
-  rows.sort((a, b) => {
-    const av = a[STATE.b23.cargoSort.col], bv = b[STATE.b23.cargoSort.col];
-    if (typeof av === 'string') return STATE.b23.cargoSort.dir * av.localeCompare(bv, 'pt');
-    return STATE.b23.cargoSort.dir * ((av || 0) - (bv || 0));
-  });
+  rows = sortRows(rows, STATE.b23.cargoSort.col, STATE.b23.cargoSort.dir);
 
   const total = rows.length;
   const totalPages = Math.ceil(total / PAGE_SIZE);
   if (STATE.b23.cargoPage > totalPages) STATE.b23.cargoPage = 1;
   const slice = rows.slice((STATE.b23.cargoPage - 1) * PAGE_SIZE, STATE.b23.cargoPage * PAGE_SIZE);
 
-  const tbody = document.querySelector('#b23-cargo-table tbody');
-  tbody.innerHTML = slice.map(r => `
+  document.getElementById('b23-cargo-count').textContent = `${total} cargos`;
+  setSortIcon('b23-cargo-table', STATE.b23.cargoSort.col, STATE.b23.cargoSort.dir);
+
+  document.querySelector('#b23-cargo-table tbody').innerHTML = slice.map(r => `
     <tr>
       <td><strong>${r.cargo}</strong></td>
       <td class="nr">${fmtN(r.vinculos)}</td>
@@ -1347,49 +1274,28 @@ function renderB23Cargo() {
       <td class="nr">${r.sal_eleg ? fmtR(r.sal_eleg) : '—'}</td>
     </tr>`).join('');
 
-  renderPagination('b23-cargo-pag', STATE.b23.cargoPage, totalPages, total, p => { STATE.b23.cargoPage = p; renderB23Cargo(); });
+  renderPagination('b23-cargo-pag', STATE.b23.cargoPage, totalPages, total,
+    p => { STATE.b23.cargoPage = p; renderB23Cargo(); });
 }
 
-// Setup sort handlers para b23
-document.querySelectorAll('#b23-cargo-table th[data-col]').forEach(th => {
-  th.onclick = () => {
-    const col = th.dataset.col;
-    if (STATE.b23.cargoSort.col === col) STATE.b23.cargoSort.dir *= -1;
-    else { STATE.b23.cargoSort.col = col; STATE.b23.cargoSort.dir = -1; }
-    renderB23Cargo();
-  };
-});
-
 // ═══════════════════════════════════════════════════════════════════════
-// BLOCO 4 — EMPRESAS-ALVO
+// BLOCO 4
 // ═══════════════════════════════════════════════════════════════════════
 function renderB4Setup() {
   const emp = STATE.dados.empresas;
   document.getElementById('b4-tag').textContent = `${fmtN(emp.total)} empresas elegíveis · top ${emp.exibidos} carregadas`;
-
-  // Insight
   const top1 = emp.rows[0];
-  const insightHtml = `
+  document.getElementById('b4-insight').innerHTML = `
     <strong>${fmtN(emp.total)}</strong> empresas com porte grande e capital social acima do mínimo.
     ${emp.com_distancia ? 'Distâncias calculadas a partir do CEP da gestora.' : 'Forneça um CEP no filtro para calcular distâncias.'}
     ${top1 ? `Maior capital: <strong>${top1.nome_empresa}</strong> (${fmtR(top1.capital_social)}).` : ''}
   `;
-  document.getElementById('b4-insight').innerHTML = insightHtml;
-
-  // Multi-select setores
-  const setoresBar = document.getElementById('b4-setor-chips');
-  setoresBar.innerHTML = '<span class="ms-label">Setores:</span>' +
-    emp.setores_unicos.slice(0, 25).map(s =>
-      `<span class="ms-chip ${STATE.b4.setoresAtivos.has(s) ? 'active' : ''}" onclick="toggleB4Setor('${s.replace(/'/g, "\\'")}')">${s}</span>`
-    ).join('');
-}
-
-function toggleB4Setor(s) {
-  if (STATE.b4.setoresAtivos.has(s)) STATE.b4.setoresAtivos.delete(s);
-  else STATE.b4.setoresAtivos.add(s);
-  STATE.b4.page = 1;
-  renderB4Setup();
-  renderB4();
+  createMultiSelect('b4-ms-setor', 'Setores', emp.setores_unicos, STATE.b4.setoresAtivos, sel => {
+    STATE.b4.setoresAtivos = sel;
+    STATE.b4.page = 1;
+    renderB4();
+  });
+  attachSortHandlers('b4-table', STATE.b4.sort, () => { STATE.b4.page = 1; renderB4(); });
 }
 
 function renderB4() {
@@ -1398,119 +1304,97 @@ function renderB4() {
   const q = (document.getElementById('b4-search')?.value || '').toLowerCase();
   if (q) rows = rows.filter(r =>
     (r.nome_empresa || '').toLowerCase().includes(q) ||
-    (r.setor || '').toLowerCase().includes(q)
-  );
+    (r.setor || '').toLowerCase().includes(q));
   if (STATE.b4.setoresAtivos.size > 0) rows = rows.filter(r => STATE.b4.setoresAtivos.has(r.setor));
-
-  rows.sort((a, b) => {
-    const av = a[STATE.b4.sort.col], bv = b[STATE.b4.sort.col];
-    if (typeof av === 'string') return STATE.b4.sort.dir * av.localeCompare(bv, 'pt');
-    return STATE.b4.sort.dir * ((av == null ? -Infinity : av) - (bv == null ? -Infinity : bv));
-  });
+  rows = sortRows(rows, STATE.b4.sort.col, STATE.b4.sort.dir);
 
   const total = rows.length;
   const totalPages = Math.ceil(total / PAGE_SIZE);
   if (STATE.b4.page > totalPages) STATE.b4.page = 1;
   const slice = rows.slice((STATE.b4.page - 1) * PAGE_SIZE, STATE.b4.page * PAGE_SIZE);
 
-  const tbody = document.querySelector('#b4-table tbody');
-  tbody.innerHTML = slice.map(r => `
+  document.getElementById('b4-count').textContent = `${total} empresas`;
+  setSortIcon('b4-table', STATE.b4.sort.col, STATE.b4.sort.dir);
+
+  document.querySelector('#b4-table tbody').innerHTML = slice.map(r => `
     <tr>
-      <td><strong>${r.nome_empresa}</strong></td>
-      <td>${r.setor}</td>
+      <td title="${r.nome_empresa}"><strong>${r.nome_empresa}</strong></td>
+      <td title="${r.setor}">${r.setor}</td>
       <td class="nr">${fmtR(r.capital_social)}</td>
       <td class="nr">${r.distancia_km != null ? r.distancia_km.toFixed(1) + ' km' : '—'}</td>
       <td>${r.cep || '—'}</td>
       <td>${r.telefone || '—'}</td>
-      <td style="font-size:11px;color:var(--cinza-80)">${r.email || '—'}</td>
     </tr>`).join('');
 
-  renderPagination('b4-pag', STATE.b4.page, totalPages, total, p => { STATE.b4.page = p; renderB4(); });
+  renderPagination('b4-pag', STATE.b4.page, totalPages, total,
+    p => { STATE.b4.page = p; renderB4(); });
 }
 
-document.querySelectorAll('#b4-table th[data-col]').forEach(th => {
-  th.onclick = () => {
-    const col = th.dataset.col;
-    if (STATE.b4.sort.col === col) STATE.b4.sort.dir *= -1;
-    else { STATE.b4.sort.col = col; STATE.b4.sort.dir = col === 'nome_empresa' || col === 'setor' || col === 'cep' ? 1 : -1; }
-    renderB4();
-  };
-});
-
 // ═══════════════════════════════════════════════════════════════════════
-// BLOCO 5 — PIPELINE UNIVERSITÁRIO
+// BLOCO 5
 // ═══════════════════════════════════════════════════════════════════════
 function renderB5Setup() {
   const p = STATE.dados.pipeline;
   document.getElementById('b5-tag').textContent = `INEP Censo Superior · ${p.anos[0]}–${p.ano_max}`;
-
-  // KPIs
   const kpis = p.kpis;
   document.getElementById('b5-kpis').innerHTML = `
     <div class="mini-kpi">
       <div class="mini-kpi-lbl">Concluintes ${p.ano_max}</div>
       <div class="mini-kpi-val">${fmtN(kpis.c24)}</div>
-      <div class="mini-kpi-sub">vs ${p.ano_max - 1}: ${fmtPctNoSign(kpis.delta_23)}</div>
+      <div class="mini-kpi-sub">vs ${p.ano_max - 1}: ${fmtSimplePct(kpis.delta_23)}</div>
     </div>
-    <div class="mini-kpi">
+    <div class="mini-kpi acc">
       <div class="mini-kpi-lbl">vs 2020</div>
-      <div class="mini-kpi-val">${fmtPctNoSign(kpis.delta_20)}</div>
+      <div class="mini-kpi-val">${fmtSimplePct(kpis.delta_20)}</div>
       <div class="mini-kpi-sub">crescimento de 4 anos</div>
     </div>
-    <div class="mini-kpi">
+    <div class="mini-kpi alt">
       <div class="mini-kpi-lbl">IES no município</div>
       <div class="mini-kpi-val">${kpis.ies24}</div>
       <div class="mini-kpi-sub">com formandos em ${p.ano_max}</div>
     </div>
-    <div class="mini-kpi">
-      <div class="mini-kpi-lbl">Áreas de formação</div>
-      <div class="mini-kpi-val">${p.areas_unicas.length}</div>
-      <div class="mini-kpi-sub">distintas no histórico</div>
+    <div class="mini-kpi warn">
+      <div class="mini-kpi-lbl">Cursos em alta</div>
+      <div class="mini-kpi-val">${(p.cursos_alta || []).length}</div>
+      <div class="mini-kpi-sub">com volume + crescimento</div>
     </div>
   `;
-
-  // Insight
   document.getElementById('b5-insight').innerHTML = `
-    Pipeline acadêmico de <strong>${fmtN(kpis.c24)}</strong> concluintes em ${p.ano_max} distribuídos em
-    <strong>${kpis.ies24}</strong> instituições. Uso recomendado: cruzar áreas em alta com setores elegíveis (Bloco 2-3) para identificar fits naturais.
+    Pipeline de <strong>${fmtN(kpis.c24)}</strong> concluintes em ${p.ano_max} distribuídos em <strong>${kpis.ies24}</strong> instituições.
+    Use os filtros para cruzar áreas com setores elegíveis (Bloco 2-3) e identificar fits naturais setor → pós.
   `;
 
-  // Multi-select áreas (top 12 por volume)
   const areaVol = {};
-  p.rows.forEach(r => {
-    if (r.ano === p.ano_max) areaVol[r.area] = (areaVol[r.area] || 0) + r.conc;
-  });
-  const topAreas = Object.entries(areaVol).sort((a, b) => b[1] - a[1]).slice(0, 12).map(x => x[0]);
-  document.getElementById('b5-area-chips').innerHTML = '<span class="ms-label">Áreas:</span>' +
-    topAreas.map(a =>
-      `<span class="ms-chip ${STATE.b5.areasAtivas.has(a) ? 'active' : ''}" onclick="toggleB5Area('${a.replace(/'/g, "\\'")}')">${a}</span>`
-    ).join('');
+  p.rows.forEach(r => { if (r.ano === p.ano_max) areaVol[r.area] = (areaVol[r.area] || 0) + r.conc; });
+  const topAreas = Object.entries(areaVol).sort((a, b) => b[1] - a[1]).map(x => x[0]);
 
-  // Multi-select IES (top 10 por volume)
   const iesVol = {};
-  p.rows.forEach(r => {
-    if (r.ano === p.ano_max) iesVol[r.ies] = (iesVol[r.ies] || 0) + r.conc;
-  });
-  const topIes = Object.entries(iesVol).sort((a, b) => b[1] - a[1]).slice(0, 10).map(x => x[0]);
-  document.getElementById('b5-ies-chips').innerHTML = '<span class="ms-label">IES:</span>' +
-    topIes.map(i =>
-      `<span class="ms-chip ${STATE.b5.iesAtivas.has(i) ? 'active' : ''}" onclick="toggleB5Ies('${i.replace(/'/g, "\\'")}')">${i}</span>`
-    ).join('');
-}
+  p.rows.forEach(r => { if (r.ano === p.ano_max) iesVol[r.ies] = (iesVol[r.ies] || 0) + r.conc; });
+  const topIes = Object.entries(iesVol).sort((a, b) => b[1] - a[1]).map(x => x[0]);
 
-function toggleB5Area(a) {
-  if (STATE.b5.areasAtivas.has(a)) STATE.b5.areasAtivas.delete(a);
-  else STATE.b5.areasAtivas.add(a);
-  STATE.b5.page = 1;
-  renderB5Setup();
-  renderB5();
-}
-function toggleB5Ies(i) {
-  if (STATE.b5.iesAtivas.has(i)) STATE.b5.iesAtivas.delete(i);
-  else STATE.b5.iesAtivas.add(i);
-  STATE.b5.page = 1;
-  renderB5Setup();
-  renderB5();
+  createMultiSelect('b5-ms-area', 'Áreas', topAreas, STATE.b5.areasAtivas, sel => {
+    STATE.b5.areasAtivas = sel; STATE.b5.page = 1; renderB5();
+  });
+  createMultiSelect('b5-ms-ies', 'IES', topIes, STATE.b5.iesAtivas, sel => {
+    STATE.b5.iesAtivas = sel; STATE.b5.page = 1; renderB5();
+  });
+
+  attachSortHandlers('b5-table', STATE.b5.sort, () => { STATE.b5.page = 1; renderB5(); });
+
+  // Cursos em alta
+  const altaTbody = document.querySelector('#b5-alta-table tbody');
+  if (p.cursos_alta && p.cursos_alta.length > 0) {
+    altaTbody.innerHTML = p.cursos_alta.map(c => `
+      <tr>
+        <td>${c.area}</td>
+        <td><strong>${c.curso}</strong></td>
+        <td class="nr">${fmtN(c.c24)}</td>
+        <td class="nr"><span class="badge badge-up">▲ ${c.cresc.toFixed(1)}%</span></td>
+        <td>${c.nota ? `<span class="badge badge-reclassif">${c.nota}</span>` : ''}</td>
+      </tr>`).join('');
+  } else {
+    altaTbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--cinza-60);padding:18px">Sem cursos em alta para este município.</td></tr>';
+  }
 }
 
 function filterB5Rows() {
@@ -1531,58 +1415,62 @@ function renderB5() {
   const porAno = {};
   filtered.forEach(r => { porAno[r.ano] = (porAno[r.ano] || 0) + r.conc; });
   const anos = Object.keys(porAno).map(Number).sort();
+  const ymax = Math.max(...anos.map(a => porAno[a]));
   Plotly.react('b5-chart-serie', [{
-    type: 'bar',
-    x: anos,
-    y: anos.map(a => porAno[a]),
+    type: 'bar', x: anos.map(String), y: anos.map(a => porAno[a]),
     marker: { color: '#003A79' },
-    text: anos.map(a => fmtN(porAno[a])),
-    textposition: 'outside',
+    text: anos.map(a => fmtN(porAno[a])), textposition: 'outside',
+    textfont: { color: '#003A79', size: 11 },
     hovertemplate: '%{x}<br>%{y:,.0f} concluintes<extra></extra>'
   }], {
-    margin: { l: 60, r: 20, t: 10, b: 36 },
-    yaxis: { title: 'Concluintes' },
+    margin: { l: 70, r: 30, t: 30, b: 40 },
+    yaxis: { title: 'Concluintes', range: [0, ymax * 1.18] },
     xaxis: { type: 'category' },
     paper_bgcolor: 'white', plot_bgcolor: 'white',
-    height: 250, font: { family: 'Arial', size: 11 }
+    height: 270, font: { family: 'Arial', size: 11 }
   }, { displayModeBar: false });
 
-  // Top IES (último ano)
+  // Top IES
   const iesAgg = {};
   filtered.filter(r => r.ano === p.ano_max).forEach(r => {
     iesAgg[r.ies] = (iesAgg[r.ies] || 0) + r.conc;
   });
   const topIes = Object.entries(iesAgg).sort((a, b) => b[1] - a[1]).slice(0, 8);
+  const truncIes = nm => nm.length > 38 ? nm.slice(0, 36) + '…' : nm;
+  const ymaxIes = topIes.length ? Math.max(...topIes.map(x => x[1])) : 1;
   Plotly.react('b5-chart-ies', [{
     type: 'bar', orientation: 'h',
     x: topIes.map(x => x[1]).reverse(),
-    y: topIes.map(x => x[0].length > 40 ? x[0].slice(0, 38) + '…' : x[0]).reverse(),
+    y: topIes.map(x => truncIes(x[0])).reverse(),
     marker: { color: '#008BC9' },
+    text: topIes.map(x => fmtN(x[1])).reverse(),
+    textposition: 'outside',
+    textfont: { color: '#003A79', size: 10 },
     hovertemplate: '%{y}<br>%{x:,.0f} concluintes<extra></extra>'
   }], {
-    margin: { l: 200, r: 20, t: 10, b: 36 },
+    margin: { l: 220, r: 60, t: 20, b: 40 },
+    xaxis: { range: [0, ymaxIes * 1.25] },
+    yaxis: { tickfont: { size: 10 }, automargin: true },
     paper_bgcolor: 'white', plot_bgcolor: 'white',
-    height: 250, font: { family: 'Arial', size: 10 }
+    height: 270, font: { family: 'Arial' }
   }, { displayModeBar: false });
 
-  // Tabela detalhada (último ano)
-  const last = filtered.filter(r => r.ano === p.ano_max);
-  last.sort((a, b) => {
-    const av = a[STATE.b5.sort.col], bv = b[STATE.b5.sort.col];
-    if (typeof av === 'string') return STATE.b5.sort.dir * av.localeCompare(bv, 'pt');
-    return STATE.b5.sort.dir * ((av || 0) - (bv || 0));
-  });
+  // Tabela detalhada (último ano apenas)
+  const last = sortRows(filtered.filter(r => r.ano === p.ano_max), STATE.b5.sort.col, STATE.b5.sort.dir);
   const total = last.length;
-  const totalPages = Math.ceil(total / PAGE_SIZE_BIG);
+  const totalPages = Math.ceil(total / PAGE_SIZE);
   if (STATE.b5.page > totalPages) STATE.b5.page = 1;
-  const slice = last.slice((STATE.b5.page - 1) * PAGE_SIZE_BIG, STATE.b5.page * PAGE_SIZE_BIG);
+  const slice = last.slice((STATE.b5.page - 1) * PAGE_SIZE, STATE.b5.page * PAGE_SIZE);
+
+  document.getElementById('b5-count').textContent = `${total} registros`;
+  setSortIcon('b5-table', STATE.b5.sort.col, STATE.b5.sort.dir);
 
   document.querySelector('#b5-table tbody').innerHTML = slice.map(r => {
     const isPub = (r.rede || '').toLowerCase().includes('pública');
     return `<tr>
       <td>${r.area}</td>
-      <td><strong>${r.curso}</strong></td>
-      <td>${r.ies}</td>
+      <td title="${r.curso}"><strong>${r.curso}</strong></td>
+      <td title="${r.ies}">${r.ies}</td>
       <td><span class="badge ${isPub ? 'badge-pub' : 'badge-priv'}">${r.rede}</span></td>
       <td class="nr">${fmtN(r.conc)}</td>
     </tr>`;
@@ -1590,23 +1478,9 @@ function renderB5() {
   renderPagination('b5-pag', STATE.b5.page, totalPages, total, p2 => { STATE.b5.page = p2; renderB5(); });
 }
 
-document.querySelectorAll('#b5-table th[data-col]').forEach(th => {
-  th.onclick = () => {
-    const col = th.dataset.col;
-    if (STATE.b5.sort.col === col) STATE.b5.sort.dir *= -1;
-    else { STATE.b5.sort.col = col; STATE.b5.sort.dir = col === 'conc' ? -1 : 1; }
-    renderB5();
-  };
-});
-
 // ═══════════════════════════════════════════════════════════════════════
-// BLOCO 6 — SCORE DE ATRATIVIDADE
+// BLOCO 6
 // ═══════════════════════════════════════════════════════════════════════
-function renderB6Setup() {
-  const score = STATE.dados.score;
-  document.getElementById('b6-tag').textContent = `${score.n} municípios SP · pesos ajustáveis`;
-}
-
 function computeRanking(W1, W2, W3, W4, total) {
   const div = total > 0 ? total : 100;
   const cidades = STATE.dados.score.cidades.map(c => ({
@@ -1619,15 +1493,12 @@ function computeRanking(W1, W2, W3, W4, total) {
 }
 
 function updateWeights() {
-  const W1 = +document.getElementById('w1').value;
-  const W2 = +document.getElementById('w2').value;
-  const W3 = +document.getElementById('w3').value;
-  const W4 = +document.getElementById('w4').value;
-  const tot = W1 + W2 + W3 + W4;
-  document.getElementById('lw1').textContent = W1 + '%';
-  document.getElementById('lw2').textContent = W2 + '%';
-  document.getElementById('lw3').textContent = W3 + '%';
-  document.getElementById('lw4').textContent = W4 + '%';
+  const W = ['w1', 'w2', 'w3', 'w4'].map(id => +document.getElementById(id).value);
+  document.getElementById('lw1').textContent = W[0] + '%';
+  document.getElementById('lw2').textContent = W[1] + '%';
+  document.getElementById('lw3').textContent = W[2] + '%';
+  document.getElementById('lw4').textContent = W[3] + '%';
+  const tot = W.reduce((s, v) => s + v, 0);
   const tEl = document.getElementById('w-total');
   tEl.textContent = `Total: ${tot}%${tot === 100 ? '' : ' (normalizado)'}`;
   tEl.style.color = tot === 100 ? 'var(--aux-turquesa)' : 'var(--aux-laranja)';
@@ -1635,29 +1506,23 @@ function updateWeights() {
 }
 
 function renderB6All() {
-  const W1 = +document.getElementById('w1').value;
-  const W2 = +document.getElementById('w2').value;
-  const W3 = +document.getElementById('w3').value;
-  const W4 = +document.getElementById('w4').value;
-  const tot = W1 + W2 + W3 + W4;
-  const ranked = computeRanking(W1, W2, W3, W4, tot);
+  const W = ['w1', 'w2', 'w3', 'w4'].map(id => +document.getElementById(id).value);
+  const tot = W.reduce((s, v) => s + v, 0);
+  const ranked = computeRanking(W[0], W[1], W[2], W[3], tot);
   STATE._b6ranked = ranked;
-
-  // KPIs do bloco
   const sel = ranked.find(r => r.id === STATE.filtros.municipio);
   const top = ranked[0];
   const avg = ranked.reduce((s, r) => s + r.score, 0) / ranked.length;
-  document.getElementById('b6-kpis').innerHTML = `
-    <div class="mini-kpi"><div class="mini-kpi-lbl">Maior score</div><div class="mini-kpi-val">${top.score.toFixed(1)}</div><div class="mini-kpi-sub">${top.nm}</div></div>
-    <div class="mini-kpi"><div class="mini-kpi-lbl">Score médio SP</div><div class="mini-kpi-val">${avg.toFixed(1)}</div><div class="mini-kpi-sub">645 municípios</div></div>
-    <div class="mini-kpi"><div class="mini-kpi-lbl">Município selecionado</div><div class="mini-kpi-val">#${sel.rank}</div><div class="mini-kpi-sub">${sel.nm} · score ${sel.score.toFixed(1)}</div></div>
-    <div class="mini-kpi"><div class="mini-kpi-lbl">Insight</div><div class="mini-kpi-val" style="font-size:13px">${insightDimensao(sel)}</div><div class="mini-kpi-sub">dimensão dominante</div></div>
-  `;
 
-  // Insight bloco
+  document.getElementById('b6-kpis').innerHTML = `
+    <div class="mini-kpi acc"><div class="mini-kpi-lbl">Maior score</div><div class="mini-kpi-val">${top.score.toFixed(1)}</div><div class="mini-kpi-sub">${top.nm}</div></div>
+    <div class="mini-kpi"><div class="mini-kpi-lbl">Score médio SP</div><div class="mini-kpi-val">${avg.toFixed(1)}</div><div class="mini-kpi-sub">645 municípios</div></div>
+    <div class="mini-kpi alt"><div class="mini-kpi-lbl">Município selecionado</div><div class="mini-kpi-val">#${sel.rank}</div><div class="mini-kpi-sub">${sel.nm} · score ${sel.score.toFixed(1)}</div></div>
+    <div class="mini-kpi warn"><div class="mini-kpi-lbl">Dimensão dominante</div><div class="mini-kpi-val" style="font-size:13px">${insightDimensao(sel)}</div><div class="mini-kpi-sub">com pesos atuais</div></div>
+  `;
   document.getElementById('b6-insight').innerHTML = `
     <strong>${sel.nm}</strong> ocupa o <strong>rank #${sel.rank}</strong> entre 645 municípios SP com os pesos atuais.
-    Score: <strong>${sel.score.toFixed(1)}/100</strong>. Ajuste os pesos para ver como o ranking se reorganiza pela perspectiva do CMO ou da diretoria comercial.
+    Score: <strong>${sel.score.toFixed(1)}/100</strong>. Ajuste os pesos para reorganizar o ranking pela perspectiva do CMO ou da diretoria comercial.
   `;
 
   // Top 20 chart
@@ -1670,13 +1535,14 @@ function renderB6All() {
     marker: { color: [...colors].reverse() },
     text: top20.map(r => r.score.toFixed(1)).reverse(),
     textposition: 'outside',
+    textfont: { color: '#003A79', size: 10 },
     hovertemplate: '%{y}<br>Score: %{x:.1f}<extra></extra>'
   }], {
-    margin: { l: 160, r: 30, t: 10, b: 30 },
+    margin: { l: 170, r: 50, t: 20, b: 36 },
     xaxis: { range: [0, top20[0].score * 1.2], title: 'Score' },
-    yaxis: { tickfont: { size: 10 } },
+    yaxis: { tickfont: { size: 10 }, automargin: true },
     paper_bgcolor: 'white', plot_bgcolor: 'white',
-    height: 340, font: { family: 'Arial' }
+    height: 380, font: { family: 'Arial' }
   }, { displayModeBar: false });
 
   // Radar
@@ -1687,8 +1553,7 @@ function renderB6All() {
   Plotly.react('b6-chart-radar', [{
     type: 'scatterpolar', fill: 'toself',
     r: vals, theta: dims,
-    line: { color: '#003A79' },
-    fillcolor: 'rgba(0, 58, 121, 0.2)',
+    line: { color: '#003A79' }, fillcolor: 'rgba(0, 58, 121, 0.2)',
     name: sel.nm
   }], {
     polar: {
@@ -1696,10 +1561,11 @@ function renderB6All() {
       angularaxis: { tickfont: { size: 11 } }
     },
     margin: { l: 60, r: 60, t: 30, b: 30 },
-    paper_bgcolor: 'white', height: 340, showlegend: false, font: { family: 'Arial' }
+    paper_bgcolor: 'white', height: 380, showlegend: false, font: { family: 'Arial' }
   }, { displayModeBar: false });
 
   renderB6Table();
+  renderKPIStrip();  // atualiza rank no strip global
 }
 
 function insightDimensao(c) {
@@ -1714,18 +1580,16 @@ function renderB6Table() {
   let rows = STATE._b6ranked.slice();
   const q = (document.getElementById('b6-search').value || '').toLowerCase();
   if (q) rows = rows.filter(r => r.nm.toLowerCase().includes(q));
-  rows.sort((a, b) => {
-    const av = a[STATE.b6.sort.col], bv = b[STATE.b6.sort.col];
-    if (typeof av === 'string') return STATE.b6.sort.dir * av.localeCompare(bv, 'pt');
-    return STATE.b6.sort.dir * ((av || 0) - (bv || 0));
-  });
+  rows = sortRows(rows, STATE.b6.sort.col, STATE.b6.sort.dir);
 
   const total = rows.length;
-  const totalPages = Math.ceil(total / PAGE_SIZE_BIG);
+  const totalPages = Math.ceil(total / PAGE_SIZE);
   if (STATE.b6.page > totalPages) STATE.b6.page = 1;
-  const slice = rows.slice((STATE.b6.page - 1) * PAGE_SIZE_BIG, STATE.b6.page * PAGE_SIZE_BIG);
+  const slice = rows.slice((STATE.b6.page - 1) * PAGE_SIZE, STATE.b6.page * PAGE_SIZE);
 
   document.getElementById('b6-count').textContent = `${total} municípios`;
+  setSortIcon('b6-table', STATE.b6.sort.col, STATE.b6.sort.dir);
+
   document.querySelector('#b6-table tbody').innerHTML = slice.map(r => `
     <tr class="${r.id === STATE.filtros.municipio ? 'highlight' : ''}">
       <td><strong>${r.rank}</strong></td>
@@ -1739,21 +1603,13 @@ function renderB6Table() {
       <td class="nr">${r.sal > 0 ? fmtR(r.sal) : '—'}</td>
       <td class="nr">${r.idhm > 0 ? r.idhm.toFixed(3) : '—'}</td>
     </tr>`).join('');
-
   renderPagination('b6-pag', STATE.b6.page, totalPages, total, p => { STATE.b6.page = p; renderB6Table(); });
 }
 
-document.querySelectorAll('#b6-table th[data-col]').forEach(th => {
-  th.onclick = () => {
-    const col = th.dataset.col;
-    if (STATE.b6.sort.col === col) STATE.b6.sort.dir *= -1;
-    else { STATE.b6.sort.col = col; STATE.b6.sort.dir = col === 'nm' ? 1 : (col === 'rank' ? 1 : -1); }
-    renderB6Table();
-  };
-});
+attachSortHandlers('b6-table', STATE.b6.sort, () => { STATE.b6.page = 1; renderB6Table(); });
 
 // ═══════════════════════════════════════════════════════════════════════
-// BLOCO 7 — NARRATIVA AI
+// BLOCO 7 — NARRATIVA AI (rendering markdown limpo)
 // ═══════════════════════════════════════════════════════════════════════
 async function gerarNarrativa() {
   if (!STATE.dados) { showError('Carregue uma análise antes.'); return; }
@@ -1767,18 +1623,13 @@ async function gerarNarrativa() {
 
   try {
     const resp = await fetch('/api/analise-llm', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        id_municipio: STATE.filtros.municipio,
-        sigla_uf: STATE.filtros.uf,
-        produto: STATE.filtros.produto,
-        mensalidade: STATE.filtros.mensalidade,
+        id_municipio: STATE.filtros.municipio, sigla_uf: STATE.filtros.uf,
+        produto: STATE.filtros.produto, mensalidade: STATE.filtros.mensalidade,
         pct_renda: STATE.filtros.pct_renda,
-        perfil: STATE.dados.perfil,
-        mercado_trabalho: STATE.dados.mercado_trabalho,
-        empresas: STATE.dados.empresas,
-        pipeline: STATE.dados.pipeline,
+        perfil: STATE.dados.perfil, mercado_trabalho: STATE.dados.mercado_trabalho,
+        empresas: STATE.dados.empresas, pipeline: STATE.dados.pipeline,
         score: STATE.dados.score,
       }),
     });
@@ -1803,7 +1654,33 @@ async function gerarNarrativa() {
   }
 }
 
+// Markdown → HTML limpo (parágrafos, negrito, itálico, listas)
+function renderMarkdownInline(text) {
+  return text
+    // negrito
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    // itálico (simples)
+    .replace(/(?<!\*)\*(?!\*)([^*\n]+)\*(?!\*)/g, '<em>$1</em>')
+    // headers # / ## / ###
+    .replace(/^###?\s+(.+)$/gm, '<strong>$1</strong>');
+}
+function renderMarkdownBlock(text) {
+  // Quebra por linhas em branco em parágrafos. Mantém line-breaks dentro do parágrafo como <br>.
+  return text.split(/\n\s*\n/).map(p => {
+    let html = renderMarkdownInline(p.trim());
+    // listas com - no início
+    if (/^\s*-\s+/m.test(html)) {
+      const items = html.split(/\n/).map(l => l.replace(/^\s*-\s+/, '').trim()).filter(Boolean);
+      return '<ul style="margin:8px 0 8px 18px">' + items.map(i => `<li>${i}</li>`).join('') + '</ul>';
+    }
+    // line breaks internos
+    html = html.replace(/\n/g, '<br>');
+    return `<p>${html}</p>`;
+  }).join('');
+}
+
 function renderNarrativa(texto) {
+  // Split por seções **N. Título**
   const partes = texto.split(/\*\*(\d+\.\s+[^\*]+)\*\*/);
   const area = document.getElementById('narr-area');
   let html = '';
@@ -1811,15 +1688,16 @@ function renderNarrativa(texto) {
   for (let i = 1; i < partes.length - 1; i += 2) {
     idx++;
     const titulo = partes[i].trim();
-    const corpo = partes[i + 1].trim()
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\n/g, '<br>');
+    const corpoRaw = partes[i + 1].trim();
+    const corpo = renderMarkdownBlock(corpoRaw);
     html += `<div class="narr-card c${idx}">
       <div class="narr-titulo">${titulo}</div>
       <div class="narr-corpo">${corpo}</div>
     </div>`;
   }
-  if (!html) html = `<pre style="white-space:pre-wrap;font-size:13px;line-height:1.7">${texto}</pre>`;
+  if (!html) {
+    html = `<div class="narr-card c1"><div class="narr-corpo">${renderMarkdownBlock(texto)}</div></div>`;
+  }
   area.innerHTML = html;
 }
 
@@ -1832,35 +1710,8 @@ function copiarNarrativa() {
   setTimeout(() => btn.textContent = original, 2000);
 }
 
-// ═══════════════════════════════════════════════════════════════════════
-// PAGINATION HELPER (event delegation)
-// ═══════════════════════════════════════════════════════════════════════
-function renderPagination(containerId, page, totalPages, total, onPage) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  let html = '';
-  const max = 7;
-  let start = Math.max(1, page - Math.floor(max / 2));
-  let end = Math.min(totalPages, start + max - 1);
-  if (end - start < max - 1) start = Math.max(1, end - max + 1);
-
-  if (totalPages === 0) {
-    el.innerHTML = '<span style="color:var(--cinza-60)">Nenhum resultado</span>';
-    return;
-  }
-
-  if (start > 1) html += `<button data-page="1">1</button><span>…</span>`;
-  for (let p = start; p <= end; p++) {
-    html += `<button class="${p === page ? 'active' : ''}" data-page="${p}">${p}</button>`;
-  }
-  if (end < totalPages) html += `<span>…</span><button data-page="${totalPages}">${totalPages}</button>`;
-  html += `<span style="margin-left:8px;font-size:11px">${total} resultados</span>`;
-  el.innerHTML = html;
-
-  el.querySelectorAll('button[data-page]').forEach(btn => {
-    btn.onclick = () => onPage(+btn.dataset.page);
-  });
-}
+// Sort handlers — bloco 1
+attachSortHandlers('b1-table', { col: 'metrica', dir: 1 }, () => {});
 </script>
 
 </body>

@@ -4,10 +4,41 @@ Lê de data/sp_mvp.duckdb (filtrado para SP) e retorna payloads prontos para o f
 """
 import duckdb
 import json
+import urllib.request
 from pathlib import Path
 
 DB_PATH = Path(__file__).parent.parent / "data" / "sp_mvp.duckdb"
 PROMPT_PATH = Path(__file__).parent.parent / "data" / "prompt_b7.json"
+
+# ── Deflatores IPCA (BCB série 433) — fallback hardcoded se API falhar ────────
+_IPCA_2010 = None
+_IPCA_2022 = None
+
+def _get_ipca(data_inicial: str, fallback: float):
+    """Calcula fator de inflação acumulado desde data_inicial até hoje (BCB série 433)."""
+    try:
+        url = f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=json&dataInicial={data_inicial}"
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=5) as r:
+            dados = json.loads(r.read())
+        fator = 1.0
+        for d in dados:
+            fator *= (1 + float(d["valor"]) / 100)
+        return fator
+    except Exception:
+        return fallback
+
+def get_ipca_2010():
+    global _IPCA_2010
+    if _IPCA_2010 is None:
+        _IPCA_2010 = _get_ipca("01/08/2010", 2.4254)
+    return _IPCA_2010
+
+def get_ipca_2022():
+    global _IPCA_2022
+    if _IPCA_2022 is None:
+        _IPCA_2022 = _get_ipca("01/12/2022", 1.1727)
+    return _IPCA_2022
 
 # ── Conexão (read-only para suportar threads) ─────────────────────────────────
 def get_con():
@@ -55,42 +86,61 @@ def get_perfil(con, id_municipio: str, sigla_uf: str, renda_min: float, ano_emp:
     # Elegíveis (cidade vs uf) usando o ano mais recente de empregos
     eleg_c = con.execute(f"""
         SELECT SUM(total_vinculos) v,
-               SUM(CASE WHEN salario_medio_reais >= {renda_min} THEN total_vinculos ELSE 0 END) e
+               SUM(CASE WHEN salario_medio_reais >= {renda_min} THEN total_vinculos ELSE 0 END) e,
+               SUM(total_vinculos * salario_medio_reais) / NULLIF(SUM(total_vinculos),0) AS sal_medio
         FROM fct_empregos WHERE id_municipio = '{id_municipio}' AND ano = {ano_emp}
     """).fetchone()
     eleg_u = con.execute(f"""
         SELECT SUM(total_vinculos) v,
-               SUM(CASE WHEN salario_medio_reais >= {renda_min} THEN total_vinculos ELSE 0 END) e
+               SUM(CASE WHEN salario_medio_reais >= {renda_min} THEN total_vinculos ELSE 0 END) e,
+               SUM(total_vinculos * salario_medio_reais) / NULLIF(SUM(total_vinculos),0) AS sal_medio
         FROM fct_empregos WHERE sigla_uf = '{sigla_uf}' AND ano = {ano_emp}
     """).fetchone()
 
     pct_c = (eleg_c[1] / eleg_c[0] * 100) if eleg_c[0] else 0.0
     pct_u = (eleg_u[1] / eleg_u[0] * 100) if eleg_u[0] else 0.0
 
+    # Aplica IPCA: Atlas 2010 → presente / RAIS 2022 → presente
+    ipca_2010 = get_ipca_2010()
+    ipca_2022 = get_ipca_2022()
+    renda_pc_c = (cidade["renda_per_capita"] or 0) * ipca_2010
+    renda_pc_u = (uf["renda_per_capita"] or 0) * ipca_2010
+    sal_rais_c = (eleg_c[2] or 0) * ipca_2022
+    sal_rais_u = (eleg_u[2] or 0) * ipca_2022
+
+    # Métricas: type="pp" usa pontos percentuais (delta absoluto), "pct" usa variação percentual
     metricas = [
-        ("IDHM geral",                  cidade["idhm"],                  uf["idhm"],                  "higher"),
-        ("Renda per capita (R$/mês)",   cidade["renda_per_capita"],      uf["renda_per_capita"],      "higher"),
-        ("Índice de Gini",              cidade["indice_gini"],           uf["indice_gini"],           "lower"),
-        ("População total",             cidade["populacao_total"],       uf["populacao_total"],       "neutral"),
-        ("Pop. 25+ com superior (%)",   cidade["taxa_superior_25_mais"], uf["taxa_superior_25_mais"], "higher"),
-        ("Proporção em pobreza (%)",    cidade["prop_pobreza"],          uf["prop_pobreza"],          "lower"),
-        ("Elegíveis / vínculos (%)",    pct_c,                           pct_u,                       "higher"),
+        ("IDHM geral",                  cidade["idhm"],                  uf["idhm"],                  "higher", "pct"),
+        ("Renda per capita (R$/mês)",   renda_pc_c,                      renda_pc_u,                  "higher", "pct"),
+        ("Renda média RAIS (R$/mês)",   sal_rais_c,                      sal_rais_u,                  "higher", "pct"),
+        ("Índice de Gini",              cidade["indice_gini"],           uf["indice_gini"],           "lower",  "pct"),
+        ("Pop. 25+ com superior",       cidade["taxa_superior_25_mais"], uf["taxa_superior_25_mais"], "higher", "pp"),
+        ("Proporção em pobreza",        cidade["prop_pobreza"],          uf["prop_pobreza"],          "lower",  "pp"),
+        ("Elegíveis / vínculos",        pct_c,                           pct_u,                       "higher", "pp"),
     ]
     rows = []
-    for label, c_val, u_val, direction in metricas:
+    for label, c_val, u_val, direction, dtype in metricas:
         delta = None
+        delta_type = dtype
         status = "neutral"
-        if u_val is not None and u_val != 0 and c_val is not None:
-            delta = (float(c_val) - float(u_val)) / abs(float(u_val)) * 100
-            if direction == "higher":
-                status = "above" if delta > 0 else "below"
-            elif direction == "lower":
-                status = "above" if delta < 0 else "below"
+        if u_val is not None and c_val is not None:
+            if dtype == "pp":
+                # diferença absoluta em pontos percentuais
+                delta = float(c_val) - float(u_val)
+            elif dtype == "pct" and u_val != 0:
+                # variação percentual relativa
+                delta = (float(c_val) - float(u_val)) / abs(float(u_val)) * 100
+            if delta is not None:
+                if direction == "higher":
+                    status = "above" if delta > 0 else "below"
+                elif direction == "lower":
+                    status = "above" if delta < 0 else "below"
         rows.append({
             "metrica": label,
             "cidade": float(c_val) if c_val is not None else None,
             "uf": float(u_val) if u_val is not None else None,
             "delta": float(delta) if delta is not None else None,
+            "delta_type": delta_type,
             "status": status,
         })
 
@@ -98,6 +148,8 @@ def get_perfil(con, id_municipio: str, sigla_uf: str, renda_min: float, ano_emp:
         "cidade_nome": cidade["nome_municipio"],
         "sigla_uf": sigla_uf,
         "populacao": int(cidade["populacao_total"] or 0),
+        "ipca_2010": round(ipca_2010, 4),
+        "ipca_2022": round(ipca_2022, 4),
         "rows": rows,
     }
 
@@ -179,6 +231,27 @@ def get_mercado_trabalho(con, id_municipio: str, renda_min: float, ano_emp: int)
     total_eleg     = int(df_setor["eleg"].sum()) if len(df_setor) else 0
     sal_eleg_pond  = float((df_setor["sal_eleg"] * df_setor["eleg"]).sum() / df_setor["eleg"].sum()) if total_eleg else 0
 
+    # Aplica IPCA aos salários
+    ipca = get_ipca_2022()
+    if "sal_medio" in df_setor.columns:
+        df_setor["sal_medio"] = (df_setor["sal_medio"] * ipca).round(0)
+        df_setor["sal_eleg"] = (df_setor["sal_eleg"] * ipca).round(0)
+    if "sal_medio" in df_cargo.columns:
+        df_cargo["sal_medio"] = (df_cargo["sal_medio"] * ipca).round(0)
+        df_cargo["sal_eleg"] = (df_cargo["sal_eleg"] * ipca).round(0)
+    if "sal_medio" in cargo_setor.columns:
+        cargo_setor["sal_medio"] = (cargo_setor["sal_medio"] * ipca).round(0)
+        cargo_setor["sal_eleg"] = (cargo_setor["sal_eleg"] * ipca).round(0)
+    sal_eleg_pond = sal_eleg_pond * ipca
+
+    # Série temporal de estabelecimentos por ano (no município)
+    df_estab_serie = con.execute(f"""
+        SELECT ano, SUM(total_estabelecimentos) AS estabs
+        FROM fct_estabelecimentos
+        WHERE id_municipio = '{id_municipio}'
+        GROUP BY ano ORDER BY ano
+    """).df()
+
     return {
         "ano": ano_emp,
         "renda_min": renda_min,
@@ -192,6 +265,7 @@ def get_mercado_trabalho(con, id_municipio: str, renda_min: float, ano_emp: int)
         "por_cargo": _df_to_records(df_cargo[["cargo", "vinculos", "sal_medio", "eleg", "pct_eleg", "sal_eleg"]]),
         "cargo_setor": _df_to_records(cargo_setor[["setor", "cargo", "vinculos", "sal_medio", "eleg", "pct_eleg", "sal_eleg"]]),
         "setores_unicos": setores_unicos,
+        "estab_serie": _df_to_records(df_estab_serie),
     }
 
 # ── BLOCO 4: Empresas-Alvo ────────────────────────────────────────────────────
@@ -292,6 +366,53 @@ def get_pipeline(con, id_municipio: str):
     delta_23 = ((c24 - c23) / c23 * 100) if c23 else 0
     delta_20 = ((c24 - c20) / c20 * 100) if c20 else 0
 
+    # ── Cursos em Alta com tratamento de reclassificação INEP ────────────────
+    # Para cada (área, curso): se o curso sumiu em ano_max mas existia em 2020,
+    # somar como baseline da área. Isso compensa consolidações INEP (ex: TIC 2024).
+    agg_curso = df.groupby(["area", "curso"], as_index=False).agg(
+        c24=("conc", lambda x: x[df.loc[x.index, "ano"] == ano_max].sum()),
+        c20=("conc", lambda x: x[df.loc[x.index, "ano"] == 2020].sum()),
+    )
+    # Baseline por área: cursos que sumiram em ano_max
+    area_baseline = (
+        agg_curso[(agg_curso["c24"] == 0) & (agg_curso["c20"] > 0)]
+        .groupby("area")["c20"].sum()
+        .to_dict()
+    )
+
+    cursos_alta_list = []
+    for _, row in agg_curso.iterrows():
+        if row["c24"] < 100:  # mínimo de volume
+            continue
+        if row["c20"] > 0 and row["c24"] > row["c20"]:
+            # crescimento direto
+            cresc = (row["c24"] - row["c20"]) / row["c20"] * 100
+            nota = ""
+        elif row["c20"] == 0 and row["area"] in area_baseline and area_baseline[row["area"]] > 0:
+            # curso novo — usa baseline da área (reclassificação)
+            base = area_baseline[row["area"]]
+            cresc = (row["c24"] - base) / base * 100
+            nota = "reclassif."
+        else:
+            continue
+        if cresc <= 0:
+            continue
+        cursos_alta_list.append({
+            "area": row["area"],
+            "curso": row["curso"],
+            "c24": int(row["c24"]),
+            "c20": int(row["c20"]) if not nota else int(area_baseline.get(row["area"], 0)),
+            "cresc": round(float(cresc), 1),
+            "nota": nota,
+        })
+    # Ordena por (volume × crescimento) para priorizar cursos em alta com massa
+    cursos_alta_list.sort(key=lambda x: (x["c24"] / 1000) * (x["cresc"] / 100), reverse=True)
+    cursos_alta_list = cursos_alta_list[:10]
+
+    # Top IES com volume e perfil
+    ies_max = df[df["ano"] == ano_max].groupby(["ies", "rede"], as_index=False)["conc"].sum()
+    ies_max = ies_max.sort_values("conc", ascending=False).head(10)
+
     return {
         "ano_max": ano_max,
         "kpis": {
@@ -303,6 +424,8 @@ def get_pipeline(con, id_municipio: str):
         "areas_unicas": sorted(df["area"].unique().tolist()),
         "ies_unicas": sorted(df["ies"].unique().tolist()),
         "anos": anos_disponiveis,
+        "cursos_alta": cursos_alta_list,
+        "top_ies": _df_to_records(ies_max),
     }
 
 # ── BLOCO 6: Score de Atratividade (todas as 645 cidades SP pré-computadas) ──
