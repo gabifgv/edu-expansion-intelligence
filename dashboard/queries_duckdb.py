@@ -109,11 +109,12 @@ def get_perfil(con, id_municipio: str, sigla_uf: str, renda_min: float, ano_emp:
     sal_rais_u = (eleg_u[2] or 0) * ipca_2022
 
     # Métricas: type="pp" usa pontos percentuais (delta absoluto), "pct" usa variação percentual
+    # Gini: para produto premium FGV, alta concentração de renda no topo é positiva → direction "higher"
     metricas = [
         ("IDHM geral",                  cidade["idhm"],                  uf["idhm"],                  "higher", "pct"),
         ("Renda per capita (R$/mês)",   renda_pc_c,                      renda_pc_u,                  "higher", "pct"),
         ("Renda média RAIS (R$/mês)",   sal_rais_c,                      sal_rais_u,                  "higher", "pct"),
-        ("Índice de Gini",              cidade["indice_gini"],           uf["indice_gini"],           "lower",  "pct"),
+        ("Índice de Gini",              cidade["indice_gini"],           uf["indice_gini"],           "higher", "pct"),
         ("Pop. 25+ com superior",       cidade["taxa_superior_25_mais"], uf["taxa_superior_25_mais"], "higher", "pp"),
         ("Proporção em pobreza",        cidade["prop_pobreza"],          uf["prop_pobreza"],          "lower",  "pp"),
         ("Elegíveis / vínculos",        pct_c,                           pct_u,                       "higher", "pp"),
@@ -244,12 +245,21 @@ def get_mercado_trabalho(con, id_municipio: str, renda_min: float, ano_emp: int)
         cargo_setor["sal_eleg"] = (cargo_setor["sal_eleg"] * ipca).round(0)
     sal_eleg_pond = sal_eleg_pond * ipca
 
-    # Série temporal de estabelecimentos por ano (no município)
+    # Série temporal de estabelecimentos por ano (total no município) — exclui 2022 (broken na fonte)
     df_estab_serie = con.execute(f"""
         SELECT ano, SUM(total_estabelecimentos) AS estabs
         FROM fct_estabelecimentos
-        WHERE id_municipio = '{id_municipio}'
+        WHERE id_municipio = '{id_municipio}' AND ano != 2022
         GROUP BY ano ORDER BY ano
+    """).df()
+
+    # Série temporal de estabelecimentos por ano × setor (para filtragem client-side)
+    df_estab_serie_setor = con.execute(f"""
+        SELECT ano, descricao_subsetor AS setor, SUM(total_estabelecimentos) AS estabs
+        FROM fct_estabelecimentos
+        WHERE id_municipio = '{id_municipio}' AND ano != 2022
+          AND descricao_subsetor IS NOT NULL
+        GROUP BY 1, 2 ORDER BY 1, 2
     """).df()
 
     return {
@@ -266,6 +276,7 @@ def get_mercado_trabalho(con, id_municipio: str, renda_min: float, ano_emp: int)
         "cargo_setor": _df_to_records(cargo_setor[["setor", "cargo", "vinculos", "sal_medio", "eleg", "pct_eleg", "sal_eleg"]]),
         "setores_unicos": setores_unicos,
         "estab_serie": _df_to_records(df_estab_serie),
+        "estab_serie_setor": _df_to_records(df_estab_serie_setor),
     }
 
 # ── BLOCO 4: Empresas-Alvo ────────────────────────────────────────────────────
@@ -413,6 +424,38 @@ def get_pipeline(con, id_municipio: str):
     ies_max = df[df["ano"] == ano_max].groupby(["ies", "rede"], as_index=False)["conc"].sum()
     ies_max = ies_max.sort_values("conc", ascending=False).head(10)
 
+    # ── Áreas em alta: agrupa cursos por área ────────────────────────────────
+    areas_alta = {}
+    for c in cursos_alta_list:
+        if c["area"] not in areas_alta:
+            areas_alta[c["area"]] = {
+                "area": c["area"],
+                "total_c24": 0,
+                "total_c20_baseline": 0,
+                "cursos": [],
+            }
+        areas_alta[c["area"]]["total_c24"] += c["c24"]
+        areas_alta[c["area"]]["total_c20_baseline"] += c.get("c20", 0)
+        areas_alta[c["area"]]["cursos"].append({
+            "curso": c["curso"],
+            "c24": c["c24"],
+            "cresc": c["cresc"],
+            "nota": c["nota"],
+        })
+
+    areas_alta_list = []
+    for area_data in areas_alta.values():
+        # Crescimento da área = soma c24 vs soma baseline
+        baseline = area_data["total_c20_baseline"]
+        cresc_area = ((area_data["total_c24"] - baseline) / baseline * 100) if baseline else 0
+        area_data["cresc"] = round(cresc_area, 1)
+        # Ordena cursos dentro da área por volume
+        area_data["cursos"].sort(key=lambda x: x["c24"], reverse=True)
+        areas_alta_list.append(area_data)
+
+    # Ordena áreas por (volume × crescimento)
+    areas_alta_list.sort(key=lambda x: (x["total_c24"] / 1000) * (x["cresc"] / 100 if x["cresc"] > 0 else 0.01), reverse=True)
+
     return {
         "ano_max": ano_max,
         "kpis": {
@@ -425,6 +468,7 @@ def get_pipeline(con, id_municipio: str):
         "ies_unicas": sorted(df["ies"].unique().tolist()),
         "anos": anos_disponiveis,
         "cursos_alta": cursos_alta_list,
+        "areas_alta": areas_alta_list,
         "top_ies": _df_to_records(ies_max),
     }
 
