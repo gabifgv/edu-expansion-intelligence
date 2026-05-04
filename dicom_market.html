@@ -1,0 +1,2622 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DICOM Market · Inteligência de Mercado FGV</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:          #0A1428;
+  --ink-soft:     #142844;
+  --ink-card:     #1A2F4D;
+  --paper:        #F4F7FB;
+  --azul-escuro:  #003A79;
+  --azul-claro:   #008BC9;
+  --azul-celeste: #73BFE8;
+  --azul-dim:     #1F4470;
+  --vinho:        #9B0A51;
+  --vinho-light:  #D6457E;
+  --turquesa:     #3BAE96;
+  --gray:         #6B7B95;
+  --gray-line:    #1F2A44;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--ink);
+  color: var(--paper);
+  overflow-x: hidden;
+  font-weight: 400;
+  cursor: none;
+}
+
+a { color: inherit; text-decoration: none; cursor: none; }
+button { cursor: none; font-family: inherit; }
+
+/* ============================================================
+   CURSOR — CÉREBRO 🧠
+   ============================================================ */
+.cursor-brain {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  font-size: 24px;
+  transform: translate(-50%, -50%);
+  transition: transform .18s cubic-bezier(.4, 1.4, .5, 1), filter .25s;
+  filter: drop-shadow(0 3px 5px rgba(0,0,0,.55));
+  user-select: none;
+  will-change: transform, left, top;
+}
+.cursor-brain.active {
+  transform: translate(-50%, -50%) scale(1.4) rotate(-8deg);
+}
+.cursor-trail {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  width: 38px; height: 38px;
+  border: 1px solid var(--azul-claro);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform .35s ease, width .25s, height .25s, opacity .25s;
+  opacity: .25;
+}
+.cursor-trail.active {
+  width: 60px; height: 60px;
+  border-color: var(--azul-celeste);
+  opacity: .55;
+}
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: var(--azul-claro);
+  z-index: 1000;
+  transition: width .1s;
+  width: 0;
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2.5rem;
+  background: rgba(10, 20, 40, .85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 139, 201, .12);
+}
+.nav-brand {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: .08em;
+  color: var(--azul-celeste);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-brand .brand-mark {
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: var(--azul-claro);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--azul-claro);
+}
+.nav-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--gray);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.nav-pills { display: flex; gap: 4px; }
+.nav-pill {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 5px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 139, 201, .2);
+  color: rgba(244, 247, 251, .5);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  transition: all .2s;
+}
+.nav-pill:hover {
+  color: var(--azul-celeste);
+  border-color: var(--azul-claro);
+}
+
+/* ============================================================
+   ESTRUTURA GLOBAL
+   ============================================================ */
+section {
+  padding: 7rem 2.5rem 5rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.section-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .25em;
+  color: var(--azul-claro);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-tag::before {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: var(--azul-claro);
+  display: inline-block;
+}
+
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+h1 em {
+  color: var(--azul-celeste);
+  font-style: italic;
+}
+h2 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin-bottom: 1.25rem;
+}
+h2 em {
+  color: var(--azul-celeste);
+  font-style: italic;
+}
+.lede {
+  font-size: 18px;
+  line-height: 1.55;
+  color: rgba(244, 247, 251, .75);
+  max-width: 720px;
+  margin-bottom: 3rem;
+}
+.lede strong { color: var(--paper); font-weight: 500; }
+.lede em { color: var(--azul-celeste); font-style: normal; }
+
+.mono { font-family: 'DM Mono', monospace; font-size: .92em; color: var(--azul-celeste); }
+
+/* Tooltip de piada estilo Cérebro DICOM */
+.piada {
+  position: relative;
+  border-bottom: 1px dashed var(--azul-claro);
+  cursor: help;
+}
+.piada::after {
+  content: attr(data-piada);
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  background: var(--ink-card);
+  color: var(--azul-celeste);
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  font-style: normal;
+  white-space: nowrap;
+  border: 1px solid var(--azul-dim);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .25s, transform .25s;
+  box-shadow: 0 4px 12px rgba(0,0,0,.4);
+  z-index: 50;
+}
+.piada:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  padding-top: 9rem;
+}
+
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .3em;
+  color: var(--azul-claro);
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-eyebrow .dot {
+  width: 5px; height: 5px;
+  background: var(--azul-claro);
+  border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: .3; transform: scale(.8); }
+  50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 12px var(--azul-claro); }
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 7.5vw, 6.5rem);
+  margin-bottom: 2rem;
+}
+
+.hero-sub {
+  font-size: 22px;
+  line-height: 1.4;
+  color: rgba(244, 247, 251, .7);
+  max-width: 800px;
+  margin-bottom: 3rem;
+  font-weight: 300;
+}
+.hero-sub strong { color: var(--azul-celeste); font-weight: 500; }
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--gray-line);
+  padding-top: 2.5rem;
+  max-width: 900px;
+}
+.hero-stat {
+  border-right: 1px solid var(--gray-line);
+  padding: 0 1.5rem;
+}
+.hero-stat:last-child { border-right: none; }
+.hero-stat:first-child { padding-left: 0; }
+
+.hero-stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--azul-claro);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.hero-stat-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  color: var(--gray);
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 2.5rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .25em;
+  color: var(--gray);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: pulse-scroll 2.5s ease-in-out infinite;
+}
+@keyframes pulse-scroll {
+  0%, 100% { opacity: .4; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(4px); }
+}
+
+/* Background accent for hero */
+.hero-bg {
+  position: absolute;
+  top: 50%; right: -200px;
+  transform: translateY(-50%);
+  width: 600px; height: 600px;
+  pointer-events: none;
+  opacity: .35;
+}
+
+/* ============================================================
+   PROBLEM SECTION
+   ============================================================ */
+.problem {
+  padding-top: 8rem;
+  padding-bottom: 8rem;
+}
+
+.sources-flow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 3rem 0;
+}
+.source-card {
+  border: 1px solid var(--gray-line);
+  padding: 1.5rem 1.25rem;
+  background: var(--ink-soft);
+  position: relative;
+  transition: all .3s;
+}
+.source-card:hover {
+  border-color: var(--azul-claro);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 139, 201, .12);
+}
+.source-card .src-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--paper);
+  margin-bottom: 4px;
+}
+.source-card .src-full {
+  font-size: 11px;
+  color: var(--gray);
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+.source-card .src-coding {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--azul-claro);
+  padding-top: 12px;
+  border-top: 1px solid var(--gray-line);
+}
+.source-card .src-coding strong { color: var(--azul-celeste); font-weight: 500; }
+
+.bridge-text {
+  font-size: 19px;
+  line-height: 1.5;
+  color: rgba(244, 247, 251, .65);
+  max-width: 720px;
+  border-left: 2px solid var(--azul-claro);
+  padding-left: 1.5rem;
+  margin-top: 2rem;
+  font-style: italic;
+  font-weight: 300;
+}
+.bridge-text .mono {
+  background: rgba(0, 139, 201, .12);
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-style: normal;
+  font-size: 16px;
+}
+
+/* ============================================================
+   EXPLORER SECTION (CENTERPIECE)
+   ============================================================ */
+.explorer {
+  padding-top: 8rem;
+  padding-bottom: 6rem;
+}
+
+.schema-stage {
+  position: relative;
+  width: 100%;
+  height: 620px;
+  margin: 3rem auto 2rem;
+  max-width: 920px;
+}
+
+.connections {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.table-card {
+  position: absolute;
+  background: var(--ink-soft);
+  border: 1px solid var(--gray-line);
+  padding: 14px 16px;
+  transition: all .3s ease;
+  z-index: 2;
+  min-width: 160px;
+}
+.table-card.center {
+  border: 1px solid var(--azul-claro);
+  background: linear-gradient(135deg, var(--ink-soft), rgba(0, 139, 201, .08));
+  min-width: 200px;
+  box-shadow: 0 0 40px rgba(0, 139, 201, .18);
+}
+.table-card:hover {
+  border-color: var(--azul-celeste);
+  transform: translate(-50%, -50%) scale(1.05) !important;
+  z-index: 5;
+}
+.table-card.selected {
+  border-color: var(--azul-claro);
+  background: linear-gradient(135deg, rgba(0, 139, 201, .14), rgba(0, 139, 201, .04));
+  box-shadow: 0 0 40px rgba(0, 139, 201, .35);
+  z-index: 4;
+}
+.table-card.dimmed { opacity: .35; }
+
+.table-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--azul-celeste);
+  margin-bottom: 4px;
+  letter-spacing: .02em;
+}
+.table-source {
+  font-size: 10px;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  margin-bottom: 8px;
+}
+.table-rows {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--paper);
+  letter-spacing: -0.01em;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+.table-card.center .table-rows {
+  font-size: 24px;
+  color: var(--azul-claro);
+}
+.table-rows-label {
+  font-size: 9px;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.click-hint {
+  text-align: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: .2em;
+  margin-bottom: 2rem;
+}
+.click-hint .blink {
+  color: var(--azul-claro);
+  animation: blink 1.4s ease-in-out infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .3; }
+}
+
+/* Detail panel */
+.detail-panel {
+  background: var(--ink-soft);
+  border: 1px solid var(--gray-line);
+  border-top: 1px solid var(--azul-claro);
+  margin-top: 2rem;
+  overflow: hidden;
+}
+
+.detail-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 1.5rem 2rem 1rem;
+  border-bottom: 1px solid var(--gray-line);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.detail-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--azul-claro);
+}
+.detail-tagline {
+  font-size: 12px;
+  color: var(--gray);
+  font-style: italic;
+  margin-top: 4px;
+}
+.detail-source {
+  font-size: 12px;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: .15em;
+}
+
+.detail-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--gray-line);
+  padding: 0 2rem;
+  gap: 0;
+  background: var(--ink);
+}
+.detail-tab {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  padding: 1rem 1.5rem;
+  color: var(--gray);
+  border-bottom: 2px solid transparent;
+  transition: all .2s;
+  background: transparent;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  font-weight: 500;
+}
+.detail-tab:hover { color: var(--paper); }
+.detail-tab.active {
+  color: var(--azul-claro);
+  border-bottom-color: var(--azul-claro);
+}
+
+.detail-body {
+  padding: 2rem;
+  min-height: 280px;
+}
+
+.schema-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+}
+.schema-table th {
+  text-align: left;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  color: var(--gray);
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--gray-line);
+  font-weight: 500;
+}
+.schema-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--gray-line);
+  color: var(--paper);
+}
+.schema-table tr:last-child td { border-bottom: none; }
+.schema-table .col-type { color: var(--turquesa); font-size: 12px; }
+.schema-table .col-flag {
+  font-size: 9px;
+  background: var(--azul-claro);
+  color: var(--ink);
+  padding: 2px 6px;
+  border-radius: 2px;
+  letter-spacing: .1em;
+  font-weight: 600;
+}
+
+.potential-content {
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--paper);
+  font-weight: 300;
+  max-width: 720px;
+}
+.potential-content .accent {
+  color: var(--azul-celeste);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.actionable-list {
+  list-style: none;
+  display: grid;
+  gap: 1rem;
+}
+.actionable-list li {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 16px;
+  padding: 1rem 1.25rem;
+  background: var(--ink);
+  border-left: 2px solid var(--azul-dim);
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(244, 247, 251, .85);
+  transition: all .2s;
+}
+.actionable-list li:hover {
+  border-left-color: var(--azul-claro);
+  background: rgba(0, 139, 201, .04);
+}
+.actionable-num {
+  font-family: 'DM Mono', monospace;
+  color: var(--azul-claro);
+  font-size: 12px;
+  letter-spacing: .1em;
+}
+
+/* ============================================================
+   SYNTHESIS SECTION
+   ============================================================ */
+.synthesis {
+  background: linear-gradient(180deg, var(--ink) 0%, #0E1830 50%, var(--ink) 100%);
+  padding-top: 8rem;
+  padding-bottom: 6rem;
+  margin-top: 4rem;
+  border-top: 1px solid var(--gray-line);
+  border-bottom: 1px solid var(--gray-line);
+}
+
+.synthesis h2 {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  margin-bottom: 3rem;
+}
+
+.flow-diagram {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr 60px 1fr;
+  gap: 0;
+  align-items: center;
+  margin: 3rem auto;
+  max-width: 1100px;
+}
+
+.flow-stage {
+  background: var(--ink-soft);
+  border: 1px solid var(--gray-line);
+  padding: 1.5rem;
+  text-align: center;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+.flow-stage.llm {
+  border-color: var(--azul-claro);
+  background: linear-gradient(135deg, var(--ink-soft), rgba(0, 139, 201, .1));
+  box-shadow: 0 0 50px rgba(0, 139, 201, .15);
+}
+
+.flow-stage-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .2em;
+  color: var(--azul-claro);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.flow-stage-icon {
+  font-size: 36px;
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+
+.flow-stage-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--paper);
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+.flow-stage-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--gray);
+}
+
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 60px;
+}
+.flow-arrow svg { width: 100%; height: 100%; }
+
+.tables-mini {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+}
+.tables-mini .tm {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  background: var(--ink);
+  padding: 3px 7px;
+  border: 1px solid var(--gray-line);
+  color: var(--gray);
+  letter-spacing: .05em;
+}
+
+.verdict-card {
+  background: var(--ink-soft);
+  border: 1px solid var(--azul-dim);
+  border-left: 3px solid var(--azul-claro);
+  padding: 2rem 2.5rem;
+  margin-top: 3rem;
+  max-width: 920px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.verdict-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .25em;
+  color: var(--azul-claro);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.verdict-priority {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--azul-celeste);
+  margin-bottom: 1rem;
+  letter-spacing: -0.01em;
+}
+.verdict-body {
+  font-size: 16px;
+  line-height: 1.65;
+  color: rgba(244, 247, 251, .85);
+  font-weight: 300;
+  min-height: 180px;
+}
+.verdict-body strong { color: var(--azul-claro); font-weight: 500; }
+
+.verdict-meta {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--gray-line);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--gray);
+  flex-wrap: wrap;
+}
+.verdict-meta span strong { color: var(--azul-claro); font-weight: 500; }
+
+/* ============================================================
+   CEREJA DO BOLO 🍒
+   ============================================================ */
+.cereja {
+  background: linear-gradient(180deg, var(--ink) 0%, #14213D 50%, var(--ink) 100%);
+  padding-top: 6rem;
+  padding-bottom: 8rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.cereja::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 1px; height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--vinho-light));
+  opacity: 0;
+  transition: opacity .8s;
+}
+.cereja.cherry-active::before {
+  opacity: .4;
+  animation: trail-fade 1.2s ease-out forwards;
+}
+@keyframes trail-fade {
+  0%   { opacity: 0; height: 0; }
+  60%  { opacity: .6; height: 200px; }
+  100% { opacity: 0; height: 200px; }
+}
+
+.cherry-stage {
+  position: relative;
+  height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.cherry-emoji {
+  font-size: 76px;
+  line-height: 1;
+  filter: drop-shadow(0 6px 16px rgba(214, 69, 126, .35));
+  user-select: none;
+  opacity: 0;
+  position: relative;
+}
+.cereja.cherry-active .cherry-emoji {
+  animation: cherryDrop 1.4s cubic-bezier(.34, 1.6, .54, 1) forwards;
+}
+@keyframes cherryDrop {
+  0%   { transform: translateY(-280px) rotate(-30deg) scale(.5); opacity: 0; }
+  35%  { opacity: 1; }
+  70%  { transform: translateY(18px) rotate(12deg) scale(1.08); opacity: 1; }
+  85%  { transform: translateY(-8px) rotate(-3deg) scale(1); }
+  100% { transform: translateY(0) rotate(0) scale(1); opacity: 1; }
+}
+
+.cherry-shadow {
+  width: 60px;
+  height: 8px;
+  background: radial-gradient(ellipse, rgba(0,0,0,.5), transparent 70%);
+  margin-top: 6px;
+  opacity: 0;
+  transform-origin: center;
+}
+.cereja.cherry-active .cherry-shadow {
+  animation: shadowPulse 1.4s ease-out forwards;
+}
+@keyframes shadowPulse {
+  0%, 50% { opacity: 0; transform: scaleX(.3); }
+  72%     { opacity: .6; transform: scaleX(1.4); }
+  88%     { opacity: .3; transform: scaleX(.85); }
+  100%    { opacity: .45; transform: scaleX(1); }
+}
+
+.cereja .section-tag { color: var(--vinho-light); }
+.cereja .section-tag::before { background: var(--vinho-light); }
+.cereja h2 em { color: var(--vinho-light); }
+
+.cereja-intro {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+.cereja-intro h2 { display: inline-block; }
+.cereja-intro .lede { margin-left: auto; margin-right: auto; }
+
+.cherry-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+  max-width: 1080px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.proprietary-card {
+  background: var(--ink-soft);
+  border: 1px solid var(--gray-line);
+  border-top: 3px solid var(--vinho-light);
+  padding: 2rem;
+  position: relative;
+  transition: all .3s;
+}
+.proprietary-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(155, 10, 81, .15);
+  border-color: var(--vinho-light);
+}
+
+.proprietary-card .card-icon {
+  font-size: 38px;
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+.proprietary-card .card-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .25em;
+  color: var(--vinho-light);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.proprietary-card .card-tag::before {
+  content: "★";
+  color: var(--vinho-light);
+}
+.proprietary-card .card-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--paper);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.proprietary-card .card-tagline {
+  font-style: italic;
+  color: var(--azul-celeste);
+  font-size: 14px;
+  margin-bottom: 1.25rem;
+  font-weight: 300;
+}
+.proprietary-card .card-detail {
+  font-size: 14px;
+  color: rgba(244, 247, 251, .75);
+  line-height: 1.55;
+  margin-bottom: 1.25rem;
+}
+.proprietary-card .card-stat {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--vinho-light);
+  padding-top: 1rem;
+  border-top: 1px solid var(--gray-line);
+  letter-spacing: .05em;
+}
+
+.cereja-conclusion {
+  background: var(--ink-card);
+  border: 1px solid var(--vinho);
+  border-radius: 4px;
+  padding: 2rem 2.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.cereja-conclusion .row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 1.5rem;
+  align-items: baseline;
+  padding: 0.75rem 0;
+}
+.cereja-conclusion .row + .row {
+  border-top: 1px solid var(--gray-line);
+}
+.cereja-conclusion .row .label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  color: var(--gray);
+}
+.cereja-conclusion .row .label.highlight { color: var(--vinho-light); }
+.cereja-conclusion .row .value {
+  font-size: 16px;
+  color: rgba(244, 247, 251, .8);
+  line-height: 1.5;
+  font-style: italic;
+  font-weight: 300;
+}
+.cereja-conclusion .row .value.highlight {
+  color: var(--paper);
+  font-style: normal;
+  font-weight: 400;
+}
+
+/* ============================================================
+   DEMO CTA — VAMOS VER NA PRÁTICA
+   ============================================================ */
+.demo-cta {
+  padding: 6rem 2.5rem;
+  text-align: center;
+  background: linear-gradient(180deg, var(--ink) 0%, #0F1B36 50%, var(--ink) 100%);
+  border-top: 1px solid var(--gray-line);
+  border-bottom: 1px solid var(--gray-line);
+}
+
+.demo-cta .demo-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .3em;
+  color: var(--azul-claro);
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.demo-cta .demo-eyebrow .live-dot {
+  width: 8px; height: 8px;
+  background: var(--turquesa);
+  border-radius: 50%;
+  animation: live-pulse 1.6s ease-in-out infinite;
+  box-shadow: 0 0 12px var(--turquesa);
+}
+@keyframes live-pulse {
+  0%, 100% { opacity: .5; transform: scale(.85); }
+  50%      { opacity: 1; transform: scale(1.15); }
+}
+
+.demo-cta h2 {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.demo-cta .demo-sub {
+  font-size: 19px;
+  color: rgba(244, 247, 251, .7);
+  max-width: 680px;
+  margin: 0 auto 3rem;
+  line-height: 1.5;
+  font-weight: 300;
+}
+.demo-cta .demo-sub em { color: var(--azul-celeste); font-style: normal; }
+
+.demo-cta .demo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 1.25rem 2.5rem;
+  background: var(--azul-claro);
+  color: var(--paper);
+  border: 1px solid var(--azul-claro);
+  font-family: 'Syne', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-decoration: none;
+  text-transform: none;
+  transition: all .25s;
+  position: relative;
+  overflow: hidden;
+}
+.demo-cta .demo-btn:hover {
+  background: var(--azul-celeste);
+  border-color: var(--azul-celeste);
+  color: var(--ink);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 139, 201, .35);
+}
+.demo-cta .demo-btn .arrow {
+  display: inline-block;
+  transition: transform .25s;
+}
+.demo-cta .demo-btn:hover .arrow {
+  transform: translateX(6px);
+}
+
+.demo-cta .demo-aside {
+  margin-top: 2rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--gray);
+  font-style: italic;
+  font-weight: 300;
+}
+
+/* ============================================================
+   PRÓXIMOS PASSOS
+   ============================================================ */
+.next-steps {
+  padding-top: 6rem;
+  padding-bottom: 4rem;
+}
+
+.welcome-back {
+  text-align: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .3em;
+  color: var(--gray);
+  text-transform: uppercase;
+  margin-bottom: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+.welcome-back::before, .welcome-back::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--gray-line);
+  max-width: 200px;
+}
+
+/* Status atual */
+.status-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+}
+.status-card {
+  background: var(--ink-soft);
+  border: 1px solid var(--gray-line);
+  padding: 1.75rem 2rem;
+  border-left: 3px solid var(--turquesa);
+}
+.status-card.limit {
+  border-left-color: var(--vinho-light);
+}
+.status-card .sc-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--turquesa);
+  margin-bottom: 8px;
+}
+.status-card.limit .sc-tag { color: var(--vinho-light); }
+
+.status-card .sc-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--paper);
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+.status-card .sc-body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(244, 247, 251, .75);
+  font-weight: 300;
+}
+.status-card .sc-body strong { color: var(--azul-celeste); font-weight: 500; }
+
+/* Arquitetura: hoje vs produção */
+.arch-comparison {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  gap: 0;
+  align-items: stretch;
+  margin: 3rem 0;
+  background: var(--ink-soft);
+  border: 1px solid var(--gray-line);
+}
+.arch-col {
+  padding: 2rem;
+}
+.arch-col.now {
+  background: rgba(155, 10, 81, .04);
+  border-right: 1px solid var(--gray-line);
+}
+.arch-col.future {
+  background: rgba(0, 139, 201, .04);
+  border-left: 1px solid var(--gray-line);
+}
+
+.arch-col .arch-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.arch-col.now .arch-tag { color: var(--vinho-light); }
+.arch-col.future .arch-tag { color: var(--azul-claro); }
+
+.arch-col .arch-heading {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--paper);
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.01em;
+}
+
+.arch-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.arch-stack-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--ink);
+  border-left: 2px solid var(--gray-line);
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--paper);
+  position: relative;
+}
+.arch-col.future .arch-stack-row {
+  border-left-color: var(--azul-claro);
+}
+.arch-col.now .arch-stack-row {
+  border-left-color: var(--vinho-light);
+}
+.arch-stack-row .layer {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  color: var(--gray);
+  width: 70px;
+  flex-shrink: 0;
+}
+.arch-stack-row .tech {
+  flex: 1;
+}
+
+.arch-bridge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.arch-bridge svg { width: 100%; height: 80px; }
+
+/* Custos */
+.cost-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+  background: var(--ink-soft);
+  border: 1px solid var(--gray-line);
+}
+.cost-table th {
+  text-align: left;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--gray);
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--gray-line);
+  font-weight: 500;
+  background: var(--ink);
+}
+.cost-table th:last-child { text-align: right; }
+.cost-table td {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--gray-line);
+  color: var(--paper);
+  font-size: 14px;
+  vertical-align: top;
+}
+.cost-table tr:last-child td { border-bottom: none; }
+.cost-table td:last-child {
+  text-align: right;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--azul-celeste);
+  white-space: nowrap;
+}
+.cost-table .item-name { font-weight: 500; }
+.cost-table .item-desc {
+  display: block;
+  font-size: 12px;
+  color: var(--gray);
+  margin-top: 3px;
+  font-weight: 400;
+}
+.cost-table .already-tag {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  background: var(--turquesa);
+  color: var(--ink);
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: .1em;
+  font-weight: 600;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.cost-table tr.total-row td {
+  background: var(--ink);
+  font-weight: 600;
+  border-top: 2px solid var(--azul-dim);
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.cost-table tr.total-row td:first-child { color: var(--azul-claro); }
+.cost-table tr.total-row td:last-child {
+  color: var(--azul-claro);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.cost-note {
+  font-size: 13px;
+  color: rgba(244, 247, 251, .6);
+  font-style: italic;
+  font-weight: 300;
+  margin-top: 1rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--azul-dim);
+  line-height: 1.55;
+  max-width: 820px;
+}
+.cost-note strong { color: var(--azul-celeste); font-weight: 500; font-style: normal; }
+
+/* Roadmap */
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 2rem 0 3rem;
+}
+.phase-card {
+  background: var(--ink-soft);
+  border: 1px solid var(--gray-line);
+  padding: 1.5rem 1.25rem;
+  position: relative;
+  transition: all .3s;
+}
+.phase-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--azul-claro);
+}
+.phase-card.done { border-top: 3px solid var(--turquesa); }
+.phase-card.next { border-top: 3px solid var(--azul-claro); background: linear-gradient(180deg, rgba(0,139,201,0.08), var(--ink-soft)); }
+.phase-card.future { border-top: 3px solid var(--azul-dim); opacity: .85; }
+
+.phase-card .phase-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 6px;
+}
+.phase-card.done .phase-num { color: var(--turquesa); }
+.phase-card.next .phase-num { color: var(--azul-claro); }
+
+.phase-card .phase-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--paper);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+.phase-card .phase-when {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: var(--ink);
+  color: var(--azul-celeste);
+  margin-bottom: 10px;
+  letter-spacing: .05em;
+}
+.phase-card.done .phase-when { background: rgba(59, 174, 150, .15); color: var(--turquesa); }
+.phase-card.next .phase-when { background: rgba(0, 139, 201, .18); color: var(--azul-celeste); }
+
+.phase-card .phase-body {
+  font-size: 13px;
+  color: rgba(244, 247, 251, .7);
+  line-height: 1.5;
+  font-weight: 300;
+}
+.phase-card .phase-status {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Decisões */
+.decisions-block {
+  background: var(--ink-soft);
+  border: 1px solid var(--azul-dim);
+  border-left: 3px solid var(--azul-claro);
+  padding: 2.5rem 2.5rem 2rem;
+  margin-top: 2rem;
+}
+.decisions-block .dec-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .25em;
+  color: var(--azul-claro);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.decisions-block h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--paper);
+  margin-bottom: 2rem;
+  letter-spacing: -0.015em;
+}
+.decisions-list {
+  list-style: none;
+  display: grid;
+  gap: 1rem;
+}
+.decisions-list li {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 16px;
+  align-items: baseline;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--gray-line);
+}
+.decisions-list li:last-child { border-bottom: none; }
+.decisions-list .dec-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--azul-claro);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.decisions-list .dec-content { line-height: 1.5; }
+.decisions-list .dec-q {
+  font-family: 'Syne', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--paper);
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+.decisions-list .dec-detail {
+  font-size: 13px;
+  color: rgba(244, 247, 251, .7);
+  font-weight: 300;
+}
+.decisions-list .dec-detail .ack {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  background: rgba(59, 174, 150, .15);
+  color: var(--turquesa);
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: .1em;
+  font-weight: 600;
+  margin-right: 6px;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   CLOSING + FOOTER
+   ============================================================ */
+.closing {
+  text-align: center;
+  padding: 6rem 2.5rem 4rem;
+  border-top: 1px solid var(--gray-line);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.closing .small {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .25em;
+  color: var(--gray);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.closing .big {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2rem, 4.5vw, 3.8rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--paper);
+  letter-spacing: -0.02em;
+  max-width: 900px;
+  margin: 0 auto 1.5rem;
+}
+.closing .big em { color: var(--azul-claro); font-style: italic; }
+.closing .big strong { color: var(--azul-celeste); font-weight: 700; }
+
+.closing .joke {
+  margin-top: 2rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--gray);
+  font-style: italic;
+  font-weight: 300;
+}
+
+footer {
+  text-align: center;
+  padding: 3rem 2.5rem 2.5rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--gray);
+  letter-spacing: .1em;
+  border-top: 1px solid var(--gray-line);
+}
+footer .credit { color: var(--paper); margin-bottom: 8px; }
+footer .date { font-size: 10px; opacity: .6; }
+footer .family {
+  margin-top: 1rem;
+  font-size: 10px;
+  color: var(--azul-claro);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   ANIMAÇÕES DE REVEAL
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .8s ease, transform .8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-d1 { transition-delay: .1s; }
+.reveal-d2 { transition-delay: .2s; }
+.reveal-d3 { transition-delay: .3s; }
+.reveal-d4 { transition-delay: .4s; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  body { cursor: auto; }
+  .cursor-brain, .cursor-trail { display: none; }
+  a, button, .table-card { cursor: pointer; }
+  nav { padding: 1rem 1.25rem; }
+  .nav-pills { display: none; }
+  section { padding: 5rem 1.25rem 3rem; }
+  .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .hero-stat { border: none; padding: 0; }
+  .sources-flow { grid-template-columns: repeat(2, 1fr); }
+  .schema-stage { height: auto; min-height: 1100px; }
+  .table-card { position: relative !important; left: auto !important; top: auto !important; transform: none !important; margin: 0 auto 1rem; }
+  .table-card:hover { transform: scale(1.02) !important; }
+  .connections { display: none; }
+  .flow-diagram { grid-template-columns: 1fr; gap: 1rem; }
+  .flow-arrow { transform: rotate(90deg); height: 40px; }
+  .cherry-cards { grid-template-columns: 1fr; }
+  .cereja-conclusion .row { grid-template-columns: 1fr; gap: .25rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor Cérebro 🧠 -->
+<div class="cursor-brain" id="cursorBrain">🧠</div>
+<div class="cursor-trail" id="cursorTrail"></div>
+<div class="progress-bar" id="progressBar"></div>
+
+<nav>
+  <div class="nav-brand">
+    <span class="brand-mark"></span>
+    DICOM · Market
+  </div>
+  <div class="nav-pills">
+    <a href="#hero" class="nav-pill">Início</a>
+    <a href="#problema" class="nav-pill">Contexto</a>
+    <a href="#atlas" class="nav-pill">Atlas</a>
+    <a href="#sintese" class="nav-pill">Síntese</a>
+    <a href="#cereja" class="nav-pill">Cereja</a>
+    <a href="#demo" class="nav-pill">Demo</a>
+    <a href="#proximos" class="nav-pill">Próximos</a>
+  </div>
+  <div class="nav-meta">v1.0 · Maio 2026</div>
+</nav>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero" id="hero">
+  <svg class="hero-bg" viewBox="0 0 600 600">
+    <defs>
+      <radialGradient id="hg1">
+        <stop offset="0%" stop-color="#008BC9" stop-opacity="0.4"/>
+        <stop offset="100%" stop-color="#008BC9" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <circle cx="300" cy="300" r="280" fill="url(#hg1)"/>
+    <circle cx="300" cy="300" r="200" fill="none" stroke="#008BC9" stroke-width="0.5" opacity="0.3" stroke-dasharray="2 4"/>
+    <circle cx="300" cy="300" r="140" fill="none" stroke="#008BC9" stroke-width="0.5" opacity="0.2" stroke-dasharray="2 4"/>
+    <circle cx="300" cy="300" r="80" fill="none" stroke="#008BC9" stroke-width="0.5" opacity="0.15"/>
+    <circle cx="500" cy="300" r="3" fill="#008BC9" opacity="0.7">
+      <animateTransform attributeName="transform" type="rotate" from="0 300 300" to="360 300 300" dur="20s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="300" cy="160" r="2" fill="#73BFE8" opacity="0.5">
+      <animateTransform attributeName="transform" type="rotate" from="0 300 300" to="360 300 300" dur="14s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="380" cy="300" r="2" fill="#73BFE8" opacity="0.6">
+      <animateTransform attributeName="transform" type="rotate" from="0 300 300" to="-360 300 300" dur="9s" repeatCount="indefinite"/>
+    </circle>
+  </svg>
+
+  <div class="hero-eyebrow">
+    <span class="dot"></span>
+    DICOM · Sistemas de Inteligência · 02
+  </div>
+
+  <h1>O Cérebro lembra.<br><em>O Market vê.</em></h1>
+
+  <p class="hero-sub">
+    <strong>DICOM Market</strong> é o sistema de inteligência <em>externa</em> da DICOM. Cruza 14 milhões de linhas de dados públicos brasileiros com bases proprietárias FGV — e devolve uma leitura de cidade em minutos.
+  </p>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">7</div>
+      <div class="hero-stat-label">Tabelas conectadas</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">4</div>
+      <div class="hero-stat-label">Fontes públicas</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">645</div>
+      <div class="hero-stat-label">Municípios SP</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">~5min</div>
+      <div class="hero-stat-label">Por análise</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>↓</span> percorra o cérebro
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTEXTO — O PROBLEMA
+     ============================================================ -->
+<section class="problem" id="problema">
+  <div class="section-tag reveal">o ponto cego</div>
+  <h2 class="reveal reveal-d1">Os dados existem.<br><em>Mas falam idiomas diferentes.</em></h2>
+  <p class="lede reveal reveal-d2">
+    Cada base pública traz parte da resposta — nenhuma traz a resposta inteira. <strong>RAIS</strong> conta vínculos por subsetor IBGE. <strong>CNPJ</strong> usa CNAE 2.0. <strong>INEP</strong> usa CINE Brasil. <strong>IBGE Atlas</strong> usa código municipal. Cruzar à mão? <em>Já tentamos. A planilha trava antes da resposta.</em>
+  </p>
+
+  <div class="sources-flow">
+    <div class="source-card reveal reveal-d1">
+      <div class="src-name">RAIS</div>
+      <div class="src-full">Relação Anual de Informações Sociais · Min. Trabalho</div>
+      <div class="src-coding">codifica em<br><strong>subsetor IBGE 1–25</strong></div>
+    </div>
+    <div class="source-card reveal reveal-d2">
+      <div class="src-name">CNPJ</div>
+      <div class="src-full">Cadastro Nacional · Receita Federal</div>
+      <div class="src-coding">codifica em<br><strong>CNAE 2.0 (4–7 dígitos)</strong></div>
+    </div>
+    <div class="source-card reveal reveal-d2">
+      <div class="src-name">INEP</div>
+      <div class="src-full">Censo Escolar e Educação Superior</div>
+      <div class="src-coding">codifica em<br><strong>CINE Brasil</strong></div>
+    </div>
+    <div class="source-card reveal reveal-d3">
+      <div class="src-name">IBGE</div>
+      <div class="src-full">Atlas ADH e indicadores municipais</div>
+      <div class="src-coding">codifica em<br><strong>código municipal 7 dígitos</strong></div>
+    </div>
+  </div>
+
+  <div class="bridge-text reveal reveal-d3">
+    Tudo começa fazendo as fontes falarem a mesma chave: <span class="mono">id_municipio + ano</span>. É a partir disso que o atlas a seguir foi construído — e por que ele existe.
+  </div>
+</section>
+
+<!-- ============================================================
+     ATLAS — INTERATIVO
+     ============================================================ -->
+<section class="explorer" id="atlas">
+  <div class="section-tag reveal">o atlas de dados</div>
+  <h2 class="reveal reveal-d1">Star schema com <em>645 municípios</em> no centro</h2>
+  <p class="lede reveal reveal-d2">
+    Sete tabelas, uma chave universal, <span class="piada" data-piada="é o que diz pra IA: 'todo mundo se conhece nesta sala'">zero ambiguidade</span>. Clique em qualquer tabela para explorar seus campos, o que ela conta e o que ela aciona na FGV.
+  </p>
+
+  <div class="schema-stage" id="schemaStage">
+    <svg class="connections" id="connections" viewBox="0 0 920 620" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#008BC9" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="#008BC9" stop-opacity="0.15"/>
+        </linearGradient>
+      </defs>
+    </svg>
+
+    <div class="table-card center" data-table="dim_municipio" style="left:50%; top:50%; transform: translate(-50%,-50%);">
+      <div class="table-name">dim_municipio</div>
+      <div class="table-source">IBGE Atlas + RAIS</div>
+      <div class="table-rows">645</div>
+      <div class="table-rows-label">municípios SP</div>
+    </div>
+
+    <div class="table-card" data-table="fct_empregos" style="left:18%; top:14%; transform: translate(-50%,-50%);">
+      <div class="table-name">fct_empregos</div>
+      <div class="table-source">RAIS Vínculos</div>
+      <div class="table-rows">13,2 M</div>
+      <div class="table-rows-label">vínculos formais</div>
+    </div>
+
+    <div class="table-card" data-table="fct_estabs" style="left:82%; top:14%; transform: translate(-50%,-50%);">
+      <div class="table-name">fct_estabs</div>
+      <div class="table-source">RAIS Estab.</div>
+      <div class="table-rows">603k</div>
+      <div class="table-rows-label">estabelecimentos</div>
+    </div>
+
+    <div class="table-card" data-table="fct_empresas" style="left:91%; top:50%; transform: translate(-50%,-50%);">
+      <div class="table-name">fct_empresas</div>
+      <div class="table-source">CNPJ Receita</div>
+      <div class="table-rows">475k</div>
+      <div class="table-rows-label">empresas SP</div>
+    </div>
+
+    <div class="table-card" data-table="fct_merc_sup" style="left:82%; top:86%; transform: translate(-50%,-50%);">
+      <div class="table-name">fct_merc_sup</div>
+      <div class="table-source">INEP Superior</div>
+      <div class="table-rows">775k</div>
+      <div class="table-rows-label">concluintes superior</div>
+    </div>
+
+    <div class="table-card" data-table="fct_form_em" style="left:18%; top:86%; transform: translate(-50%,-50%);">
+      <div class="table-name">fct_form_em</div>
+      <div class="table-source">INEP Censo Escolar</div>
+      <div class="table-rows">~110k</div>
+      <div class="table-rows-label">formandos EM</div>
+    </div>
+
+    <div class="table-card" data-table="stg_qualidade_ed" style="left:9%; top:50%; transform: translate(-50%,-50%);">
+      <div class="table-name">stg_qualidade_ed</div>
+      <div class="table-source">INEP IDEB / INSE</div>
+      <div class="table-rows">~32k</div>
+      <div class="table-rows-label">escolas avaliadas</div>
+    </div>
+  </div>
+
+  <div class="click-hint">
+    <span class="blink">●</span> 🧠 clique em uma tabela para explorar
+  </div>
+
+  <div class="detail-panel" id="detailPanel">
+    <div class="detail-header">
+      <div>
+        <div class="detail-name" id="detailName">dim_municipio</div>
+        <div class="detail-tagline" id="detailTagline"></div>
+      </div>
+      <div class="detail-source" id="detailSource">IBGE Atlas + RAIS</div>
+    </div>
+    <div class="detail-tabs">
+      <button class="detail-tab active" data-tab="schema">Schema</button>
+      <button class="detail-tab" data-tab="potencial">Potencial</button>
+      <button class="detail-tab" data-tab="acionavel">Acionável FGV</button>
+    </div>
+    <div class="detail-body" id="detailBody"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SÍNTESE
+     ============================================================ -->
+<section class="synthesis" id="sintese">
+  <div class="section-tag reveal">a síntese</div>
+  <h2 class="reveal reveal-d1">Muitos dados.<br><em>Uma análise inteligente.</em></h2>
+  <p class="lede reveal reveal-d2">
+    O atlas inteiro entra como contexto em uma chamada à <strong>Anthropic Claude API</strong>. Em ~15 segundos, o modelo devolve um <em>veredito executivo estruturado em 6 seções</em> — com cursos, empresas-alvo e parcerias acadêmicas, tudo extraído dos dados, <span class="piada" data-piada="o LLM cita a fonte. se não tem nos dados, ele não inventa">sem invenção</span>.
+  </p>
+
+  <div class="flow-diagram reveal reveal-d2">
+    <div class="flow-stage">
+      <div class="flow-stage-tag">01 · entrada</div>
+      <div class="flow-stage-icon">▦</div>
+      <div class="flow-stage-title">Atlas consolidado</div>
+      <div class="flow-stage-meta">7 tabelas · 14M linhas</div>
+      <div class="tables-mini" style="margin-top: 12px;">
+        <span class="tm">dim_municipio</span>
+        <span class="tm">fct_empregos</span>
+        <span class="tm">fct_estabs</span>
+        <span class="tm">fct_empresas</span>
+        <span class="tm">fct_merc_sup</span>
+        <span class="tm">fct_form_em</span>
+        <span class="tm">qualidade_ed</span>
+      </div>
+    </div>
+
+    <div class="flow-arrow">
+      <svg viewBox="0 0 60 20" fill="none">
+        <line x1="0" y1="10" x2="50" y2="10" stroke="#008BC9" stroke-width="1" stroke-dasharray="3 3">
+          <animate attributeName="stroke-dashoffset" from="0" to="-12" dur="1.2s" repeatCount="indefinite"/>
+        </line>
+        <polyline points="45,5 55,10 45,15" stroke="#008BC9" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
+
+    <div class="flow-stage llm">
+      <div class="flow-stage-tag">02 · processamento</div>
+      <div class="flow-stage-icon">🧠</div>
+      <div class="flow-stage-title">Claude opus-4-7</div>
+      <div class="flow-stage-meta">~14k tokens · ~15s</div>
+      <div style="margin-top: 12px; font-size: 11px; color: var(--gray); font-family: 'DM Mono', monospace; line-height: 1.6;">
+        prompt em 3 camadas:<br>
+        <span style="color: var(--azul-celeste);">setor → pós</span><br>
+        <span style="color: var(--azul-celeste);">graduação → pós</span><br>
+        <span style="color: var(--azul-celeste);">gap de portfólio</span>
+      </div>
+    </div>
+
+    <div class="flow-arrow">
+      <svg viewBox="0 0 60 20" fill="none">
+        <line x1="0" y1="10" x2="50" y2="10" stroke="#008BC9" stroke-width="1" stroke-dasharray="3 3">
+          <animate attributeName="stroke-dashoffset" from="0" to="-12" dur="1.2s" repeatCount="indefinite"/>
+        </line>
+        <polyline points="45,5 55,10 45,15" stroke="#008BC9" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
+
+    <div class="flow-stage">
+      <div class="flow-stage-tag">03 · saída</div>
+      <div class="flow-stage-icon">▶</div>
+      <div class="flow-stage-title">Veredito executivo</div>
+      <div class="flow-stage-meta">6 seções · ~R$ 0,30</div>
+      <div style="margin-top: 12px; font-size: 11px; color: var(--gray); font-family: 'DM Mono', monospace; line-height: 1.6;">
+        prioridade<br>
+        cursos recomendados<br>
+        empresas-alvo<br>
+        parcerias acadêmicas
+      </div>
+    </div>
+  </div>
+
+  <div class="verdict-card reveal reveal-d3">
+    <div class="verdict-eyebrow">Saída literal · caso Campinas/SP</div>
+    <div class="verdict-priority">Prioridade: Alta</div>
+    <div class="verdict-body" id="verdictText"></div>
+    <div class="verdict-meta">
+      <span><strong>Modelo:</strong> claude-opus-4-7</span>
+      <span><strong>Tempo:</strong> ~15s</span>
+      <span><strong>Custo:</strong> R$ 0,30</span>
+      <span><strong>Auditabilidade:</strong> 100% rastreável ao schema</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CEREJA DO BOLO 🍒
+     ============================================================ -->
+<section class="cereja" id="cereja">
+  <div class="cherry-stage" id="cherryStage">
+    <div class="cherry-emoji">🍒</div>
+    <div class="cherry-shadow"></div>
+  </div>
+
+  <div class="cereja-intro">
+    <div class="section-tag reveal">a cerejinha do bolo</div>
+    <h2 class="reveal reveal-d1">Calma. <em>Tem mais.</em></h2>
+    <p class="lede reveal reveal-d2">
+      Os dados públicos do atlas dão o esqueleto da análise. Mas <span class="piada" data-piada="dado público todo mundo tem. usar é outra história.">dado público todo mundo tem</span>. Em cima disso, a DICOM Market acrescenta <strong>duas bases proprietárias FGV</strong> — a cereja que transforma "leitura de cidade" em <em>leitura de cidade-FGV</em>.
+    </p>
+  </div>
+
+  <div class="cherry-cards">
+    <div class="proprietary-card reveal reveal-d1">
+      <div class="card-icon">🎯</div>
+      <div class="card-tag">base proprietária · 01</div>
+      <div class="card-name">(i)Market</div>
+      <div class="card-tagline">A fofoca dos concorrentes, mensalmente atualizada.</div>
+      <div class="card-detail">
+        Inteligência competitiva mapeada por praça e por área. PUC, Insper, FDC, IBMEC, ESPM, Mackenzie, PUCRS Online — o que cada um lança, em qual cidade, com qual ticket, em qual formato. Atualização mensal, com curadoria do time DICOM.
+      </div>
+      <div class="card-stat">3.464 cursos catalogados · +50 instituições · cadência mensal</div>
+    </div>
+
+    <div class="proprietary-card reveal reveal-d2">
+      <div class="card-icon">📚</div>
+      <div class="card-tag">base proprietária · 02</div>
+      <div class="card-name">Portfólio FGV</div>
+      <div class="card-tagline">A nossa casa, em SQL.</div>
+      <div class="card-detail">
+        123 cursos FGV catalogados por área CINE, ticket, formato e modalidade. É o que permite o LLM saber exatamente o que a FGV oferece, o que ainda não oferece e onde tem fit imediato com a praça analisada.
+      </div>
+      <div class="card-stat">123 cursos FGV · classificação CINE Brasil · cobertura completa</div>
+    </div>
+  </div>
+
+  <div class="cereja-conclusion reveal reveal-d3">
+    <div class="row">
+      <div class="label">Sem cereja:</div>
+      <div class="value">"Boa praça pra MBA. Recomendamos abrir."</div>
+    </div>
+    <div class="row">
+      <div class="label highlight">Com cereja:</div>
+      <div class="value highlight">"Saúde + Finanças + Gestão Pública. Híbrido com âncora em Barão Geraldo. Itaú via Universidade Corporativa. Gap competitivo em Neuromarketing — ESPM e PUCRS já oferecem na praça."</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     DEMO CTA — CHEGA DE FALAR, BORA VER
+     ============================================================ -->
+<section class="demo-cta" id="demo">
+  <div class="demo-eyebrow">
+    <span class="live-dot"></span>
+    chega de slide · ao vivo
+  </div>
+  <h2 class="reveal">Bora ver na <em>prática?</em></h2>
+  <p class="demo-sub reveal reveal-d1">
+    O <strong>MVP do DICOM Market</strong> está rodando agora mesmo. <em>Vou abrir e a gente passeia por uma cidade juntos.</em>
+  </p>
+
+  <a href="#" class="demo-btn reveal reveal-d2" id="openDemoBtn" target="_blank" rel="noopener">
+    🧠 Abrir o DICOM Market
+    <span class="arrow">→</span>
+  </a>
+
+  <div class="demo-aside reveal reveal-d3">
+    Volto pra apresentação em alguns minutos com os próximos passos.
+  </div>
+</section>
+
+<!-- ============================================================
+     PRÓXIMOS PASSOS — DEPOIS DA DEMO
+     ============================================================ -->
+<section class="next-steps" id="proximos">
+  <div class="welcome-back reveal">de volta · próximos passos</div>
+
+  <div class="section-tag reveal">status atual</div>
+  <h2 class="reveal reveal-d1">O MVP <em>existe e funciona</em>.</h2>
+  <p class="lede reveal reveal-d2">
+    O que falta é uma decisão de infraestrutura — não de produto. Tudo o que precisamos para colocar na mão dos gestores <em>já está aprovado e em uso na FGV</em>.
+  </p>
+
+  <div class="status-block">
+    <div class="status-card reveal reveal-d1">
+      <div class="sc-tag">o que já está pronto</div>
+      <div class="sc-title">Ferramenta funcional, dados reais</div>
+      <div class="sc-body">
+        DICOM Market rodando localmente com <strong>INEP, RAIS, IBGE e Receita Federal</strong> para os 645 municípios de SP. 7 dimensões de atratividade, narrativa executiva via Claude API em ~15 segundos. <span class="piada" data-piada="essa parte é a parte chata: produto bom no notebook errado">Acabou no notebook errado</span> — só roda na minha máquina.
+      </div>
+    </div>
+    <div class="status-card limit reveal reveal-d2">
+      <div class="sc-tag">o que falta</div>
+      <div class="sc-title">Um endereço público para os gestores</div>
+      <div class="sc-body">
+        Para a equipe comercial usar via navegador, precisa de um <strong>deploy em nuvem</strong>. Sem isso, o produto fica preso em uma única pessoa — eu. <em>É exatamente o oposto do que queremos.</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-tag reveal" style="margin-top: 4rem;">arquitetura</div>
+  <h2 class="reveal reveal-d1">De <em>local</em> para <em>produção</em></h2>
+
+  <div class="arch-comparison reveal reveal-d2">
+    <div class="arch-col now">
+      <div class="arch-tag">hoje · MVP local</div>
+      <div class="arch-heading">Notebook da Gabi</div>
+      <div class="arch-stack">
+        <div class="arch-stack-row"><span class="layer">Interface</span><span class="tech">FastAPI local</span></div>
+        <div class="arch-stack-row"><span class="layer">Dados</span><span class="tech">DuckDB (arquivo)</span></div>
+        <div class="arch-stack-row"><span class="layer">IA</span><span class="tech">Claude API</span></div>
+        <div class="arch-stack-row"><span class="layer">Acesso</span><span class="tech">Só a Gabi</span></div>
+      </div>
+    </div>
+
+    <div class="arch-bridge">
+      <svg viewBox="0 0 80 80" fill="none">
+        <line x1="0" y1="40" x2="65" y2="40" stroke="#008BC9" stroke-width="1" stroke-dasharray="4 4">
+          <animate attributeName="stroke-dashoffset" from="0" to="-16" dur="1.4s" repeatCount="indefinite"/>
+        </line>
+        <polyline points="58,32 72,40 58,48" stroke="#008BC9" stroke-width="1.5" fill="none"/>
+      </svg>
+    </div>
+
+    <div class="arch-col future">
+      <div class="arch-tag">produção · proposto</div>
+      <div class="arch-heading">Google Cloud Run</div>
+      <div class="arch-stack">
+        <div class="arch-stack-row"><span class="layer">Interface</span><span class="tech">FastAPI containerizado</span></div>
+        <div class="arch-stack-row"><span class="layer">Dados</span><span class="tech">Cloud Storage (GCS)</span></div>
+        <div class="arch-stack-row"><span class="layer">IA</span><span class="tech">Claude API (mesma)</span></div>
+        <div class="arch-stack-row"><span class="layer">Acesso</span><span class="tech">URL pública controlada</span></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="lede reveal reveal-d3" style="margin-top: 1rem;">
+    A FGV já tem <strong>projeto GCP ativo com BigQuery</strong> — o mesmo onde os dados do TCC estão hospedados. Cloud Run roda <em>no mesmo ambiente, no mesmo contrato, na mesma conta</em>. Sem novo fornecedor.
+  </p>
+
+  <div class="section-tag reveal" style="margin-top: 4rem;">roadmap</div>
+  <h2 class="reveal reveal-d1">Quatro fases · <em>uma já entregue</em></h2>
+  <p class="lede reveal reveal-d2">
+    Cada fase amplia o alcance do produto. A infraestrutura proposta a seguir <em>cobre todas elas</em> — não é orçamento de MVP, é orçamento de operação.
+  </p>
+
+  <div class="roadmap-grid">
+    <div class="phase-card done reveal reveal-d1">
+      <div class="phase-status">✓</div>
+      <div class="phase-num">Fase 01</div>
+      <div class="phase-title">MVP funcional</div>
+      <div class="phase-when">concluído</div>
+      <div class="phase-body">SP completo · 645 municípios · 7 blocos · narrativa IA · DuckDB local · 14M linhas</div>
+    </div>
+    <div class="phase-card next reveal reveal-d2">
+      <div class="phase-status">→</div>
+      <div class="phase-num">Fase 02</div>
+      <div class="phase-title">Deploy GCP</div>
+      <div class="phase-when">2–3 semanas</div>
+      <div class="phase-body">URL pública · gestores acessam de qualquer navegador · acesso controlado por SSO FGV</div>
+    </div>
+    <div class="phase-card future reveal reveal-d3">
+      <div class="phase-num">Fase 03</div>
+      <div class="phase-title">Expansão nacional</div>
+      <div class="phase-when">a definir</div>
+      <div class="phase-body">MG, RJ, RS e demais estados · re-export do DuckDB · mesma plataforma, ~5.570 municípios</div>
+    </div>
+    <div class="phase-card future reveal reveal-d4">
+      <div class="phase-num">Fase 04</div>
+      <div class="phase-title">Produto Graduação</div>
+      <div class="phase-when">a definir</div>
+      <div class="phase-body">novos indicadores: IDEB, INSE, formandos EM · viabiliza decisões de captação para graduação</div>
+    </div>
+  </div>
+
+  <div class="section-tag reveal" style="margin-top: 4rem;">custos mensais</div>
+  <h2 class="reveal reveal-d1">O <em>orçamento</em> da operação completa</h2>
+  <p class="lede reveal reveal-d2">
+    Estes custos sustentam <strong>todas as quatro fases</strong> — operação atual, expansão nacional e produto graduação. <em>A arquitetura é a mesma. O que muda é o volume de dados, não o stack.</em>
+  </p>
+
+  <table class="cost-table reveal reveal-d2">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>O que é</th>
+        <th>Custo mensal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="item-name">Cloud Run</span><span class="already-tag">já contratado</span><span class="item-desc">servidor que roda o dashboard</span></td>
+        <td>infraestrutura de aplicação no GCP, ambiente já em uso pela DICOM</td>
+        <td>~R$ 10–30</td>
+      </tr>
+      <tr>
+        <td><span class="item-name">Cloud Storage</span><span class="already-tag">já contratado</span><span class="item-desc">banco de dados do atlas</span></td>
+        <td>arquivo DuckDB hospedado em GCS · ~3 GB hoje, ~15 GB com expansão nacional</td>
+        <td>~R$ 3–15</td>
+      </tr>
+      <tr>
+        <td><span class="item-name">Claude API (Anthropic)</span><span class="item-desc">narrativa IA por análise gerada</span></td>
+        <td>pay-as-you-go · ~R$ 0,30 por análise · estimativa de 50 análises/mês em uso interno</td>
+        <td>~R$ 15</td>
+      </tr>
+      <tr>
+        <td><span class="item-name">Claude Code Max</span><span class="already-tag">institucionalizar</span><span class="item-desc">desenvolvimento e manutenção contínua</span></td>
+        <td>plano profissional usado pela equipe técnica para evolução, debug e novas fases · formalizar como custo institucional</td>
+        <td>~R$ 500</td>
+      </tr>
+      <tr>
+        <td><span class="item-name">Domínio (opcional)</span><span class="item-desc">ex: inteligencia.fgv.br</span></td>
+        <td>endereço institucional dedicado</td>
+        <td>~R$ 50/ano</td>
+      </tr>
+      <tr class="total-row">
+        <td colspan="2">Total mensal · operação completa cobrindo todas as fases</td>
+        <td>&lt; R$ 600/mês</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="cost-note reveal reveal-d3">
+    O grosso do custo já <strong>existe na FGV</strong> — Cloud Run e Storage rodam no projeto GCP ativo. <span class="piada" data-piada="o pulo do gato: o que custa caro no mercado, a FGV já paga.">A IA é o único pay-as-you-go</span> e escala com o uso real, não com a capacidade instalada.
+  </div>
+
+  <div class="decisions-block reveal">
+    <div class="dec-eyebrow">o pedido ao comitê</div>
+    <h3>Quatro decisões para destravar a Fase 02</h3>
+    <ul class="decisions-list">
+      <li>
+        <span class="dec-num">01</span>
+        <div class="dec-content">
+          <div class="dec-q">Aprovar hospedagem no GCP</div>
+          <div class="dec-detail"><span class="ack">já temos</span>Cloud Run no projeto FGV existente. Sem novo fornecedor, sem novo contrato — mesma conta do BigQuery que a DICOM usa hoje.</div>
+        </div>
+      </li>
+      <li>
+        <span class="dec-num">02</span>
+        <div class="dec-content">
+          <div class="dec-q">Formalizar contratos Anthropic</div>
+          <div class="dec-detail"><span class="ack">já em uso</span>Claude API (pay-as-you-go) e Claude Code Max — ambos já em uso pela equipe técnica. Decisão é de institucionalização, não de adoção.</div>
+        </div>
+      </li>
+      <li>
+        <span class="dec-num">03</span>
+        <div class="dec-content">
+          <div class="dec-q">Definir política de acesso</div>
+          <div class="dec-detail">Quem usa? Quantos gestores? SSO via Google Workspace FGV ou login dedicado? Esta é a decisão que define o escopo da Fase 02.</div>
+        </div>
+      </li>
+      <li>
+        <span class="dec-num">04</span>
+        <div class="dec-content">
+          <div class="dec-q">Priorizar a Fase 03</div>
+          <div class="dec-detail">Quais estados expandir primeiro? Sugestão técnica: começar por MG e RJ (maior volume de dados estabilizados e demanda comercial conhecida).</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================
+     CLOSING
+     ============================================================ -->
+<div class="closing">
+  <div class="small">a pergunta de fechamento</div>
+  <div class="big"><em>Por onde começamos?</em><br><strong>Liguem o DICOM Market na rede.</strong></div>
+  <div class="joke">— a Fase 02 cabe em duas semanas. a Fase 01 cabe em um clique. 🧠</div>
+</div>
+
+<footer>
+  <div class="credit">Gabriella do Nascimento Pinheiro · Inteligência de Dados e Pesquisa de Mercado · DICOM FGV</div>
+  <div class="date">DICOM Market · v1.0 · Maio 2026</div>
+  <div class="family">sistemas dicom · cérebro 🧠 · market 🌎</div>
+</footer>
+
+<script>
+// ============================================================
+// CURSOR — CÉREBRO 🧠
+// ============================================================
+const brain = document.getElementById('cursorBrain');
+const trail = document.getElementById('cursorTrail');
+let mx = -50, my = -50, rx = -50, ry = -50;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  brain.style.left = mx + 'px';
+  brain.style.top = my + 'px';
+});
+
+function tickCursor() {
+  rx += (mx - rx) * 0.18;
+  ry += (my - ry) * 0.18;
+  trail.style.left = rx + 'px';
+  trail.style.top = ry + 'px';
+  requestAnimationFrame(tickCursor);
+}
+tickCursor();
+
+document.querySelectorAll('a, button, .table-card, .source-card, .nav-pill, .detail-tab, .proprietary-card, .piada').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    brain.classList.add('active');
+    trail.classList.add('active');
+  });
+  el.addEventListener('mouseleave', () => {
+    brain.classList.remove('active');
+    trail.classList.remove('active');
+  });
+});
+
+// ============================================================
+// PROGRESS BAR
+// ============================================================
+const progressBar = document.getElementById('progressBar');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight);
+  progressBar.style.width = (scrolled * 100) + '%';
+});
+
+// ============================================================
+// REVEAL ON SCROLL
+// ============================================================
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ============================================================
+// CHERRY ARRIVAL 🍒
+// ============================================================
+const cerejaSection = document.getElementById('cereja');
+const cherryObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      cerejaSection.classList.add('cherry-active');
+      cherryObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.25 });
+cherryObserver.observe(cerejaSection);
+
+// ============================================================
+// DADOS DAS TABELAS
+// ============================================================
+const tables = {
+  dim_municipio: {
+    name: 'dim_municipio',
+    tagline: 'o endereço fixo de tudo no atlas',
+    source: 'IBGE Atlas + RAIS',
+    rows: '645 municípios SP',
+    fields: [
+      { name: 'id_municipio', type: 'string', flag: 'PK' },
+      { name: 'nome_municipio', type: 'string' },
+      { name: 'sigla_uf', type: 'string' },
+      { name: 'populacao_total', type: 'integer' },
+      { name: 'idhm', type: 'numeric' },
+      { name: 'renda_per_capita', type: 'numeric' },
+      { name: 'gini', type: 'numeric' },
+      { name: 'escolaridade_25_mais', type: 'numeric' }
+    ],
+    potential: 'Define <span class="accent">quem mora onde, com que perfil socioeconômico</span>. É a chave universal — toda outra tabela do atlas se conecta aqui via <span class="accent">id_municipio</span>. É a primeira leitura para entender se uma praça tem maturidade educacional e capacidade de pagamento antes mesmo de olhar mercado de trabalho.',
+    actions: [
+      'Pré-filtro de praças: corta cidades sem maturidade educacional antes de qualquer análise mais profunda.',
+      'Benchmark estadual ponderado por população — comparação justa entre municípios de tamanhos diferentes.',
+      'Indicador prévio de capacidade de pagamento via renda per capita deflacionada para o ano corrente (BCB série 433).'
+    ]
+  },
+
+  fct_empregos: {
+    name: 'fct_empregos',
+    tagline: '13 milhões de brasileiros, com salário e setor',
+    source: 'RAIS Vínculos · Min. Trabalho',
+    rows: '13.216.062 vínculos formais SP',
+    fields: [
+      { name: 'id_municipio', type: 'string', flag: 'FK' },
+      { name: 'ano', type: 'integer', flag: 'FK' },
+      { name: 'descricao_subsetor', type: 'string' },
+      { name: 'cbo_2002_grupo', type: 'string' },
+      { name: 'salario_medio_reais', type: 'numeric' },
+      { name: 'qtd_vinculos', type: 'integer' },
+      { name: 'qtd_elegiveis', type: 'integer' }
+    ],
+    potential: 'Quem trabalha onde, em que setor, ganhando quanto. Cruzamento de <span class="accent">subsetor + faixa salarial</span> revela mercado pagante por vertical e por município. É a única fonte que permite calcular <span class="accent">% elegíveis ao ticket</span> com precisão setorial.',
+    actions: [
+      'Dimensionamento de elegíveis ao ticket — base direta para definir mensalidade da oferta na praça.',
+      'Identificação de setores com maior fit para o portfólio (ex: Adm. Pública: 88,6% elegíveis em Campinas).',
+      'Insumo principal para a recomendação de cursos por setor dominante feita pelo LLM no Bloco 7.'
+    ]
+  },
+
+  fct_estabs: {
+    name: 'fct_estabs',
+    tagline: 'onde o empresário acordou ano passado',
+    source: 'RAIS Estabelecimentos',
+    rows: '603.000 estabelecimentos SP',
+    fields: [
+      { name: 'id_municipio', type: 'string', flag: 'FK' },
+      { name: 'ano', type: 'integer', flag: 'FK' },
+      { name: 'descricao_subsetor', type: 'string' },
+      { name: 'qtd_estabs', type: 'integer' },
+      { name: 'porte_estabelecimento', type: 'string' }
+    ],
+    potential: 'Densidade empresarial por setor e porte. Cruzada com <span class="accent">fct_empregos</span> revela a concentração real do tecido econômico. Setores com muitos vínculos mas poucos estabelecimentos sinalizam grandes empregadores; muitos estabelecimentos com poucos vínculos sinalizam mercado pulverizado.',
+    actions: [
+      'Identifica setores com massa crítica para programas in-company versus presenciais abertos.',
+      'Apoio na decisão entre formato presencial (alta densidade) ou híbrido (média ou baixa).',
+      'Insumo para o mapa de empresas-alvo do Bloco 4 (densidade aponta onde concentrar prospecção).'
+    ]
+  },
+
+  fct_empresas: {
+    name: 'fct_empresas',
+    tagline: 'todo CNPJ médio e grande de SP, com telefone',
+    source: 'CNPJ Receita Federal',
+    rows: '475.000 empresas SP médias e grandes',
+    fields: [
+      { name: 'cnpj', type: 'string', flag: 'PK' },
+      { name: 'razao_social', type: 'string' },
+      { name: 'id_municipio', type: 'string', flag: 'FK' },
+      { name: 'cnae_classe', type: 'string' },
+      { name: 'capital_social', type: 'numeric' },
+      { name: 'porte_receita', type: 'string' },
+      { name: 'telefone', type: 'string' },
+      { name: 'email', type: 'string' },
+      { name: 'cep', type: 'string' }
+    ],
+    potential: 'A única tabela com <span class="accent">dado individual e nominal</span> — empresa por empresa, com canal de contato. Filtrada por capital social mínimo, separa SPEs e holdings vazias de operações reais. É o que permite passar de "setor" para "empresa-alvo".',
+    actions: [
+      'Lista de leads B2B pronta para o time comercial — CNPJ + razão social + telefone + email.',
+      'Distância de carro real até a unidade FGV mais próxima via geocoding (BrasilAPI + OSRM).',
+      'Modelo de abordagem por empresa via Bloco 7 — Claude propõe ângulo comercial pelo nome real.'
+    ]
+  },
+
+  fct_merc_sup: {
+    name: 'fct_merc_sup',
+    tagline: 'nosso aluno de pós em ~2 anos',
+    source: 'INEP Censo Educação Superior',
+    rows: '775.000 concluintes SP',
+    fields: [
+      { name: 'id_municipio', type: 'string', flag: 'FK' },
+      { name: 'ano', type: 'integer', flag: 'FK' },
+      { name: 'area_detalhada_cine', type: 'string' },
+      { name: 'qtd_concluintes', type: 'integer' },
+      { name: 'nome_ies', type: 'string' },
+      { name: 'modalidade_ensino', type: 'string' }
+    ],
+    potential: 'Quem se forma onde, em que área, em qual instituição. Antecipa demanda de pós em horizonte de <span class="accent">2 a 3 anos</span> pós-formatura. É a fonte que permite identificar IES locais para parcerias acadêmicas e tendências de área para planejamento de portfólio.',
+    actions: [
+      'Vetor primário de captação de pós — ex: 3.000+ formandos/ano em saúde em Campinas indicam fit para Gestão de Saúde.',
+      'Identificação de IES locais para parcerias acadêmicas (Bloco 7 sugere convênios automaticamente).',
+      'Detecção de áreas em crescimento como insumo para roadmap de novos produtos.'
+    ]
+  },
+
+  fct_form_em: {
+    name: 'fct_form_em',
+    tagline: 'nosso aluno de pós em ~6 anos',
+    source: 'INEP Censo Escolar · Ensino Médio',
+    rows: '~110.000 cohortes municipais SP',
+    fields: [
+      { name: 'id_municipio', type: 'string', flag: 'FK' },
+      { name: 'ano', type: 'integer', flag: 'FK' },
+      { name: 'qtd_formandos_em', type: 'integer' },
+      { name: 'dependencia_administrativa', type: 'string' }
+    ],
+    potential: 'Pipeline de jovens prestes a entrar no ensino superior. Indicador antecipado da próxima onda de concluintes em <span class="accent">4 a 5 anos</span>. Combinado com fct_merc_sup, dá visibilidade de longo prazo para a praça.',
+    actions: [
+      'Previsão de pipeline universitário em horizonte de 4 a 5 anos para a praça candidata.',
+      'Mapeamento de cidades com fluxo previsível de demanda futura por graduação e, depois, pós.',
+      'Apoio à estratégia de longo prazo (graduação + pós) em praças de menor maturidade atual.'
+    ]
+  },
+
+  stg_qualidade_ed: {
+    name: 'stg_qualidade_ed',
+    tagline: 'a qualidade do que está vindo',
+    source: 'INEP IDEB · INSE',
+    rows: '~32.000 escolas avaliadas',
+    fields: [
+      { name: 'id_municipio', type: 'string', flag: 'FK' },
+      { name: 'ano', type: 'integer', flag: 'FK' },
+      { name: 'inse_classificacao', type: 'string' },
+      { name: 'ideb_anos_finais', type: 'numeric' },
+      { name: 'idhm_educacao', type: 'numeric' }
+    ],
+    potential: 'Qualidade da educação básica local. Funciona como <span class="accent">predictor do nível médio</span> dos profissionais que entrarão no mercado nos próximos 10 a 15 anos — sinal estrutural de maturidade da praça.',
+    actions: [
+      'Sinaliza maturidade educacional como indicador de demanda madura por pós-graduação.',
+      'Insumo para a dimensão D3 (Pipeline Acadêmico) do score de atratividade do Bloco 6.',
+      'Diferenciador entre praças com perfil socioeconômico parecido na hora de priorizar.'
+    ]
+  }
+};
+
+// ============================================================
+// CONEXÕES SVG
+// ============================================================
+function drawConnections() {
+  const svg = document.getElementById('connections');
+  const pct = (xp, yp) => ({ x: xp * 920, y: yp * 620 });
+
+  const center = pct(0.50, 0.50);
+  const positions = {
+    fct_empregos:    pct(0.18, 0.14),
+    fct_estabs:      pct(0.82, 0.14),
+    fct_empresas:    pct(0.91, 0.50),
+    fct_merc_sup:    pct(0.82, 0.86),
+    fct_form_em:     pct(0.18, 0.86),
+    stg_qualidade_ed: pct(0.09, 0.50),
+  };
+
+  while (svg.children.length > 1) svg.removeChild(svg.lastChild);
+
+  Object.entries(positions).forEach(([name, p], i) => {
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', center.x);
+    line.setAttribute('y1', center.y);
+    line.setAttribute('x2', p.x);
+    line.setAttribute('y2', p.y);
+    line.setAttribute('stroke', '#008BC9');
+    line.setAttribute('stroke-width', '0.6');
+    line.setAttribute('opacity', '0.35');
+    line.setAttribute('stroke-dasharray', '3 4');
+    line.setAttribute('data-target', name);
+    line.classList.add('conn-line');
+
+    const anim = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+    anim.setAttribute('attributeName', 'stroke-dashoffset');
+    anim.setAttribute('from', '0');
+    anim.setAttribute('to', '-14');
+    anim.setAttribute('dur', (1.8 + i * 0.2) + 's');
+    anim.setAttribute('repeatCount', 'indefinite');
+    line.appendChild(anim);
+
+    svg.appendChild(line);
+  });
+
+  const cross = [
+    ['fct_empregos', 'fct_estabs'],
+    ['fct_empregos', 'fct_empresas'],
+    ['fct_merc_sup', 'fct_form_em'],
+    ['stg_qualidade_ed', 'fct_form_em'],
+  ];
+  cross.forEach(([a, b]) => {
+    const pa = positions[a], pb = positions[b];
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', pa.x);
+    line.setAttribute('y1', pa.y);
+    line.setAttribute('x2', pb.x);
+    line.setAttribute('y2', pb.y);
+    line.setAttribute('stroke', '#008BC9');
+    line.setAttribute('stroke-width', '0.4');
+    line.setAttribute('opacity', '0.12');
+    line.setAttribute('stroke-dasharray', '1 5');
+    svg.appendChild(line);
+  });
+}
+
+drawConnections();
+window.addEventListener('resize', drawConnections);
+
+// ============================================================
+// INTERAÇÃO DAS TABELAS
+// ============================================================
+let currentTable = 'dim_municipio';
+let currentTab = 'schema';
+
+function renderDetail() {
+  const t = tables[currentTable];
+  if (!t) return;
+
+  document.getElementById('detailName').textContent = t.name;
+  document.getElementById('detailTagline').textContent = '— ' + t.tagline;
+  document.getElementById('detailSource').textContent = t.source + ' · ' + t.rows;
+
+  const body = document.getElementById('detailBody');
+
+  if (currentTab === 'schema') {
+    body.innerHTML = `
+      <table class="schema-table">
+        <thead>
+          <tr>
+            <th>Campo</th>
+            <th>Tipo</th>
+            <th>Chave</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${t.fields.map(f => `
+            <tr>
+              <td><strong>${f.name}</strong></td>
+              <td class="col-type">${f.type}</td>
+              <td>${f.flag ? `<span class="col-flag">${f.flag}</span>` : ''}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  } else if (currentTab === 'potencial') {
+    body.innerHTML = `<div class="potential-content">${t.potential}</div>`;
+  } else if (currentTab === 'acionavel') {
+    body.innerHTML = `
+      <ul class="actionable-list">
+        ${t.actions.map((a, i) => `
+          <li>
+            <span class="actionable-num">${String(i + 1).padStart(2, '0')}</span>
+            <span>${a}</span>
+          </li>
+        `).join('')}
+      </ul>
+    `;
+  }
+
+  // Re-bind brain cursor for new actionable items
+  document.querySelectorAll('.actionable-list li').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      brain.classList.add('active');
+      trail.classList.add('active');
+    });
+    el.addEventListener('mouseleave', () => {
+      brain.classList.remove('active');
+      trail.classList.remove('active');
+    });
+  });
+}
+
+document.querySelectorAll('.table-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const tableName = card.dataset.table;
+    if (!tableName) return;
+
+    currentTable = tableName;
+
+    document.querySelectorAll('.table-card').forEach(c => {
+      c.classList.remove('selected', 'dimmed');
+      if (c === card) c.classList.add('selected');
+      else c.classList.add('dimmed');
+    });
+
+    document.querySelectorAll('.conn-line').forEach(l => {
+      if (l.getAttribute('data-target') === tableName) {
+        l.setAttribute('opacity', '0.85');
+        l.setAttribute('stroke-width', '1.2');
+      } else {
+        l.setAttribute('opacity', '0.15');
+        l.setAttribute('stroke-width', '0.4');
+      }
+    });
+
+    renderDetail();
+
+    setTimeout(() => {
+      document.getElementById('detailPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 200);
+  });
+});
+
+document.querySelectorAll('.detail-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.detail-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentTab = tab.dataset.tab;
+    renderDetail();
+  });
+});
+
+document.querySelector('.table-card.center').classList.add('selected');
+renderDetail();
+
+// ============================================================
+// DEMO BUTTON — abre o MVP do DICOM Market
+// ============================================================
+// EDITE AQUI a URL do MVP quando estiver no GCP.
+// Por enquanto, na hora da apresentação:
+//  - se MVP_URL estiver vazio, o botão abre um prompt pedindo a URL
+//  - se preenchido, abre direto em nova aba
+const MVP_URL = ""; // ex: "http://localhost:8000" ou "https://dicom-market.fgv.br"
+
+document.getElementById('openDemoBtn').addEventListener('click', (e) => {
+  e.preventDefault();
+  const url = MVP_URL || prompt('URL do MVP DICOM Market (ex: http://localhost:8000):', 'http://localhost:8000');
+  if (url) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+});
+
+// ============================================================
+// VERDICT TYPEWRITER
+// ============================================================
+const verdictText = `Campinas combina <strong>(i)</strong> base de 180 mil profissionais elegíveis com salário médio de R$ 9.512 — o ticket de R$ 1.200/mês representa apenas 12,6% da renda; <strong>(ii)</strong> pipeline acadêmico de 16.867 concluintes/ano com forte crescimento em saúde; <strong>(iii)</strong> presença ancorada de Itaú e Bradesco viabilizando estratégia B2B de turmas fechadas. <strong>Recomendação:</strong> entrada com portfólio enxuto e curado (Saúde + Finanças + Gestão Pública + Transformação Digital), modelo híbrido com âncora presencial em Barão Geraldo.`;
+
+let typed = false;
+const verdictEl = document.getElementById('verdictText');
+
+const verdictObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !typed) {
+      typed = true;
+      typeText(verdictEl, verdictText, 12);
+    }
+  });
+}, { threshold: 0.3 });
+
+verdictObserver.observe(document.querySelector('.verdict-card'));
+
+function typeText(el, html, speed) {
+  el.innerHTML = '';
+  let i = 0, buf = '', inTag = false;
+  function step() {
+    if (i >= html.length) return;
+    const ch = html[i];
+    if (ch === '<') inTag = true;
+    buf += ch;
+    if (ch === '>') inTag = false;
+    i++;
+    el.innerHTML = buf + (inTag ? '' : '<span style="opacity:.4">▮</span>');
+    if (inTag || ch === '<') step();
+    else setTimeout(step, speed);
+  }
+  step();
+}
+</script>
+</body>
+</html>
