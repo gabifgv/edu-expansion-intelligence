@@ -71,7 +71,18 @@
       "Bash(dir \"C:\\\\edu-expansion-intelligence\\\\foco\")",
       "Bash(dir \"C:\\\\edu-expansion-intelligence\")",
       "Bash(where pdftotext.exe)",
-      "Bash(pdftotext -layout Relatorio_FGV_Campinas_2023.pdf -)"
+      "Bash(pdftotext -layout Relatorio_FGV_Campinas_2023.pdf -)",
+      "Bash(awk NR==1{print substr\\($0,1,500\\)} *)",
+      "Bash(awk 'NR==2' \"C:/edu-expansion-intelligence/data/prompt_b7.json\")",
+      "Bash(awk 'NR>=3 && NR<=25' \"C:/edu-expansion-intelligence/data/prompt_b7.json\")",
+      "Bash(awk 'NR==3' \"C:/edu-expansion-intelligence/data/prompt_b7.json\")",
+      "Bash(.venv/Scripts/python.exe -c \"import json; d=json.load\\(open\\('data/prompt_b7.json',encoding='utf-8'\\)\\); print\\('keys:', list\\(d.keys\\(\\)\\)\\); print\\('placeholders ok:', '{nome_municipio}' in d['user_template'], '{produto}' in d['user_template'], '{dados_b1}' in d['user_template']\\); print\\('proibido preco:', 'ticket realista' not in d['user_template'] and 'mensalidade de R$' not in d['user_template']\\); print\\('SO WHAT presente:', 'SO WHAT' in d['user_template']\\); print\\('primeiras 200 do system:', d['system'][:200]\\)\")",
+      "Bash(.venv/Scripts/python.exe dashboard/_patch_system.py)",
+      "Bash(.venv/Scripts/python.exe -c \"import json,sys; sys.stdout.reconfigure\\(encoding='utf-8'\\); d=json.load\\(open\\('data/prompt_b7.json',encoding='utf-8'\\)\\); print\\(d['system'][:300]\\)\")",
+      "Bash(netstat -ano)",
+      "Bash(findstr \":8001\")",
+      "Bash(\"../.venv/Scripts/python.exe\" -m uvicorn app:app --host 127.0.0.1 --port 8001)",
+      "Bash(curl -sf http://127.0.0.1:8001/api/ufs)"
     ]
   }
 }

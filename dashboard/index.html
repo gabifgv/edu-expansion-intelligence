@@ -1580,30 +1580,40 @@ function renderMarkdownInline(text) {
 }
 function renderMarkdownBlock(text) {
   return text.split(/\n\s*\n/).map(p => {
-    let html = renderMarkdownInline(p.trim());
+    const trimmed = p.trim();
+    if (!trimmed) return '';
+    let html = renderMarkdownInline(trimmed);
     if (/^\s*-\s+/m.test(html)) {
       const items = html.split(/\n/).map(l => l.replace(/^\s*-\s+/, '').trim()).filter(Boolean);
-      return '<ul style="margin:8px 0 8px 18px">' + items.map(i => `<li>${i}</li>`).join('') + '</ul>';
+      return '<ul class="narr-list">' + items.map(i => `<li>${i}</li>`).join('') + '</ul>';
     }
     html = html.replace(/\n/g, '<br>');
-    return `<p>${html}</p>`;
-  }).join('');
+    const isAcao = /(?:^|>)\s*(?:<strong>)?\s*→\s*(?:Ação|Decisão|Acao|Decisao)/i.test(html);
+    return `<p${isAcao ? ' class="narr-acao"' : ''}>${html}</p>`;
+  }).filter(Boolean).join('');
 }
 function renderNarrativa(texto) {
-  const partes = texto.split(/\*\*(\d+\.\s+[^\*]+)\*\*/);
+  // Normaliza variantes de cabeçalho para o formato "**N. Título**" esperado
+  let t = texto.trim();
+  t = t.replace(/^\s*#{1,4}\s+(\d+\.\s+.+?)\s*$/gm, '**$1**');
+  t = t.replace(/^\s*(\d+)\.\s+\*\*\s*([^\n*]+?)\s*\*\*\s*$/gm, '**$1. $2**');
+  t = t.replace(/\*\*(\d+\.\s+[^\n*]+?):\*\*/g, '**$1**');
+
+  const partes = t.split(/\*\*(\d+\.\s+[^\n*]+?)\*\*/);
   const area = document.getElementById('narr-area');
   let html = ''; let idx = 0;
-  for (let i = 1; i < partes.length - 1; i += 2) {
+  for (let i = 1; i < partes.length; i += 2) {
     idx++;
     const titulo = partes[i].trim();
-    const corpoRaw = partes[i + 1].trim();
+    const corpoRaw = (partes[i + 1] || '').trim();
     const corpo = renderMarkdownBlock(corpoRaw);
-    html += `<div class="narr-section"><div class="narr-card c${idx}">
+    const cls = idx <= 6 ? `c${idx}` : 'c6';
+    html += `<div class="narr-section"><div class="narr-card ${cls}">
       <div class="narr-titulo">${titulo}</div>
       <div class="narr-corpo">${corpo}</div>
     </div></div>`;
   }
-  if (!html) html = `<div class="narr-card c1"><div class="narr-corpo">${renderMarkdownBlock(texto)}</div></div>`;
+  if (!html) html = `<div class="narr-section"><div class="narr-card c1"><div class="narr-corpo">${renderMarkdownBlock(t)}</div></div></div>`;
   area.innerHTML = html;
 }
 function copiarNarrativa() {
