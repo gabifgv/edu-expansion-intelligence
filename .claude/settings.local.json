@@ -67,7 +67,11 @@
       "PowerShell($h = Invoke-WebRequest -Uri \"http://127.0.0.1:8001/dev/comparativo\" -UseBasicParsing -ErrorAction Stop; Write-Host \"comparativo:\" $h.StatusCode \"size:\" $h.RawContentLength; $css = Invoke-WebRequest -Uri \"http://127.0.0.1:8001/static/dev/styles.css\" -UseBasicParsing -ErrorAction Stop; Write-Host \"styles.css:\" $css.StatusCode \"size:\" $css.RawContentLength; $dev = Invoke-WebRequest -Uri \"http://127.0.0.1:8001/dev\" -UseBasicParsing -ErrorAction Stop; Write-Host \"dev \\(visão\\):\" $dev.StatusCode \"size:\" $dev.RawContentLength)",
       "PowerShell($h = Invoke-WebRequest -Uri \"http://127.0.0.1:8001/dev/comparativo\" -UseBasicParsing -ErrorAction Stop; Write-Host \"comparativo:\" $h.StatusCode \"size:\" $h.RawContentLength; $css = Invoke-WebRequest -Uri \"http://127.0.0.1:8001/static/dev/styles.css\" -UseBasicParsing -ErrorAction Stop; Write-Host \"styles.css:\" $css.StatusCode \"size:\" $css.RawContentLength)",
       "PowerShell($h = Invoke-WebRequest -Uri \"http://127.0.0.1:8001/dev/comparativo\" -UseBasicParsing -ErrorAction Stop; Write-Host \"comparativo:\" $h.StatusCode \"size:\" $h.RawContentLength)",
-      "Bash(git check-ignore *)"
+      "Bash(git check-ignore *)",
+      "Bash(dir \"C:\\\\edu-expansion-intelligence\\\\foco\")",
+      "Bash(dir \"C:\\\\edu-expansion-intelligence\")",
+      "Bash(where pdftotext.exe)",
+      "Bash(pdftotext -layout Relatorio_FGV_Campinas_2023.pdf -)"
     ]
   }
 }
