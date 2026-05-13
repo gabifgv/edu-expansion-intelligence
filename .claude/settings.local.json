@@ -82,7 +82,11 @@
       "Bash(netstat -ano)",
       "Bash(findstr \":8001\")",
       "Bash(\"../.venv/Scripts/python.exe\" -m uvicorn app:app --host 127.0.0.1 --port 8001)",
-      "Bash(curl -sf http://127.0.0.1:8001/api/ufs)"
+      "Bash(curl -sf http://127.0.0.1:8001/api/ufs)",
+      "PowerShell(python -c \"import json; nb=json.load\\(open\\('C:/edu-expansion-intelligence/notebooks/analise_campinas_adhoc.ipynb', encoding='utf-8'\\)\\); print\\(f'OK - {len\\(nb[\\\\\"cells\\\\\"]\\)} celulas'\\)\")",
+      "PowerShell(Remove-Item *)",
+      "PowerShell(python C:\\\\edu-expansion-intelligence\\\\notebooks\\\\_analise_elegiveis.py 2>&1)",
+      "PowerShell($env:PYTHONIOENCODING='utf-8'; python C:\\\\edu-expansion-intelligence\\\\notebooks\\\\_analise_elegiveis.py 2>&1)"
     ]
   }
 }
