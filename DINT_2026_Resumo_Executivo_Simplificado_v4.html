@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DINT 2026 — Resumo de Mídia | FGV</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --navy:#003A79; --blue:#008BC9; --ink:#1A2733; --muted:#5B6B7A;
+  --mist:#EEF3F8; --paper:#FFFFFF; --green:#1E7A46; --green-soft:#E5F3EB;
+  --amber:#B07800; --amber-soft:#FCF3DF; --line:#D8E2EC; --li:#6FC6EE;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--paper);line-height:1.5;}
+
+.hd{background:var(--navy);color:#fff;padding:52px 6% 84px;position:relative;overflow:hidden;}
+.hd::before{content:'';position:absolute;right:-140px;top:-120px;width:420px;height:420px;border:1.5px solid rgba(255,255,255,.16);transform:rotate(45deg);}
+.hd::after{content:'';position:absolute;right:-40px;top:40px;width:420px;height:420px;border:1.5px solid rgba(0,139,201,.45);transform:rotate(45deg);}
+.eyebrow{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#8FC9E8;margin-bottom:14px;}
+.hd h1{font-size:clamp(28px,4.4vw,44px);font-weight:900;letter-spacing:-.5px;line-height:1.1;max-width:820px;}
+.hd h1 em{font-style:normal;color:#6FC6EE;}
+.hd .meta{margin-top:16px;font-size:14px;opacity:.85;}
+.cut{height:46px;background:var(--navy);clip-path:polygon(0 0,100% 0,100% 0,0 100%);margin-top:-1px;}
+
+.sec{max-width:1180px;margin:46px auto 0;padding:0 6%;}
+.sec h2{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--blue);font-weight:bold;margin-bottom:6px;}
+.sec .lead{font-size:clamp(19px,2.4vw,25px);font-weight:900;letter-spacing:-.3px;max-width:820px;margin-bottom:20px;}
+
+.chartbox{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 20px 12px;margin-top:18px;}
+.chartbox canvas{max-height:330px;}
+.note{font-size:12.5px;color:var(--muted);margin-top:12px;max-width:900px;}
+
+/* antes | depois */
+.split{max-width:1180px;margin:6px auto 0;padding:0 6%;}
+.split-grid{display:grid;grid-template-columns:1fr 1fr;border-radius:12px;overflow:hidden;box-shadow:0 2px 14px rgba(0,58,121,.10);}
+.pane{padding:30px 30px 26px;position:relative;}
+.pane.before{background:repeating-linear-gradient(135deg,var(--mist),var(--mist) 14px,#E4ECF4 14px,#E4ECF4 15px);}
+.pane.after{background:var(--navy);color:#fff;}
+.pane .tag{display:inline-block;font-size:11px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border-radius:3px;margin-bottom:14px;}
+.before .tag{background:#fff;color:var(--muted);border:1px solid var(--line);}
+.after .tag{background:var(--blue);color:#fff;}
+.pane h3{font-size:19px;font-weight:900;margin-bottom:12px;letter-spacing:-.2px;}
+.pane ul{list-style:none;font-size:13.5px;}
+.pane li{padding:7px 0 7px 18px;position:relative;border-bottom:1px solid rgba(0,0,0,.06);}
+.after li{border-bottom:1px solid rgba(255,255,255,.14);}
+.pane li::before{content:'';position:absolute;left:0;top:14px;width:8px;height:8px;transform:rotate(45deg);}
+.before li::before{background:#B9C8D6;}
+.after li::before{background:var(--blue);}
+.before b{color:var(--navy);} .after b{color:#8FD4F5;}
+.split .divider{position:relative;text-align:center;}
+.split .pin{position:absolute;left:50%;top:-16px;transform:translateX(-50%);background:var(--green);color:#fff;font-size:12px;font-weight:bold;letter-spacing:2px;padding:7px 16px;border-radius:20px;z-index:2;white-space:nowrap;box-shadow:0 2px 8px rgba(30,122,70,.4);}
+
+/* história em números: tabelas */
+.hist table{width:100%;border-collapse:collapse;font-size:12.5px;margin:14px 0 4px;background:#fff;}
+.hist th{background:var(--navy);color:#fff;padding:8px 9px;text-align:left;font-size:11.5px;}
+.hist td{padding:7px 9px;border-bottom:1px solid var(--mist);}
+.hist tr.pp td{background:var(--green-soft);}
+.hist .tbl-title{font-size:13.5px;font-weight:900;color:var(--navy);margin-top:22px;}
+@media(max-width:900px){.hist{overflow-x:auto;}}
+
+/* barras CSS (3 semanas) */
+.bars{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:end;max-width:680px;}
+.bar{text-align:center;}
+.bar .col{background:linear-gradient(180deg,var(--blue),var(--navy));border-radius:6px 6px 0 0;margin:0 auto;width:74%;display:flex;align-items:flex-start;justify-content:center;color:#fff;font-weight:900;font-size:clamp(15px,1.8vw,20px);padding-top:10px;}
+.bar.b1 .col{height:190px;} .bar.b2 .col{height:107px;} .bar.b3 .col{height:71px;background:linear-gradient(180deg,#2E9E5B,var(--green));}
+.bar .lb{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.35;}
+.bar .lb b{color:var(--ink);display:block;font-size:13px;}
+
+/* campanhas */
+.prod{display:grid;grid-template-columns:1fr 1.5fr;gap:22px;margin-top:18px;align-items:stretch;}
+.prod+.prod{margin-top:26px;}
+.camp{border:1px solid var(--line);border-radius:12px;padding:24px;border-top:5px solid var(--blue);}
+.camp h3{font-size:16px;font-weight:900;color:var(--navy);letter-spacing:-.2px;}
+.camp .job{font-size:11.5px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin:2px 0 14px;}
+.camp .row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--mist);font-size:13.5px;}
+.camp .row b{color:var(--navy);}
+.status{display:inline-block;margin-top:14px;font-size:12px;font-weight:bold;padding:6px 12px;border-radius:4px;}
+.st-g{background:var(--green-soft);color:var(--green);} .st-y{background:var(--amber-soft);color:var(--amber);}
+.hlbox{background:var(--green-soft);border-radius:6px;padding:10px 12px;margin-top:14px;font-size:13px;}
+.hlbox b{color:var(--green);}
+.hlbox.y{background:var(--amber-soft);} .hlbox.y b{color:var(--amber);}
+.prod .chartbox{margin-top:0;display:flex;flex-direction:column;justify-content:center;}
+
+/* leituras */
+.reads{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:18px;}
+.read{background:var(--mist);border-radius:12px;padding:24px;}
+.read .rt{font-size:11px;font-weight:bold;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:10px;}
+.read.problema .rt{color:#A03A3A;} .read.virada .rt{color:var(--green);} .read.legado .rt{color:var(--blue);}
+.read p{font-size:13.5px;}
+.read b{color:var(--navy);}
+
+/* próximo ciclo */
+.next{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px;margin-bottom:60px;}
+.chip{border:1.5px solid var(--blue);border-radius:10px;padding:16px;font-size:13px;}
+.chip b{display:block;color:var(--navy);font-size:13.5px;margin-bottom:4px;}
+
+@media(max-width:900px){
+  .split-grid,.reads,.prod{grid-template-columns:1fr;}
+  .next{grid-template-columns:1fr 1fr;}
+  .split .pin{position:static;display:inline-block;transform:none;margin:-14px 0 0;}
+}
+@media print{.cut{display:none;}}
+</style>
+</head>
+<body>
+
+<!-- CAPA -->
+<div class="hd">
+  <div class="eyebrow">FGV · DICOM · GIM – Mídia &nbsp;|&nbsp; Resumo executivo de campanha</div>
+  <h1>Campanhas DINT 2026<br><em>Resultados de mídia do flight</em></h1>
+  <div class="meta">Formação em Governabilidade e Inovação Pública · Geopolítica para Líderes &nbsp;·&nbsp; 09/04 – 08/06/2026 &nbsp;·&nbsp; Meta Ads + LinkedIn</div>
+</div>
+<div class="cut"></div>
+
+<!-- ANTES | DEPOIS -->
+<div class="split">
+  <div class="divider"><span class="pin">21/05 — FUNIL COMPLETO NO AR</span></div>
+  <div class="split-grid">
+    <div class="pane before">
+      <span class="tag">Antes · 09/04 a 20/05</span>
+      <h3>Volume barato, resultado invisível</h3>
+      <ul>
+        <li>Formulário externo (Microsoft Forms) — <b>sem medição de Purchase</b>, otimização cega de fundo de funil</li>
+        <li>AddToCart a <b>R$ 6–8</b> em Geopolítica sob segmentação restrita (17–22/04) — e <b>queda brusca de inscritos</b> reportada pela Unidade</li>
+        <li>LinkedIn pausado com <b>8 dias</b> de veiculação, sem base de avaliação</li>
+        <li><b>Lição central:</b> métrica de plataforma barata não é resultado</li>
+      </ul>
+    </div>
+    <div class="pane after">
+      <span class="tag">Depois · 21/05 a 08/06</span>
+      <h3>Funil mensurável, eficiência crescente</h3>
+      <ul>
+        <li>Formulário próprio tagueado + <b>mudança de segmentação da campanha para públicos mais recentes de 2025, com a entrada de lookalike de matriculados</b></li>
+        <li><b>65 Purchases</b> medidos de ponta a ponta · taxa AddToCart → Purchase de <b>12,2%</b> (Governabilidade) e <b>16,1%</b> (Geopolítica)</li>
+        <li>CPA de Purchase em <b>queda contínua</b> mesmo com orçamento reduzido a 1/3</li>
+        <li>Inscrições reais <b>em recuperação</b>, segundo retorno da própria DINT</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- A HISTÓRIA DA CAMPANHA EM NÚMEROS -->
+<div class="sec hist">
+  <h2>A história da campanha em números</h2>
+  <div class="lead">O flight completo, dia a dia e semana a semana.</div>
+
+  <div class="chartbox"><canvas id="chGovFull"></canvas></div>
+  <div class="note">Governabilidade: o CPA de AddToCart acumulado fica ancorado em ~R$ 20 durante a era do formulário externo, sobe com o realinhamento de 14-15/05 (reset de aprendizado + público qualificado) e estabiliza em ~R$ 33 no encerramento. O CPA de Purchase acumulado nasce em 21/05 e cai de forma contínua até R$ 397.</div>
+
+  <div class="chartbox"><canvas id="chGeoFull"></canvas></div>
+  <div class="note">Geopolítica: o CPA de AddToCart acumulado ancorado artificialmente em R$ 6-7 sobe de forma íngreme a partir de 15/05 — não por piora, mas porque o número passou a medir tráfego real. O CPA de Purchase acumulado tinha 7 dias de formação quando a campanha foi pausada (27/05).</div>
+
+  <div class="tbl-title">Formação em Governabilidade e Inovação Pública — evolução semanal</div>
+  <table>
+    <tr><th>Semana</th><th>Período</th><th>Invest. Meta</th><th>Invest. LinkedIn</th><th>AddToCart</th><th>CPA ATC</th><th>Purchase</th><th>CPA Purchase</th><th>Contexto</th></tr>
+    <tr><td>S1</td><td>09–15/04</td><td>R$ 2.388,49</td><td>R$ 1.928,99</td><td>123</td><td>R$ 19,42</td><td>—</td><td>—</td><td>Lançamento (público vencedor de 2025)</td></tr>
+    <tr><td>S2</td><td>16–22/04</td><td>R$ 10.191,68</td><td>R$ 689,79</td><td>444</td><td>R$ 22,95</td><td>—</td><td>—</td><td>Boost de R$ 10 mil + segmentação restrita; LinkedIn pausado em 17/04</td></tr>
+    <tr><td>S3</td><td>23–29/04</td><td>R$ 2.212,74</td><td>—</td><td>135</td><td>R$ 16,39</td><td>—</td><td>—</td><td>Contenção; faixa 25-54 e restrição geográfica</td></tr>
+    <tr><td>S4</td><td>30/04–06/05</td><td>R$ 2.081,72</td><td>—</td><td>111</td><td>R$ 18,75</td><td>—</td><td>—</td><td>Verba residual; remoção do Facebook</td></tr>
+    <tr><td>S5</td><td>07–13/05</td><td>R$ 1.548,54</td><td>—</td><td>64</td><td>R$ 24,20</td><td>—</td><td>—</td><td>Ata de realinhamento (12/05)</td></tr>
+    <tr><td>S6</td><td>14–20/05</td><td>R$ 10.006,94</td><td>—</td><td>173</td><td>R$ 57,84</td><td>—</td><td>—</td><td>Aporte + nova segmentação (públicos 2025 + lookalike): reinício do aprendizado</td></tr>
+    <tr class="pp"><td>S7</td><td>21–27/05</td><td>R$ 12.836,08</td><td>—</td><td>231</td><td>R$ 55,57</td><td>22</td><td>R$ 583,46</td><td>Funil completo no ar (novo formulário tagueado)</td></tr>
+    <tr class="pp"><td>S8</td><td>28/05–03/06</td><td>R$ 5.551,86</td><td>—</td><td>125</td><td>R$ 44,41</td><td>17</td><td>R$ 326,58</td><td>Extensão a R$ 780/dia</td></tr>
+    <tr class="pp"><td>S9</td><td>04–08/06</td><td>R$ 3.468,42</td><td>—</td><td>95</td><td>R$ 36,51</td><td>16</td><td>R$ 216,78</td><td>Semana final (5 dias) — melhor eficiência do flight</td></tr>
+  </table>
+
+  <div class="tbl-title">Geopolítica para Líderes — evolução semanal</div>
+  <table>
+    <tr><th>Semana</th><th>Período</th><th>Invest. Meta</th><th>Invest. LinkedIn</th><th>AddToCart</th><th>CPA ATC</th><th>Purchase</th><th>CPA Purchase</th><th>Contexto</th></tr>
+    <tr><td>S1</td><td>10–16/04</td><td>R$ 896,27</td><td>R$ 1.354,45</td><td>119</td><td>R$ 7,53</td><td>—</td><td>—</td><td>Lançamento (estrutura baseada no histórico do CAF)</td></tr>
+    <tr><td>S2</td><td>17–23/04</td><td>R$ 8.732,60</td><td>R$ 259,92</td><td>1.369</td><td>R$ 6,38</td><td>—</td><td>—</td><td>Boost + segmentação restrita: volume sem correspondência em inscritos; LinkedIn pausado em 17/04</td></tr>
+    <tr><td>S3</td><td>24–30/04</td><td>R$ 2.025,80</td><td>—</td><td>318</td><td>R$ 6,37</td><td>—</td><td>—</td><td>Contenção</td></tr>
+    <tr><td>S4</td><td>01–07/05</td><td>R$ 1.744,41</td><td>—</td><td>214</td><td>R$ 8,15</td><td>—</td><td>—</td><td>Verba residual; criativo horizontal identificado como vencedor</td></tr>
+    <tr><td>S5</td><td>08–14/05</td><td>R$ 982,65</td><td>—</td><td>42</td><td>R$ 23,40</td><td>—</td><td>—</td><td>Realinhamento: nova segmentação (públicos 2025 + lista LAL alta gestão/OneMBA)</td></tr>
+    <tr><td>S6</td><td>15–21/05</td><td>R$ 11.769,56</td><td>—</td><td>289</td><td>R$ 40,73</td><td>1*</td><td>—</td><td>Aporte a R$ 2 mil/dia; funil completo no último dia da semana (21/05)</td></tr>
+    <tr class="pp"><td>S7</td><td>22–28/05</td><td>R$ 10.979,66</td><td>—</td><td>54</td><td>R$ 203,33</td><td>9</td><td>R$ 1.219,96</td><td>Fase Purchase interrompida: pausa em 27/05 a pedido da DINT</td></tr>
+  </table>
+  <div class="note">* O Purchase isolado da S6 ocorreu em 21/05, último dia da semana — o CPA semanal correspondente não é representativo e foi omitido. Investimento LinkedIn alocado às semanas de veiculação (Content e, em Governabilidade, Text Ads); valores em consumo de plataforma.</div>
+</div>
+
+<!-- BARRAS 3 SEMANAS -->
+<div class="sec">
+  <h2>A prova em três semanas</h2>
+  <div class="lead">Governabilidade encerrou em plena curva de ganho: cada semana de funil completo entregou Purchase mais barato.</div>
+  <div class="bars">
+    <div class="bar b1"><div class="col">R$ 583</div><div class="lb"><b>Semana 7</b>21–27/05 · 22 Purchases</div></div>
+    <div class="bar b2"><div class="col">R$ 327</div><div class="lb"><b>Semana 8</b>28/05–03/06 · 17 Purchases</div></div>
+    <div class="bar b3"><div class="col">R$ 217</div><div class="lb"><b>Semana 9</b>04–08/06 · 16 Purchases</div></div>
+  </div>
+  <div class="note">CPA de Purchase semanal (investimento da semana ÷ Purchases da semana), Meta Ads. No mesmo período, o orçamento diário caiu de R$ 2.000 para R$ 780 — a eficiência cresceu mais rápido do que a verba diminuiu.</div>
+</div>
+
+<!-- CAMPANHAS -->
+<div class="sec">
+  <h2>As duas campanhas em resumo</h2>
+
+  <div class="prod">
+    <div class="camp">
+      <h3>Formação em Governabilidade e Inovação Pública</h3>
+      <div class="job">09/04 – 08/06</div>
+      <div class="row"><span>Investimento (Meta + LinkedIn)</span><b>R$ 52.905,25</b></div>
+      <div class="row"><span>AddToCart</span><b>1.501 · CPA R$ 33,50</b></div>
+      <div class="row"><span>Purchase (fase 21/05–08/06)</span><b>55 · CPA R$ 397,39</b></div>
+      <span class="status st-g">✓ Encerrada no prazo estendido (08/06)</span>
+      <div class="hlbox"><b>Destaque:</b> melhor fase do flight foi a última — CPA de AddToCart e de Purchase em queda simultânea na reta final.</div>
+    </div>
+    <div class="chartbox"><canvas id="chGov"></canvas><div class="note">Barras empilhadas: investimento semanal Meta (azul-escuro) e LinkedIn (azul-claro, ativo apenas nas semanas 1-2). Linhas: CPA semanal não acumulado de AddToCart e de Purchase (este, mensurável a partir da S7).</div></div>
+  </div>
+
+  <div class="prod">
+    <div class="camp">
+      <h3>Geopolítica para Líderes</h3>
+      <div class="job">10/04 – 27/05</div>
+      <div class="row"><span>Investimento (Meta + LinkedIn)</span><b>R$ 38.745,32</b></div>
+      <div class="row"><span>AddToCart</span><b>2.405 · CPA R$ 15,44</b></div>
+      <div class="row"><span>Purchase (fase 21–27/05)</span><b>10 · CPA R$ 1.210,45</b></div>
+      <span class="status st-y">◐ Pausada antecipadamente em 27/05, a pedido da DINT</span>
+      <div class="hlbox y"><b>Leitura:</b> apenas 7 dias de funil completo — interrompida em pleno aprendizado, mas com a melhor taxa de conversão do flight (16,1%).</div>
+    </div>
+    <div class="chartbox"><canvas id="chGeo"></canvas><div class="note">Barras empilhadas: investimento semanal Meta e LinkedIn (ativo apenas nas semanas 1-2). Linhas: CPA semanal não acumulado de AddToCart e de Purchase — exibido apenas na S7 (9 Purchases); a S6 teve 1 Purchase isolado no último dia, insuficiente para um CPA semanal representativo.</div></div>
+  </div>
+</div>
+
+<!-- LEITURAS -->
+<div class="sec">
+  <h2>Três leituras essenciais</h2>
+  <div class="reads">
+    <div class="read problema">
+      <div class="rt">O problema</div>
+      <p>Seis semanas sem evento de Purchase fizeram o flight otimizar para cliques que não viravam inscrição. O CPA de R$ 6 era um espelho falso — <b>o custo real do público sênior da DINT é outro</b>, e só apareceu quando a medição completa entrou no ar.</p>
+    </div>
+    <div class="read virada">
+      <div class="rt">A virada</div>
+      <p>Formulário próprio + segmentação qualificada mudaram a natureza da campanha em 21/05. Em 19 dias, Governabilidade provou o modelo: <b>conversões estáveis, custo caindo 63% e inscrições reais em recuperação</b>.</p>
+    </div>
+    <div class="read legado">
+      <div class="rt">O legado</div>
+      <p>O flight termina com um blueprint validado e um ativo novo: <b>a base de inscritos 2026, semente de lookalike para o próximo ciclo</b> — especialmente valiosa para Geopolítica, que partiu sem histórico próprio.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PRÓXIMO CICLO -->
+<div class="sec">
+  <h2>Para o próximo ciclo</h2>
+  <div class="next">
+    <div class="chip"><b>Funil completo desde o dia 1</b>Tagueamento de Purchase como pré-requisito de subida, não como correção de rota.</div>
+    <div class="chip"><b>Janela de maturação protegida</b>Mínimo de 4 semanas sem pausas ou mudanças estruturais após o início.</div>
+    <div class="chip"><b>Lookalike com a base 2026</b>Partir dos públicos validados e da lista de inscritos gerada neste flight.</div>
+    <div class="chip"><b>Verba estável</b>Aportes aprovados antes do D-day e no máximo 1 ajuste de orçamento por semana.</div>
+  </div>
+</div>
+
+<script>
+const W = {"HERO": {"labels": ["21/05", "22/05", "23/05", "24/05", "25/05", "26/05", "27/05", "28/05", "29/05", "30/05", "31/05", "01/06", "02/06", "03/06", "04/06", "05/06", "06/06", "07/06", "08/06"], "invest": [2612.48, 4239.0, 3487.63, 4492.69, 3849.22, 4102.34, 2157.25, 733.33, 796.29, 700.02, 905.16, 869.72, 827.78, 719.56, 734.81, 698.61, 701.54, 832.59, 500.87], "cpaatc": [100.48, 90.15, 86.16, 84.75, 86.09, 88.65, 85.71, 83.36, 83.5, 79.21, 76.09, 73.65, 73.51, 72.95, 71.79, 69.4, 68.4, 67.19, 66.2], "cpapur": [2612.48, 622.86, 689.27, 706.28, 747.24, 843.83, 779.39, 778.0, 778.54, 734.33, 668.46, 643.23, 633.47, 622.3, 589.19, 560.1, 562.54, 539.68, 522.48]}, "GOV": {"labels": ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9"], "meta": [2388.49, 10191.68, 2212.74, 2081.72, 1548.54, 10006.94, 12836.08, 5551.86, 3468.42], "li": [1928.99, 689.79, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "cpaatc": [19.42, 22.95, 16.39, 18.75, 24.2, 57.84, 55.57, 44.41, 36.51], "cpapur": [null, null, null, null, null, null, 583.46, 326.58, 216.78]}, "GEO": {"labels": ["S1", "S2", "S3", "S4", "S5", "S6", "S7"], "meta": [896.27, 8732.6, 2025.8, 1744.41, 982.65, 11769.56, 10979.66], "li": [1354.45, 259.92, 0.0, 0.0, 0.0, 0.0, 0.0], "cpaatc": [7.53, 6.38, 6.37, 8.15, 23.4, 40.73, 203.33], "cpapur": [null, null, null, null, null, null, 1219.96]}};
+const FD = {"GOV": {"labels": ["09/04", "10/04", "11/04", "12/04", "13/04", "14/04", "15/04", "16/04", "17/04", "18/04", "19/04", "20/04", "21/04", "22/04", "23/04", "24/04", "25/04", "26/04", "27/04", "28/04", "29/04", "30/04", "01/05", "02/05", "03/05", "04/05", "05/05", "06/05", "07/05", "08/05", "09/05", "10/05", "11/05", "12/05", "13/05", "14/05", "15/05", "16/05", "17/05", "18/05", "19/05", "20/05", "21/05", "22/05", "23/05", "24/05", "25/05", "26/05", "27/05", "28/05", "29/05", "30/05", "31/05", "01/06", "02/06", "03/06", "04/06", "05/06", "06/06", "07/06", "08/06"], "invest": [132.91, 360.51, 309.28, 405.26, 464.85, 419.42, 296.26, 283.36, 1290.26, 1020.59, 2381.44, 1432.6, 2454.99, 1328.44, 358.85, 363.7, 313.26, 394.39, 284.83, 228.46, 269.25, 289.63, 314.13, 343.24, 351.88, 283.91, 221.16, 277.77, 238.6, 216.79, 207.38, 246.71, 251.7, 200.35, 187.01, 253.42, 701.56, 1876.68, 2047.8, 1353.45, 2109.86, 1664.17, 1487.61, 2061.36, 1763.22, 2326.05, 2086.0, 2106.06, 1005.78, 733.33, 796.29, 700.02, 905.16, 869.72, 827.78, 719.56, 734.81, 698.61, 701.54, 832.59, 500.87], "cpaatc": [13.29, 19.74, 21.69, 18.87, 19.01, 19.93, 19.42, 18.3, 22.01, 21.85, 23.53, 23.27, 23.25, 22.19, 21.75, 21.63, 21.51, 20.91, 20.99, 21.05, 21.07, 21.21, 21.03, 20.93, 20.84, 20.81, 20.72, 20.76, 20.74, 20.83, 20.78, 20.73, 20.75, 20.82, 21.01, 20.96, 21.51, 22.59, 23.9, 24.93, 26.14, 27.08, 28.01, 29.02, 29.6, 30.49, 31.38, 32.13, 32.21, 32.41, 32.79, 32.68, 32.72, 32.78, 33.09, 33.3, 33.42, 33.32, 33.42, 33.5, 33.5], "cpapur": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 443.62, 442.68, 477.39, 511.8, 591.52, 583.46, 589.97, 598.57, 557.99, 499.09, 481.16, 477.52, 471.49, 444.72, 421.73, 427.56, 410.68, 397.39]}, "GOV_Z": {"labels": ["21/05", "22/05", "23/05", "24/05", "25/05", "26/05", "27/05", "28/05", "29/05", "30/05", "31/05", "01/06", "02/06", "03/06", "04/06", "05/06", "06/06", "07/06", "08/06"], "invest": [1487.61, 2061.36, 1763.22, 2326.05, 2086.0, 2106.06, 1005.78, 733.33, 796.29, 700.02, 905.16, 869.72, 827.78, 719.56, 734.81, 698.61, 701.54, 832.59, 500.87], "cpaatc": [82.64, 68.25, 59.02, 57.43, 58.58, 58.28, 55.57, 55.16, 56.34, 53.61, 52.02, 50.88, 51.51, 51.65, 51.27, 49.8, 49.45, 48.98, 48.46], "cpapur": [null, 443.62, 442.68, 477.39, 511.8, 591.52, 583.46, 589.97, 598.57, 557.99, 499.09, 481.16, 477.52, 471.49, 444.72, 421.73, 427.56, 410.68, 397.39]}, "GEO": {"labels": ["10/04", "11/04", "12/04", "13/04", "14/04", "15/04", "16/04", "17/04", "18/04", "19/04", "20/04", "21/04", "22/04", "23/04", "24/04", "25/04", "26/04", "27/04", "28/04", "29/04", "30/04", "01/05", "02/05", "03/05", "04/05", "05/05", "06/05", "07/05", "08/05", "09/05", "10/05", "11/05", "12/05", "13/05", "14/05", "15/05", "16/05", "17/05", "18/05", "19/05", "20/05", "21/05", "22/05", "23/05", "24/05", "25/05", "26/05", "27/05", "28/05"], "invest": [0.56, 0.0, 0.0, 257.1, 285.38, 208.46, 144.77, 1077.4, 1219.71, 1831.46, 1401.34, 1759.46, 1156.78, 286.45, 289.54, 279.05, 318.3, 309.5, 199.35, 278.26, 351.8, 301.82, 340.54, 344.92, 266.65, 185.95, 168.04, 136.49, 131.47, 131.16, 153.96, 138.53, 186.88, 159.0, 81.65, 547.14, 1944.74, 2387.28, 2625.73, 2060.06, 1079.74, 1124.87, 2177.64, 1724.41, 2166.64, 1763.22, 1996.28, 1151.47, 0.0], "cpaatc": [null, null, null, 6.28, 7.44, 7.67, 7.53, 7.71, 6.04, 5.66, 5.85, 6.25, 6.4, 6.47, 6.45, 6.39, 6.38, 6.38, 6.37, 6.39, 6.45, 6.49, 6.54, 6.59, 6.61, 6.61, 6.62, 6.63, 6.64, 6.69, 6.77, 6.81, 6.88, 6.96, 6.97, 7.22, 7.99, 8.67, 9.42, 10.26, 10.68, 11.12, 11.97, 12.66, 13.51, 14.2, 15.01, 15.45, 15.44], "cpapur": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1124.87, 1100.84, 1675.64, 1438.71, 1492.8, 1564.72, 1210.45, 1210.45]}, "GEO_Z": {"labels": ["21/05", "22/05", "23/05", "24/05", "25/05", "26/05", "27/05", "28/05"], "invest": [1124.87, 2177.64, 1724.41, 2166.64, 1763.22, 1996.28, 1151.47, 0.0], "cpaatc": [140.61, 137.6, 167.56, 171.28, 175.62, 202.83, 201.74, 195.23], "cpapur": [1124.87, 1100.84, 1675.64, 1438.71, 1492.8, 1564.72, 1210.45, 1210.45]}};
+const NAVY='#003A79', BLUE='#008BC9', LI='#6FC6EE', GREEN='#1E7A46', GRAY='#8C8C8C';
+Chart.defaults.font.family='Arial';
+Chart.defaults.font.size=11.5;
+
+// História da campanha: flight completo por produto
+function fullChart(id,key,title){
+  new Chart(document.getElementById(id),{data:{
+    labels:FD[key].labels,
+    datasets:[
+     {type:'bar',label:'Investimento diário (R$)',data:FD[key].invest,backgroundColor:'rgba(0,139,201,.35)',yAxisID:'y'},
+     {type:'line',label:'CPA AddToCart acumulado (R$)',data:FD[key].cpaatc,borderColor:NAVY,yAxisID:'y1',tension:.25,pointRadius:0,borderWidth:2.5,spanGaps:true},
+     {type:'line',label:'CPA Purchase acumulado (R$)',data:FD[key].cpapur,borderColor:GREEN,yAxisID:'y2',tension:.25,pointRadius:0,borderWidth:2.5,borderDash:[6,4],spanGaps:true}
+    ]},
+    options:{plugins:{title:{display:true,text:title,color:NAVY,font:{size:12.5,weight:'bold'}},legend:{labels:{boxWidth:13}}},
+    scales:{x:{ticks:{maxTicksLimit:14}},
+      y:{position:'left',title:{display:true,text:'Investimento (R$)'},grid:{color:'#EEF3F8'}},
+      y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'CPA ATC acum. (R$)'}},
+      y2:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'CPA Purchase acum. (R$)'}}}}
+  });
+}
+fullChart('chGovFull','GOV','Governabilidade — flight completo (09/04 a 08/06): investimento diário × CPA acumulado (Purchase mensurável a partir de 21/05)');
+fullChart('chGeoFull','GEO','Geopolítica — flight completo (10/04 a 28/05): investimento diário × CPA acumulado (Purchase mensurável a partir de 21/05)');
+
+// Semanal por produto: barras empilhadas Meta+LinkedIn + linhas CPA semanais
+function weekly(id,key,title){
+  new Chart(document.getElementById(id),{data:{
+    labels:W[key].labels,
+    datasets:[
+     {type:'bar',label:'Investimento Meta (R$)',data:W[key].meta,backgroundColor:NAVY,stack:'inv',yAxisID:'y'},
+     {type:'bar',label:'Investimento LinkedIn (R$)',data:W[key].li,backgroundColor:LI,stack:'inv',yAxisID:'y'},
+     {type:'line',label:'CPA AddToCart semanal (R$)',data:W[key].cpaatc,borderColor:BLUE,backgroundColor:BLUE,yAxisID:'y1',tension:.25,pointRadius:3,borderWidth:2.5,spanGaps:true},
+     {type:'line',label:'CPA Purchase semanal (R$)',data:W[key].cpapur,borderColor:GRAY,backgroundColor:GRAY,yAxisID:'y2',tension:.25,pointRadius:4,borderWidth:2.5,borderDash:[6,4],spanGaps:true}
+    ]},
+    options:{plugins:{title:{display:true,text:title,color:NAVY,font:{size:12.5,weight:'bold'}},legend:{labels:{boxWidth:13}}},
+    scales:{x:{stacked:true},
+      y:{stacked:true,position:'left',title:{display:true,text:'Investimento (R$)'},grid:{color:'#EEF3F8'}},
+      y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'CPA ATC (R$)'}},
+      y2:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'CPA Purchase (R$)'}}}}
+  });
+}
+weekly('chGov','GOV','Governabilidade — investimento semanal (Meta + LinkedIn) × CPA semanal de AddToCart e Purchase');
+weekly('chGeo','GEO','Geopolítica — investimento semanal (Meta + LinkedIn) × CPA semanal de AddToCart e Purchase');
+</script>
+</body>
+</html>

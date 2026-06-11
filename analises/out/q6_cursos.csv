@@ -1,0 +1,283 @@
+id_municipio,nome_area_geral,nome_area_especifica,nome_area_detalhada,conc_2020,conc_2021,conc_2022,conc_2023,conc_2024,matr_2024,ing_2024,delta_conc_pct
+3509502,"Negócios, administração e direito",Negócios e administração,Gestão e administração,3312,3149,2358,2897,3015,16482,11441,-9.0
+3509502,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Análise e desenvolvimento de algoritmos e aplicações,0,0,0,0,1278,8574,5675,
+3509502,"Negócios, administração e direito",Direito,Direito,1589,1548,1446,1350,1174,6644,2727,-26.1
+3509502,Saúde e bem-estar,Saúde,"Promoção, prevenção, terapia e reabilitação",674,1167,910,815,884,6948,4066,31.2
+3509502,"Ciências sociais, comunicação e informação",Ciências sociais e comportamentais,Psicologia,554,737,613,602,636,4685,2297,14.8
+3509502,Educação,Educação,Formação de professores sem áreas específicas,1231,1672,1487,857,596,5623,3188,-51.6
+3509502,Educação,Educação,Formação de professores em áreas específicas (exceto Letras),725,821,695,704,593,4782,2126,-18.2
+3509502,"Negócios, administração e direito",Negócios e administração,Marketing e propaganda,744,709,478,654,579,3256,2135,-22.2
+3509502,Saúde e bem-estar,Saúde,Medicina,395,423,603,540,577,4481,1038,46.1
+3509502,Saúde e bem-estar,Saúde,Enfermagem,377,682,583,464,401,4164,2549,6.4
+3509502,"Engenharia, produção e construção",Engenharia e profissões correlatas,Engenharia mecânica e metalurgia,368,514,452,412,378,2389,855,2.7
+3509502,"Engenharia, produção e construção",Engenharia e profissões correlatas,Eletrônica e automação,340,330,357,351,363,2818,995,6.8
+3509502,Saúde e bem-estar,Saúde,Tecnologia de diagnóstico e tratamento médico,53,258,217,119,363,2881,1726,584.9
+3509502,Saúde e bem-estar,Saúde,Farmácia,198,341,418,327,342,2743,1383,72.7
+3509502,"Ciências sociais, comunicação e informação",Ciências sociais e comportamentais,Ciências sociais e políticas,287,318,353,346,334,1658,595,16.4
+3509502,"Ciências sociais, comunicação e informação",Ciências sociais e comportamentais,Economia,277,336,327,345,296,1984,672,6.9
+3509502,"Engenharia, produção e construção",Arquitetura e construção,Engenharia civil e construção,775,743,561,398,287,2071,914,-63.0
+3509502,"Negócios, administração e direito",Negócios e administração,Contabilidade e tributação,575,478,390,408,281,2343,1457,-51.1
+3509502,Saúde e bem-estar,Saúde,Odontologia,168,111,174,428,276,1628,703,64.3
+3509502,"Engenharia, produção e construção",Engenharia e profissões correlatas,Eletricidade e energia,294,313,297,254,261,1940,879,-11.2
+3509502,"Negócios, administração e direito",Negócios e administração,"Finanças, bancos e seguros",229,203,139,204,256,1084,848,11.8
+3509502,"Engenharia, produção e construção",Arquitetura e construção,Arquitetura e planejamento urbano,294,339,329,237,251,1731,665,-14.6
+3509502,"Negócios, administração e direito",Negócios e administração,Gestão comercial,229,220,194,268,245,1271,1158,7.0
+3509502,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Infraestrutura e gestão de TIC,197,173,146,207,231,1588,1155,17.3
+3509502,"Engenharia, produção e construção",Produção e processamento,Produção e processos de fabricação,582,477,374,297,214,1404,756,-63.2
+3509502,"Agricultura, silvicultura, pesca e veterinária",Veterinária,Veterinária,499,364,266,172,202,1530,660,-59.5
+3509502,Artes e humanidades,Artes,"Produção audiovisual, de mídia e cultural",188,158,83,161,191,1019,706,1.6
+3509502,Serviços,Serviços de segurança,Proteção de pessoas e de propriedades,134,156,76,193,190,920,822,41.8
+3509502,"Engenharia, produção e construção",Engenharia e profissões correlatas,Engenharia química e de processos,203,195,197,183,182,1028,231,-10.3
+3509502,Educação,Educação,Formação de professores de letras,151,200,160,164,164,1189,603,8.6
+3509502,"Ciências naturais, matemática e estatística",Ciências físicas,Química,149,183,188,188,162,1196,458,8.7
+3509502,Artes e humanidades,Artes,Música e artes cênicas,43,99,68,76,108,491,88,151.2
+3509502,"Engenharia, produção e construção",Produção e processamento,Processamento de alimentos,95,121,81,91,103,707,152,8.4
+3509502,"Ciências sociais, comunicação e informação",Comunicação e informação,Comunicação e reportagem,118,118,129,112,101,691,235,-14.4
+3509502,Serviços,Serviços pessoais,Serviços de beleza,67,116,109,81,100,639,520,49.3
+3509502,"Ciências naturais, matemática e estatística",Ciências biológicas e correlatas,Biologia,90,103,101,102,98,573,249,8.9
+3509502,"Engenharia, produção e construção",Engenharia e profissões correlatas,Tecnologia de proteção ambiental,93,74,56,72,93,480,301,0.0
+3509502,Saúde e bem-estar,Bem-estar,Serviço social,234,190,143,99,86,924,548,-63.2
+3509502,Artes e humanidades,Programas interdisciplinares abrangendo artes e humanidades,Programas interdisciplinares abrangendo artes e humanidades,95,73,93,71,84,233,119,-11.6
+3509502,Artes e humanidades,Artes,"Moda, design de interiores e desenho industrial",120,88,50,91,75,711,488,-37.5
+3509502,Computação e Tecnologias da Informação e Comunicação (TIC),Programas interdisciplinares abrangendo computação e Tecnologias da Informação e Comunicação (TIC),Soluções computacionais para domínios específicos,0,0,0,0,74,652,405,
+3509502,"Ciências naturais, matemática e estatística","Programas interdisciplinares abrangendo ciências naturais, matemática e estatística","Programas interdisciplinares abrangendo ciências naturais, matemática e estatística",0,0,0,2,68,227,98,
+3509502,Artes e humanidades,Línguas,Letras,47,49,47,73,53,327,108,12.8
+3509502,"Ciências naturais, matemática e estatística",Matemática e estatística,Estatística,46,70,43,57,52,362,87,13.0
+3509502,Artes e humanidades,Artes,Belas artes,33,37,50,35,50,378,145,51.5
+3509502,Serviços,Serviços pessoais,Serviços de alimentação,57,71,47,64,48,351,271,-15.8
+3509502,"Ciências naturais, matemática e estatística",Matemática e estatística,Matemática,34,53,33,38,48,296,11,41.2
+3509502,Serviços,Serviços de transporte,Serviços de transporte,13,9,25,33,46,153,99,253.8
+3509502,"Ciências naturais, matemática e estatística",Ciências físicas,Física,39,61,42,51,45,283,6,15.4
+3509502,Artes e humanidades,Humanidades (exceto línguas),História e arqueologia,39,44,43,41,43,240,76,10.3
+3509502,Artes e humanidades,Humanidades (exceto línguas),Religião e teologia,27,51,46,27,43,341,213,59.3
+3509502,Artes e humanidades,Humanidades (exceto línguas),Filosofia e ética,44,41,59,36,39,147,41,-11.4
+3509502,"Agricultura, silvicultura, pesca e veterinária",Agricultura,"Produção agrícola, agropecuária e zootecnia",52,39,41,50,38,548,216,-26.9
+3509502,Serviços,Serviços pessoais,Turismo e hotelaria,53,28,32,26,29,151,110,-45.3
+3509502,Saúde e bem-estar,Saúde,Medicina e terapia tradicional e complementar,0,11,21,34,26,192,176,
+3509502,"Ciências naturais, matemática e estatística",Ciências físicas,Ciências da terra,20,20,13,16,24,186,35,20.0
+3509502,Educação,Educação,Ciência da educação,0,2,6,4,15,238,241,
+3509502,Computação e Tecnologias da Informação e Comunicação (TIC),Programas interdisciplinares abrangendo computação e Tecnologias da Informação e Comunicação (TIC),Programas interdisciplinares abrangendo computação e Tecnologias da Informação e Comunicação (TIC),0,1,0,3,15,71,85,
+3509502,"Ciências sociais, comunicação e informação","Programas abrangendo ciências sociais, comunicação e informação em processo de definição da classificação","Programas abrangendo ciências sociais, comunicação e informação em processo de definição da classificação",0,0,0,0,14,273,278,
+3509502,"Ciências sociais, comunicação e informação",Comunicação e informação,Ciência da informação e museologia,28,28,34,13,13,88,46,-53.6
+3509502,"Negócios, administração e direito",Negócios e administração,Secretariado e trabalhos de escritório,6,5,10,7,8,56,51,33.3
+3509502,"Negócios, administração e direito","Programas interdisciplinares abrangendo negócios, administração e direito","Programas interdisciplinares abrangendo negócios, administração e direito",2,0,1,4,7,31,36,250.0
+3509502,Serviços,Higiene e serviços de saúde ocupacional,Saúde e segurança no trabalho,6,2,6,4,5,150,191,-16.7
+3509502,Saúde e bem-estar,Programas interdisciplinares abrangendo saúde e bem-estar,Programas interdisciplinares abrangendo saúde e bem-estar,0,0,0,3,4,24,18,
+3509502,Saúde e bem-estar,Bem-estar,Assistência a idosos e a deficientes,3,4,14,16,3,57,53,0.0
+3509502,Serviços,Serviços pessoais,Esportes e lazer,0,1,1,0,3,20,4,
+3509502,"Ciências sociais, comunicação e informação","Programas interdisciplinares abrangendo ciências sociais, comunicação e informação","Programas interdisciplinares abrangendo ciências sociais, comunicação e informação",0,0,0,0,2,7,3,
+3509502,"Engenharia, produção e construção",Engenharia e profissões correlatas,Engenharia e profissões correlatas sem definição precisa,0,0,0,0,1,1,0,
+3509502,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Programas abrangendo Computação e Tecnologias da Informação e Comunicação (TIC) em processo de definição da classificação,0,0,0,0,1,18,13,
+3509502,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Gestão e desenvolvimento de sistemas de informação,388,605,626,692,0,0,0,-100.0
+3509502,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Ciência da computação,176,181,147,164,0,0,0,-100.0
+3509502,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Desenvolvimento de sistemas que integram software e hardware,92,144,77,88,0,0,0,-100.0
+3509502,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Produção de software,48,63,46,61,0,0,0,-100.0
+3509502,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Soluções computacionais para domínios específicos,0,3,15,26,0,0,0,
+3509502,"Engenharia, produção e construção",Engenharia e profissões correlatas,"Veículos a motor, construção naval, aeronáutica, ferroviária e metroviária",1,0,2,2,0,11,7,-100.0
+3525904,"Negócios, administração e direito",Negócios e administração,Gestão e administração,1636,1382,1116,1550,1654,8724,6367,1.1
+3525904,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Análise e desenvolvimento de algoritmos e aplicações,0,0,0,0,349,2856,2004,
+3525904,Saúde e bem-estar,Saúde,"Promoção, prevenção, terapia e reabilitação",299,426,386,369,318,2824,1748,6.4
+3525904,Educação,Educação,Formação de professores sem áreas específicas,831,798,516,359,262,2374,1554,-68.5
+3525904,"Negócios, administração e direito",Direito,Direito,493,411,329,322,245,1888,932,-50.3
+3525904,"Ciências sociais, comunicação e informação",Ciências sociais e comportamentais,Psicologia,434,193,189,208,203,1972,1118,-53.2
+3525904,Saúde e bem-estar,Saúde,Odontologia,0,0,0,0,172,618,232,
+3525904,"Negócios, administração e direito",Negócios e administração,Marketing e propaganda,162,189,134,163,141,1118,817,-13.0
+3525904,Saúde e bem-estar,Saúde,Enfermagem,102,161,133,148,138,1151,747,35.3
+3525904,"Negócios, administração e direito",Negócios e administração,Gestão comercial,109,80,74,131,136,680,557,24.8
+3525904,"Negócios, administração e direito",Negócios e administração,Contabilidade e tributação,282,192,156,170,132,1092,717,-53.2
+3525904,"Engenharia, produção e construção",Arquitetura e construção,Engenharia civil e construção,351,242,190,136,131,699,408,-62.7
+3525904,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Infraestrutura e gestão de TIC,76,98,72,114,124,965,705,63.2
+3525904,"Negócios, administração e direito",Negócios e administração,"Finanças, bancos e seguros",86,79,86,113,122,532,443,41.9
+3525904,Saúde e bem-estar,Saúde,Medicina,79,117,123,116,120,715,123,51.9
+3525904,"Engenharia, produção e construção",Engenharia e profissões correlatas,Eletrônica e automação,128,144,96,88,116,545,270,-9.4
+3525904,"Engenharia, produção e construção",Engenharia e profissões correlatas,Engenharia mecânica e metalurgia,281,272,166,112,115,780,397,-59.1
+3525904,"Engenharia, produção e construção",Engenharia e profissões correlatas,Eletricidade e energia,81,125,68,63,115,636,354,42.0
+3525904,Artes e humanidades,Artes,"Produção audiovisual, de mídia e cultural",57,41,36,87,85,444,344,49.1
+3525904,Educação,Educação,Formação de professores em áreas específicas (exceto Letras),149,131,86,84,81,716,528,-45.6
+3525904,"Engenharia, produção e construção",Produção e processamento,Produção e processos de fabricação,206,209,218,137,74,574,306,-64.1
+3525904,Saúde e bem-estar,Saúde,Tecnologia de diagnóstico e tratamento médico,39,77,66,70,73,998,652,87.2
+3525904,"Engenharia, produção e construção",Engenharia e profissões correlatas,Tecnologia de proteção ambiental,72,83,81,47,73,351,170,1.4
+3525904,Saúde e bem-estar,Saúde,Farmácia,52,108,73,87,72,665,444,38.5
+3525904,"Engenharia, produção e construção",Arquitetura e construção,Arquitetura e planejamento urbano,109,84,78,67,57,517,201,-47.7
+3525904,Serviços,Serviços de segurança,Proteção de pessoas e de propriedades,30,29,27,32,51,285,267,70.0
+3525904,"Ciências sociais, comunicação e informação",Ciências sociais e comportamentais,Economia,25,10,30,46,49,289,147,96.0
+3525904,"Engenharia, produção e construção",Engenharia e profissões correlatas,Engenharia química e de processos,67,78,59,63,46,232,61,-31.3
+3525904,Educação,Educação,Formação de professores de letras,71,80,53,57,41,309,198,-42.3
+3525904,Serviços,Serviços pessoais,Turismo e hotelaria,47,37,42,31,39,169,122,-17.0
+3525904,Serviços,Serviços pessoais,Serviços de beleza,85,68,57,71,38,367,295,-55.3
+3525904,"Agricultura, silvicultura, pesca e veterinária",Veterinária,Veterinária,0,0,0,0,36,425,140,
+3525904,Saúde e bem-estar,Bem-estar,Serviço social,108,74,55,44,34,275,183,-68.5
+3525904,Artes e humanidades,Artes,"Moda, design de interiores e desenho industrial",22,27,16,36,33,228,194,50.0
+3525904,Computação e Tecnologias da Informação e Comunicação (TIC),Programas interdisciplinares abrangendo computação e Tecnologias da Informação e Comunicação (TIC),Soluções computacionais para domínios específicos,0,0,0,0,32,270,258,
+3525904,"Ciências naturais, matemática e estatística",Ciências físicas,Química,4,1,23,19,20,151,95,400.0
+3525904,"Ciências naturais, matemática e estatística",Ciências biológicas e correlatas,Biologia,20,27,20,11,15,123,98,-25.0
+3525904,"Ciências sociais, comunicação e informação",Ciências sociais e comportamentais,Ciências sociais e políticas,0,3,5,14,14,155,111,
+3525904,Saúde e bem-estar,Saúde,Medicina e terapia tradicional e complementar,0,0,3,12,10,101,85,
+3525904,"Engenharia, produção e construção",Produção e processamento,Processamento de alimentos,19,5,12,6,10,56,24,-47.4
+3525904,Artes e humanidades,Humanidades (exceto línguas),Religião e teologia,6,6,3,11,9,101,80,50.0
+3525904,Serviços,Serviços pessoais,Serviços de alimentação,8,5,4,13,8,69,70,0.0
+3525904,Serviços,Higiene e serviços de saúde ocupacional,Saúde e segurança no trabalho,0,0,0,0,7,97,147,
+3525904,Serviços,Serviços de transporte,Serviços de transporte,2,1,5,10,6,25,13,200.0
+3525904,Saúde e bem-estar,Bem-estar,Assistência a idosos e a deficientes,1,3,3,2,5,21,14,400.0
+3525904,Educação,Educação,Ciência da educação,0,0,1,1,5,97,132,
+3525904,"Negócios, administração e direito",Negócios e administração,Secretariado e trabalhos de escritório,4,0,1,8,4,26,22,0.0
+3525904,"Ciências sociais, comunicação e informação",Comunicação e informação,Comunicação e reportagem,0,1,7,4,4,58,60,
+3525904,"Ciências sociais, comunicação e informação","Programas abrangendo ciências sociais, comunicação e informação em processo de definição da classificação","Programas abrangendo ciências sociais, comunicação e informação em processo de definição da classificação",0,0,0,0,4,94,107,
+3525904,"Negócios, administração e direito","Programas interdisciplinares abrangendo negócios, administração e direito","Programas interdisciplinares abrangendo negócios, administração e direito",0,0,0,1,3,9,8,
+3525904,Artes e humanidades,Humanidades (exceto línguas),História e arqueologia,0,1,2,1,3,16,7,
+3525904,Artes e humanidades,Humanidades (exceto línguas),Filosofia e ética,0,0,0,0,3,22,13,
+3525904,Serviços,Serviços pessoais,Esportes e lazer,0,0,0,0,3,8,2,
+3525904,Saúde e bem-estar,Programas interdisciplinares abrangendo saúde e bem-estar,Programas interdisciplinares abrangendo saúde e bem-estar,0,0,0,2,2,16,14,
+3525904,"Ciências sociais, comunicação e informação","Programas interdisciplinares abrangendo ciências sociais, comunicação e informação","Programas interdisciplinares abrangendo ciências sociais, comunicação e informação",0,0,0,3,1,6,4,
+3525904,"Ciências naturais, matemática e estatística",Matemática e estatística,Estatística,0,0,0,1,1,7,4,
+3525904,"Ciências naturais, matemática e estatística",Matemática e estatística,Matemática,1,1,0,0,1,12,5,0.0
+3525904,Artes e humanidades,Artes,Música e artes cênicas,0,0,0,0,1,5,6,
+3525904,"Engenharia, produção e construção",Engenharia e profissões correlatas,"Veículos a motor, construção naval, aeronáutica, ferroviária e metroviária",0,0,2,0,1,10,5,
+3525904,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Gestão e desenvolvimento de sistemas de informação,161,156,167,259,0,0,0,-100.0
+3525904,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Ciência da computação,81,55,50,72,0,0,0,-100.0
+3525904,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Desenvolvimento de sistemas que integram software e hardware,48,24,34,30,0,0,0,-100.0
+3525904,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Soluções computacionais para domínios específicos,2,3,5,12,0,0,0,-100.0
+3525904,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Produção de software,2,0,1,10,0,0,0,-100.0
+3525904,Artes e humanidades,Línguas,Letras,1,1,2,4,0,19,15,-100.0
+3525904,Artes e humanidades,Artes,Belas artes,0,0,0,2,0,29,20,
+3525904,"Ciências sociais, comunicação e informação",Comunicação e informação,Ciência da informação e museologia,0,0,0,2,0,17,11,
+3538709,"Negócios, administração e direito",Negócios e administração,Gestão e administração,1409,1219,1035,1225,1285,6639,4257,-8.8
+3538709,"Negócios, administração e direito",Direito,Direito,580,396,299,319,314,1691,865,-45.9
+3538709,Saúde e bem-estar,Saúde,"Promoção, prevenção, terapia e reabilitação",504,437,289,339,275,2354,1581,-45.4
+3538709,"Ciências sociais, comunicação e informação",Ciências sociais e comportamentais,Psicologia,252,144,186,136,238,1538,626,-5.6
+3538709,Educação,Educação,Formação de professores sem áreas específicas,682,780,583,364,229,2064,1268,-66.4
+3538709,"Agricultura, silvicultura, pesca e veterinária",Agricultura,"Produção agrícola, agropecuária e zootecnia",154,179,169,210,208,1353,300,35.1
+3538709,Saúde e bem-estar,Saúde,Enfermagem,198,148,160,142,183,1240,672,-7.6
+3538709,Educação,Educação,Formação de professores em áreas específicas (exceto Letras),283,274,221,116,165,915,466,-41.7
+3538709,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Análise e desenvolvimento de algoritmos e aplicações,0,0,0,0,158,1410,1047,
+3538709,Saúde e bem-estar,Saúde,Medicina,0,0,0,0,152,706,136,
+3538709,"Engenharia, produção e construção",Engenharia e profissões correlatas,Engenharia mecânica e metalurgia,145,134,137,98,124,1037,491,-14.5
+3538709,"Negócios, administração e direito",Negócios e administração,Contabilidade e tributação,191,181,137,140,104,920,520,-45.5
+3538709,Saúde e bem-estar,Saúde,Tecnologia de diagnóstico e tratamento médico,0,0,0,85,101,754,430,
+3538709,"Engenharia, produção e construção",Arquitetura e construção,Engenharia civil e construção,192,133,139,97,99,607,313,-48.4
+3538709,"Engenharia, produção e construção",Produção e processamento,Produção e processos de fabricação,126,116,149,125,98,874,408,-22.2
+3538709,"Negócios, administração e direito",Negócios e administração,Marketing e propaganda,112,114,65,92,95,545,448,-15.2
+3538709,"Negócios, administração e direito",Negócios e administração,Gestão comercial,32,20,47,71,93,348,265,190.6
+3538709,"Engenharia, produção e construção",Engenharia e profissões correlatas,Eletricidade e energia,31,34,66,41,83,510,226,167.7
+3538709,"Engenharia, produção e construção",Engenharia e profissões correlatas,Tecnologia de proteção ambiental,65,66,52,58,77,361,126,18.5
+3538709,Saúde e bem-estar,Saúde,Odontologia,60,16,71,135,71,568,204,18.3
+3538709,"Engenharia, produção e construção",Engenharia e profissões correlatas,Eletrônica e automação,59,59,30,40,66,732,278,11.9
+3538709,"Negócios, administração e direito",Negócios e administração,"Finanças, bancos e seguros",16,41,39,43,62,290,227,287.5
+3538709,Artes e humanidades,Artes,"Produção audiovisual, de mídia e cultural",91,94,46,64,60,222,163,-34.1
+3538709,"Ciências sociais, comunicação e informação",Ciências sociais e comportamentais,Economia,103,66,47,44,54,346,121,-47.6
+3538709,"Engenharia, produção e construção",Produção e processamento,Processamento de alimentos,70,63,46,66,42,259,89,-40.0
+3538709,Serviços,Serviços de segurança,Proteção de pessoas e de propriedades,18,39,34,38,37,188,161,105.6
+3538709,"Agricultura, silvicultura, pesca e veterinária",Veterinária,Veterinária,0,0,0,26,34,434,247,
+3538709,"Agricultura, silvicultura, pesca e veterinária",Silvicultura,Silvicultura,20,24,23,36,29,211,37,45.0
+3538709,"Engenharia, produção e construção",Arquitetura e construção,Arquitetura e planejamento urbano,0,8,36,14,28,369,211,
+3538709,"Ciências naturais, matemática e estatística",Ciências físicas,Química,0,0,3,1,28,129,82,
+3538709,Educação,Educação,Formação de professores de letras,82,55,61,45,27,282,197,-67.1
+3538709,Saúde e bem-estar,Bem-estar,Serviço social,77,82,28,42,27,250,149,-64.9
+3538709,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Infraestrutura e gestão de TIC,30,24,6,27,26,204,179,-13.3
+3538709,Serviços,Serviços pessoais,Serviços de beleza,10,23,12,16,25,93,74,150.0
+3538709,"Ciências naturais, matemática e estatística",Ciências biológicas e correlatas,Biologia,43,45,26,36,19,173,57,-55.8
+3538709,Artes e humanidades,Artes,"Moda, design de interiores e desenho industrial",2,2,10,22,18,98,78,800.0
+3538709,Serviços,Serviços pessoais,Serviços de alimentação,26,12,2,16,14,43,37,-46.2
+3538709,Artes e humanidades,Humanidades (exceto línguas),Religião e teologia,7,11,9,9,11,73,51,57.1
+3538709,Computação e Tecnologias da Informação e Comunicação (TIC),Programas interdisciplinares abrangendo computação e Tecnologias da Informação e Comunicação (TIC),Soluções computacionais para domínios específicos,0,0,0,0,11,106,75,
+3538709,"Engenharia, produção e construção",Engenharia e profissões correlatas,Engenharia química e de processos,36,20,25,32,10,194,88,-72.2
+3538709,Saúde e bem-estar,Saúde,Medicina e terapia tradicional e complementar,0,0,4,5,10,59,49,
+3538709,Serviços,Serviços pessoais,Turismo e hotelaria,1,5,3,5,9,39,30,800.0
+3538709,Computação e Tecnologias da Informação e Comunicação (TIC),Programas interdisciplinares abrangendo computação e Tecnologias da Informação e Comunicação (TIC),Programas interdisciplinares abrangendo computação e Tecnologias da Informação e Comunicação (TIC),0,0,0,0,9,78,98,
+3538709,Saúde e bem-estar,Saúde,Farmácia,42,72,28,2,8,250,183,-81.0
+3538709,"Ciências sociais, comunicação e informação",Comunicação e informação,Ciência da informação e museologia,0,0,0,0,8,38,15,
+3538709,"Ciências sociais, comunicação e informação",Ciências sociais e comportamentais,Ciências sociais e políticas,27,34,6,1,4,70,53,-85.2
+3538709,Educação,Educação,Ciência da educação,0,0,1,1,4,57,53,
+3538709,"Ciências sociais, comunicação e informação","Programas interdisciplinares abrangendo ciências sociais, comunicação e informação","Programas interdisciplinares abrangendo ciências sociais, comunicação e informação",0,0,0,0,4,8,4,
+3538709,Saúde e bem-estar,Bem-estar,Assistência a idosos e a deficientes,0,0,1,5,3,18,13,
+3538709,"Negócios, administração e direito",Negócios e administração,Secretariado e trabalhos de escritório,1,0,2,2,3,17,16,200.0
+3538709,Serviços,Serviços de transporte,Serviços de transporte,0,0,0,2,3,9,5,
+3538709,Artes e humanidades,Línguas,Letras,52,48,25,3,2,14,9,-96.2
+3538709,"Ciências sociais, comunicação e informação","Programas abrangendo ciências sociais, comunicação e informação em processo de definição da classificação","Programas abrangendo ciências sociais, comunicação e informação em processo de definição da classificação",0,0,0,2,2,83,78,
+3538709,Artes e humanidades,Humanidades (exceto línguas),História e arqueologia,0,0,0,2,2,15,7,
+3538709,"Negócios, administração e direito","Programas interdisciplinares abrangendo negócios, administração e direito","Programas interdisciplinares abrangendo negócios, administração e direito",0,1,0,2,2,12,4,
+3538709,Serviços,Serviços pessoais,Esportes e lazer,0,0,0,0,2,4,0,
+3538709,Artes e humanidades,Artes,Belas artes,0,0,0,0,2,16,16,
+3538709,"Ciências sociais, comunicação e informação",Comunicação e informação,Comunicação e reportagem,86,38,7,1,1,39,32,-98.8
+3538709,"Ciências naturais, matemática e estatística",Matemática e estatística,Estatística,0,0,0,1,1,4,5,
+3538709,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Gestão e desenvolvimento de sistemas de informação,112,87,102,130,0,0,0,-100.0
+3538709,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Ciência da computação,27,36,33,38,0,0,0,-100.0
+3538709,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Desenvolvimento de sistemas que integram software e hardware,0,0,7,10,0,0,0,
+3538709,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Soluções computacionais para domínios específicos,0,0,2,9,0,0,0,
+3538709,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Produção de software,0,1,0,5,0,0,0,
+3538709,Artes e humanidades,Humanidades (exceto línguas),Filosofia e ética,0,0,2,1,0,4,3,
+3538709,"Engenharia, produção e construção",Engenharia e profissões correlatas,"Veículos a motor, construção naval, aeronáutica, ferroviária e metroviária",0,0,2,1,0,4,2,
+3538709,Saúde e bem-estar,Programas interdisciplinares abrangendo saúde e bem-estar,Programas interdisciplinares abrangendo saúde e bem-estar,0,0,0,1,0,2,4,
+3552205,"Negócios, administração e direito",Negócios e administração,Gestão e administração,1961,2058,1428,2080,2010,11819,8420,2.5
+3552205,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Análise e desenvolvimento de algoritmos e aplicações,0,0,0,0,990,5290,3476,
+3552205,Educação,Educação,Formação de professores sem áreas específicas,1486,1419,1070,728,704,6131,3514,-52.6
+3552205,"Negócios, administração e direito",Direito,Direito,435,522,496,507,510,2845,1115,17.2
+3552205,Saúde e bem-estar,Saúde,"Promoção, prevenção, terapia e reabilitação",519,635,629,607,483,3982,2522,-6.9
+3552205,"Engenharia, produção e construção",Engenharia e profissões correlatas,Engenharia mecânica e metalurgia,358,417,412,396,339,1745,854,-5.3
+3552205,Educação,Educação,Formação de professores em áreas específicas (exceto Letras),506,519,373,374,331,2548,1452,-34.6
+3552205,"Engenharia, produção e construção",Engenharia e profissões correlatas,Eletrônica e automação,202,201,168,176,295,2120,832,46.0
+3552205,"Negócios, administração e direito",Negócios e administração,Marketing e propaganda,253,288,220,327,293,1784,1335,15.8
+3552205,"Ciências sociais, comunicação e informação",Ciências sociais e comportamentais,Psicologia,254,273,216,263,271,1940,996,6.7
+3552205,"Engenharia, produção e construção",Produção e processamento,Produção e processos de fabricação,303,337,297,265,235,1463,725,-22.4
+3552205,"Agricultura, silvicultura, pesca e veterinária",Veterinária,Veterinária,98,94,116,175,202,1128,412,106.1
+3552205,"Negócios, administração e direito",Negócios e administração,Contabilidade e tributação,246,274,187,221,199,1441,891,-19.1
+3552205,"Negócios, administração e direito",Negócios e administração,"Finanças, bancos e seguros",125,185,122,174,190,821,727,52.0
+3552205,Saúde e bem-estar,Saúde,Odontologia,58,91,78,163,190,897,305,227.6
+3552205,"Engenharia, produção e construção",Arquitetura e construção,Engenharia civil e construção,445,381,298,257,176,1067,517,-60.4
+3552205,"Negócios, administração e direito",Negócios e administração,Gestão comercial,151,135,116,139,171,890,764,13.2
+3552205,Saúde e bem-estar,Saúde,Enfermagem,209,261,261,231,166,2101,1406,-20.6
+3552205,Saúde e bem-estar,Saúde,Tecnologia de diagnóstico e tratamento médico,46,152,169,127,148,1871,1256,221.7
+3552205,Saúde e bem-estar,Saúde,Farmácia,51,154,142,114,130,1069,590,154.9
+3552205,"Engenharia, produção e construção",Engenharia e profissões correlatas,Tecnologia de proteção ambiental,103,97,95,110,104,628,324,1.0
+3552205,"Ciências sociais, comunicação e informação",Ciências sociais e comportamentais,Economia,69,60,63,79,100,736,296,44.9
+3552205,"Engenharia, produção e construção",Arquitetura e construção,Arquitetura e planejamento urbano,180,182,140,151,98,1003,390,-45.6
+3552205,Educação,Educação,Formação de professores de letras,95,177,103,127,91,844,571,-4.2
+3552205,Serviços,Serviços pessoais,Serviços de beleza,94,113,81,83,91,508,384,-3.2
+3552205,Saúde e bem-estar,Saúde,Medicina,105,107,113,96,88,913,233,-16.2
+3552205,Serviços,Serviços de segurança,Proteção de pessoas e de propriedades,62,61,42,81,87,461,421,40.3
+3552205,"Engenharia, produção e construção",Engenharia e profissões correlatas,Eletricidade e energia,129,113,96,106,85,685,401,-34.1
+3552205,Artes e humanidades,Artes,"Produção audiovisual, de mídia e cultural",73,73,38,64,83,447,382,13.7
+3552205,"Engenharia, produção e construção",Engenharia e profissões correlatas,Engenharia química e de processos,116,128,105,119,82,381,82,-29.3
+3552205,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Infraestrutura e gestão de TIC,33,43,49,62,79,605,613,139.4
+3552205,Artes e humanidades,Artes,"Moda, design de interiores e desenho industrial",76,92,67,113,72,584,387,-5.3
+3552205,"Ciências naturais, matemática e estatística",Ciências biológicas e correlatas,Biologia,61,88,90,64,53,475,205,-13.1
+3552205,"Agricultura, silvicultura, pesca e veterinária",Agricultura,"Produção agrícola, agropecuária e zootecnia",20,28,46,60,45,341,174,125.0
+3552205,Saúde e bem-estar,Bem-estar,Serviço social,92,129,71,51,43,416,317,-53.3
+3552205,Serviços,Serviços pessoais,Serviços de alimentação,50,54,29,34,41,177,182,-18.0
+3552205,Computação e Tecnologias da Informação e Comunicação (TIC),Programas interdisciplinares abrangendo computação e Tecnologias da Informação e Comunicação (TIC),Soluções computacionais para domínios específicos,0,0,0,0,41,434,269,
+3552205,Serviços,Serviços pessoais,Turismo e hotelaria,26,13,18,36,38,231,115,46.2
+3552205,"Ciências sociais, comunicação e informação",Comunicação e informação,Comunicação e reportagem,32,47,53,45,37,275,150,15.6
+3552205,"Ciências sociais, comunicação e informação",Ciências sociais e comportamentais,Ciências sociais e políticas,22,16,17,35,37,303,165,68.2
+3552205,Saúde e bem-estar,Saúde,Medicina e terapia tradicional e complementar,0,0,34,70,29,205,176,
+3552205,"Engenharia, produção e construção",Produção e processamento,Materiais,20,22,25,15,22,114,70,10.0
+3552205,"Ciências naturais, matemática e estatística",Ciências físicas,Química,15,12,15,11,20,137,93,33.3
+3552205,"Agricultura, silvicultura, pesca e veterinária",Silvicultura,Silvicultura,10,13,26,25,19,171,37,90.0
+3552205,"Ciências sociais, comunicação e informação","Programas abrangendo ciências sociais, comunicação e informação em processo de definição da classificação","Programas abrangendo ciências sociais, comunicação e informação em processo de definição da classificação",0,0,0,0,15,201,205,
+3552205,Serviços,Serviços de transporte,Serviços de transporte,1,1,4,8,14,41,21,1300.0
+3552205,Computação e Tecnologias da Informação e Comunicação (TIC),Programas interdisciplinares abrangendo computação e Tecnologias da Informação e Comunicação (TIC),Programas interdisciplinares abrangendo computação e Tecnologias da Informação e Comunicação (TIC),0,0,0,1,13,147,192,
+3552205,"Engenharia, produção e construção",Engenharia e profissões correlatas,"Veículos a motor, construção naval, aeronáutica, ferroviária e metroviária",24,21,26,14,12,54,34,-50.0
+3552205,"Negócios, administração e direito",Negócios e administração,Secretariado e trabalhos de escritório,5,2,1,6,10,50,40,100.0
+3552205,Saúde e bem-estar,Bem-estar,Assistência a idosos e a deficientes,0,2,4,8,9,39,34,
+3552205,"Engenharia, produção e construção",Produção e processamento,Processamento de alimentos,17,21,16,22,8,48,24,-52.9
+3552205,Serviços,Higiene e serviços de saúde ocupacional,Saúde e segurança no trabalho,1,0,5,7,8,117,144,700.0
+3552205,"Negócios, administração e direito","Programas interdisciplinares abrangendo negócios, administração e direito","Programas interdisciplinares abrangendo negócios, administração e direito",0,4,0,5,8,25,20,
+3552205,Educação,Educação,Ciência da educação,0,0,5,3,8,141,190,
+3552205,Artes e humanidades,Humanidades (exceto línguas),Religião e teologia,12,12,6,6,7,163,135,-41.7
+3552205,"Ciências sociais, comunicação e informação",Comunicação e informação,Ciência da informação e museologia,2,2,12,6,6,48,25,200.0
+3552205,Artes e humanidades,Humanidades (exceto línguas),História e arqueologia,0,1,0,0,4,17,10,
+3552205,Artes e humanidades,Línguas,Letras,8,10,11,8,2,28,19,-75.0
+3552205,Saúde e bem-estar,Programas interdisciplinares abrangendo saúde e bem-estar,Programas interdisciplinares abrangendo saúde e bem-estar,0,0,0,2,2,22,21,
+3552205,"Ciências naturais, matemática e estatística","Programas interdisciplinares abrangendo ciências naturais, matemática e estatística","Programas interdisciplinares abrangendo ciências naturais, matemática e estatística",0,0,0,0,2,7,3,
+3552205,"Ciências naturais, matemática e estatística",Ciências físicas,Ciências da terra,0,0,0,0,2,4,2,
+3552205,"Ciências naturais, matemática e estatística",Ciências físicas,Física,0,0,0,0,2,6,3,
+3552205,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Programas abrangendo Computação e Tecnologias da Informação e Comunicação (TIC) em processo de definição da classificação,0,0,0,0,2,6,0,
+3552205,"Ciências naturais, matemática e estatística",Matemática e estatística,Estatística,0,0,0,0,1,6,6,
+3552205,Artes e humanidades,Artes,Música e artes cênicas,0,0,0,0,1,3,3,
+3552205,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Gestão e desenvolvimento de sistemas de informação,214,256,377,460,0,0,0,-100.0
+3552205,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Desenvolvimento de sistemas que integram software e hardware,67,73,83,98,0,0,0,-100.0
+3552205,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Ciência da computação,76,51,45,84,0,0,0,-100.0
+3552205,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Soluções computacionais para domínios específicos,0,4,4,16,0,0,0,
+3552205,Computação e Tecnologias da Informação e Comunicação (TIC),Computação e Tecnologias da Informação e Comunicação (TIC),Produção de software,99,52,25,15,0,0,0,-100.0
+3552205,Artes e humanidades,Humanidades (exceto línguas),Filosofia e ética,1,0,0,4,0,20,9,-100.0
+3552205,Serviços,Serviços pessoais,Esportes e lazer,0,1,1,2,0,5,5,
+3552205,"Ciências naturais, matemática e estatística",Matemática e estatística,Matemática,2,0,0,1,0,13,11,-100.0

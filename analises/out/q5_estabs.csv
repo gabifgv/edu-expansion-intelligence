@@ -1,0 +1,101 @@
+id_municipio,descricao_subsetor,estabs_2020,estabs_2024,delta_estabs_pct,vinc_ativos_2024,vinc_total_2022,vinc_eleg_2022,pct_eleg_2022
+3509502,Comércio e Administração de Imóveis e Serviços Técnicos,13568,17020,25.4,105910,172649,14290,8.3
+3509502,Comércio Varejista,14088,14538,3.2,73189,252978,2268,0.9
+3509502,"Serviços Médicos, Odontológicos e Veterinários",3622,7037,94.3,25338,115221,4154,3.6
+3509502,"Serviços de Alojamento, Alimentação e Reparação",6699,6261,-6.5,53367,123527,248,0.2
+3509502,Transportes e Comunicações,2857,2593,-9.2,33780,85094,4461,5.2
+3509502,Construção Civil,2069,2536,22.6,23927,50381,1062,2.1
+3509502,Comércio Atacadista,1997,2238,12.1,20121,48321,3478,7.2
+3509502,Ensino,1667,2023,21.4,45160,40872,3869,9.5
+3509502,"Instituições de Crédito, Seguros e Capitalização",1053,1236,17.4,9809,12963,5156,39.8
+3509502,"Indústria de Produtos Alimentícios, Bebidas e Álcool",604,796,31.8,13153,39406,3258,8.3
+3509502,Indústria Metalúrgica,410,525,28.0,3743,7459,134,1.8
+3509502,Indústria Mecânica,424,476,12.3,3633,21339,1114,5.2
+3509502,"Agricultura, Silvicultura, Criação de Animais e Extrativismo Vegetal",505,394,-22.0,2237,6799,229,3.4
+3509502,"Indústria da Borracha, Fumo, Couros e Similares",317,392,23.7,6173,17834,176,1.0
+3509502,"Indústria do Papel, Papelão, Editorial e Gráfica",297,363,22.2,974,1604,89,5.5
+3509502,Indústria Têxtil do Vestuário e Artefatos de Tecidos,250,232,-7.2,1952,4095,21,0.5
+3509502,Indústria da Madeira e do Mobiliário,158,190,20.3,935,1185,3,0.3
+3509502,Indústria Química,155,172,11.0,4254,13456,1786,13.3
+3509502,Serviços Industriais de Utilidade Pública,94,127,35.1,5525,5671,1127,19.9
+3509502,Indústria do Material Elétrico e de Comunicações,111,125,12.6,4353,6992,771,11.0
+3509502,Indústria do Material de Transporte,73,87,19.2,8733,11534,1091,9.5
+3509502,Indústria de Produtos Minerais Não Metálicos,68,65,-4.4,700,3116,31,1.0
+3509502,Administração Pública Direta e Autárquica,46,44,-4.3,24654,20782,3307,15.9
+3509502,Extrativismo Mineral,8,6,-25.0,434,3074,272,8.8
+3509502,Indústria de Calçados,5,3,-40.0,46,96,0,0.0
+3525904,Comércio e Administração de Imóveis e Serviços Técnicos,4940,6983,41.4,32583,62974,1248,2.0
+3525904,Comércio Varejista,5062,5330,5.3,28366,99266,1398,1.4
+3525904,"Serviços Médicos, Odontológicos e Veterinários",1051,2531,140.8,10292,44410,817,1.8
+3525904,"Serviços de Alojamento, Alimentação e Reparação",2427,2121,-12.6,16804,42767,226,0.5
+3525904,Transportes e Comunicações,1157,1129,-2.4,16913,58588,684,1.2
+3525904,Construção Civil,644,979,52.0,6659,12211,160,1.3
+3525904,Comércio Atacadista,744,932,25.3,9887,33040,1508,4.6
+3525904,Ensino,696,845,21.4,14329,11728,295,2.5
+3525904,"Indústria de Produtos Alimentícios, Bebidas e Álcool",404,449,11.1,11031,28620,1260,4.4
+3525904,Indústria Mecânica,298,363,21.8,6566,22822,800,3.5
+3525904,"Instituições de Crédito, Seguros e Capitalização",346,363,4.9,3458,4630,1007,21.7
+3525904,Indústria Metalúrgica,208,211,1.4,3815,7380,190,2.6
+3525904,"Agricultura, Silvicultura, Criação de Animais e Extrativismo Vegetal",312,177,-43.3,803,1818,18,1.0
+3525904,"Indústria da Borracha, Fumo, Couros e Similares",107,154,43.9,1766,5463,648,11.9
+3525904,"Indústria do Papel, Papelão, Editorial e Gráfica",132,148,12.1,3074,3128,211,6.7
+3525904,Indústria Química,119,130,9.2,10586,27845,1401,5.0
+3525904,Indústria da Madeira e do Mobiliário,75,76,1.3,1108,1301,8,0.6
+3525904,Indústria Têxtil do Vestuário e Artefatos de Tecidos,78,69,-11.5,1571,3484,6,0.2
+3525904,Indústria do Material Elétrico e de Comunicações,45,57,26.7,5566,8676,917,10.6
+3525904,Indústria de Produtos Minerais Não Metálicos,44,51,15.9,2717,5640,64,1.1
+3525904,Serviços Industriais de Utilidade Pública,50,49,-2.0,1203,1512,140,9.3
+3525904,Indústria do Material de Transporte,34,40,17.6,4404,6284,167,2.7
+3525904,Administração Pública Direta e Autárquica,24,17,-29.2,8234,7949,493,6.2
+3525904,Extrativismo Mineral,6,7,16.7,106,1067,22,2.1
+3525904,Indústria de Calçados,1,1,0.0,0,4,0,0.0
+3538709,Comércio Varejista,5280,5709,8.1,26420,86548,582,0.7
+3538709,Comércio e Administração de Imóveis e Serviços Técnicos,2938,4361,48.4,24120,24216,754,3.1
+3538709,"Serviços de Alojamento, Alimentação e Reparação",2095,2010,-4.1,11006,28659,46,0.2
+3538709,"Serviços Médicos, Odontológicos e Veterinários",894,1453,62.5,7194,26827,380,1.4
+3538709,Construção Civil,788,1136,44.2,5614,10873,100,0.9
+3538709,Comércio Atacadista,823,1034,25.6,6359,13606,190,1.4
+3538709,Transportes e Comunicações,731,787,7.7,6635,21220,151,0.7
+3538709,Ensino,419,561,33.9,10977,10199,312,3.1
+3538709,Indústria Mecânica,430,545,26.7,14747,29764,311,1.0
+3538709,Indústria Metalúrgica,320,423,32.2,5457,8067,85,1.1
+3538709,"Agricultura, Silvicultura, Criação de Animais e Extrativismo Vegetal",417,356,-14.6,1878,3462,221,6.4
+3538709,"Indústria de Produtos Alimentícios, Bebidas e Álcool",267,338,26.6,5998,15004,107,0.7
+3538709,"Instituições de Crédito, Seguros e Capitalização",312,332,6.4,2037,3141,1013,32.3
+3538709,"Indústria da Borracha, Fumo, Couros e Similares",140,159,13.6,969,2603,18,0.7
+3538709,Indústria da Madeira e do Mobiliário,124,146,17.7,1265,1593,0,0.0
+3538709,Indústria Química,104,128,23.1,3146,4984,53,1.1
+3538709,"Indústria do Papel, Papelão, Editorial e Gráfica",85,94,10.6,2065,1796,43,2.4
+3538709,Indústria Têxtil do Vestuário e Artefatos de Tecidos,69,92,33.3,1408,2312,30,1.3
+3538709,Indústria de Produtos Minerais Não Metálicos,78,74,-5.1,1686,4190,62,1.5
+3538709,Indústria do Material de Transporte,38,54,42.1,7841,18594,595,3.2
+3538709,Indústria do Material Elétrico e de Comunicações,31,46,48.4,311,1229,10,0.8
+3538709,Serviços Industriais de Utilidade Pública,31,37,19.4,1951,2713,24,0.9
+3538709,Administração Pública Direta e Autárquica,18,13,-27.8,8937,7554,307,4.1
+3538709,Extrativismo Mineral,9,9,0.0,56,528,44,8.3
+3538709,Indústria de Calçados,1,1,0.0,0,4,0,0.0
+3552205,Comércio Varejista,7435,7865,5.8,41993,151455,727,0.5
+3552205,Comércio e Administração de Imóveis e Serviços Técnicos,5880,7157,21.7,39093,54241,806,1.5
+3552205,"Serviços Médicos, Odontológicos e Veterinários",1685,3103,84.2,17087,75493,286,0.4
+3552205,"Serviços de Alojamento, Alimentação e Reparação",3281,2898,-11.7,19244,48458,83,0.2
+3552205,Construção Civil,1362,1938,42.3,9196,19062,91,0.5
+3552205,Comércio Atacadista,1318,1495,13.4,9654,22596,436,1.9
+3552205,Transportes e Comunicações,1041,1099,5.6,11092,27914,307,1.1
+3552205,Ensino,692,822,18.8,18394,15592,604,3.9
+3552205,"Indústria de Produtos Alimentícios, Bebidas e Álcool",489,558,14.1,7160,28033,792,2.8
+3552205,Indústria Metalúrgica,411,500,21.7,5957,9964,149,1.5
+3552205,Indústria Mecânica,425,487,14.6,10492,39198,637,1.6
+3552205,"Instituições de Crédito, Seguros e Capitalização",459,450,-2.0,4316,4921,1359,27.6
+3552205,"Indústria da Borracha, Fumo, Couros e Similares",186,227,22.0,2329,6402,475,7.4
+3552205,Indústria Química,169,203,20.1,6199,15161,752,5.0
+3552205,"Indústria do Papel, Papelão, Editorial e Gráfica",169,168,-0.6,2297,2529,143,5.7
+3552205,"Agricultura, Silvicultura, Criação de Animais e Extrativismo Vegetal",159,160,0.6,682,1997,6,0.3
+3552205,Indústria Têxtil do Vestuário e Artefatos de Tecidos,147,160,8.8,3256,7622,118,1.5
+3552205,Indústria da Madeira e do Mobiliário,81,103,27.2,985,1089,6,0.6
+3552205,Indústria do Material de Transporte,78,99,26.9,15931,28157,1460,5.2
+3552205,Indústria de Produtos Minerais Não Metálicos,72,85,18.1,1896,4695,22,0.5
+3552205,Indústria do Material Elétrico e de Comunicações,75,81,8.0,5034,7227,1051,14.5
+3552205,Serviços Industriais de Utilidade Pública,43,51,18.6,1918,2751,50,1.8
+3552205,Administração Pública Direta e Autárquica,32,25,-21.9,13103,9767,649,6.6
+3552205,Extrativismo Mineral,6,4,-33.3,118,974,33,3.4
+3552205,Indústria de Calçados,4,2,-50.0,56,36,0,0.0

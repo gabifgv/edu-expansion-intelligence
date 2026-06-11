@@ -1,0 +1,355 @@
+﻿
+================================================================
+## Campinas
+================================================================
+
+### Perfil rows (vs UF SP):
+  IDHM geral: cidade=0.805 uf=0.7801040652244444 delta=% status=above
+  Renda per capita (R$/mÃªs): cidade=3395.9269724315473 uf=2646.82452202067 delta=% status=above
+  Renda mÃ©dia RAIS (R$/mÃªs): cidade=6310.208027038383 uf=5349.543267525539 delta=% status=above
+  Ãndice de Gini: cidade=0.56 uf=0.525009701009876 delta=% status=above
+  Pop. 25+ com superior: cidade=21.31 uf=14.90261370946323 delta=% status=above
+  ProporÃ§Ã£o em pobreza: cidade=3.16 uf=4.660854720806323 delta=% status=above
+  ElegÃ­veis / vÃ­nculos: cidade=6.616744305615269 uf=3.883376184723406 delta=% status=above
+
+### Top 12 setores (por_setor) ordenados por elegiveis:
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,5% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg= 15,7% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  1,7% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,2% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  2,5% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,6% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,2% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,2% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,0% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  2,6% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  5,8% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  1,5% | 
+
+### Top 20 cargos (por_cargo) por elegiveis:
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+
+### Pipeline cursos_alta (top 10):
+  {"area":"SaÃºde e bem-estar","curso":"Tecnologia de diagnÃ³stico e tratamento mÃ©dico","c24":363,"c20":53,"share":2.15,"cresc":584.9,"nota":""}
+  {"area":"ComputaÃ§Ã£o e Tecnologias da InformaÃ§Ã£o e ComunicaÃ§Ã£o (TIC)","curso":"AnÃ¡lise e desenvolvimento de algoritmos e aplicaÃ§Ãµes","c24":1278,"c20":704,"share":7.58,"cresc":81.5,"nota":"reclassif."}
+  {"area":"SaÃºde e bem-estar","curso":"PromoÃ§Ã£o, prevenÃ§Ã£o, terapia e reabilitaÃ§Ã£o","c24":884,"c20":674,"share":5.24,"cresc":31.2,"nota":""}
+  {"area":"SaÃºde e bem-estar","curso":"Medicina","c24":577,"c20":395,"share":3.42,"cresc":46.1,"nota":""}
+  {"area":"SaÃºde e bem-estar","curso":"FarmÃ¡cia","c24":342,"c20":198,"share":2.03,"cresc":72.7,"nota":""}
+  {"area":"SaÃºde e bem-estar","curso":"Odontologia","c24":276,"c20":168,"share":1.64,"cresc":64.3,"nota":""}
+  {"area":"CiÃªncias sociais, comunicaÃ§Ã£o e informaÃ§Ã£o","curso":"Psicologia","c24":636,"c20":554,"share":3.77,"cresc":14.8,"nota":""}
+  {"area":"ServiÃ§os","curso":"ProteÃ§Ã£o de pessoas e de propriedades","c24":190,"c20":134,"share":1.13,"cresc":41.8,"nota":""}
+  {"area":"CiÃªncias sociais, comunicaÃ§Ã£o e informaÃ§Ã£o","curso":"CiÃªncias sociais e polÃ­ticas","c24":334,"c20":287,"share":1.98,"cresc":16.4,"nota":""}
+  {"area":"ComputaÃ§Ã£o e Tecnologias da InformaÃ§Ã£o e ComunicaÃ§Ã£o (TIC)","curso":"Infraestrutura e gestÃ£o de TIC","c24":231,"c20":197,"share":1.37,"cresc":17.3,"nota":""}
+
+### Pipeline areas_alta (top 10):
+  {"area":"SaÃºde e bem-estar","total_c24":2843,"total_c20_baseline":1865,"cursos":[{"curso":"PromoÃ§Ã£o, prevenÃ§Ã£o, terapia e reabilitaÃ§Ã£o","c24":884,"cresc":31.2,"nota":""},{"curso":"Medicina","c24":577,"cresc":46.1,"nota":""},{"curso":"Enfermagem","c24":401,"cresc":6.4,"nota":""},{"curso":"Tecnologia de diagnÃ³stico e tratamento mÃ©dico","c24":363,"cresc":584.9,"nota":""},{"curso":"FarmÃ¡cia","c24":342,"cresc":72.7,"nota":""},{"curso":"Odontologia","c24":276,"cresc":64.3,"nota":""}],"cresc":52.4}
+  {"area":"ComputaÃ§Ã£o e Tecnologias da InformaÃ§Ã£o e ComunicaÃ§Ã£o (TIC)","total_c24":1509,"total_c20_baseline":901,"cursos":[{"curso":"AnÃ¡lise e desenvolvimento de algoritmos e aplicaÃ§Ãµes","c24":1278,"cresc":81.5,"nota":"reclassif."},{"curso":"Infraestrutura e gestÃ£o de TIC","c24":231,"cresc":17.3,"nota":""}],"cresc":67.5}
+  {"area":"CiÃªncias sociais, comunicaÃ§Ã£o e informaÃ§Ã£o","total_c24":1266,"total_c20_baseline":1118,"cursos":[{"curso":"Psicologia","c24":636,"cresc":14.8,"nota":""},{"curso":"CiÃªncias sociais e polÃ­ticas","c24":334,"cresc":16.4,"nota":""},{"curso":"Economia","c24":296,"cresc":6.9,"nota":""}],"cresc":13.2}
+  {"area":"ServiÃ§os","total_c24":190,"total_c20_baseline":134,"cursos":[{"curso":"ProteÃ§Ã£o de pessoas e de propriedades","c24":190,"cresc":41.8,"nota":""}],"cresc":41.8}
+  {"area":"NegÃ³cios, administraÃ§Ã£o e direito","total_c24":501,"total_c20_baseline":458,"cursos":[{"curso":"FinanÃ§as, bancos e seguros","c24":256,"cresc":11.8,"nota":""},{"curso":"GestÃ£o comercial","c24":245,"cresc":7.0,"nota":""}],"cresc":9.4}
+  {"area":"Engenharia, produÃ§Ã£o e construÃ§Ã£o","total_c24":363,"total_c20_baseline":340,"cursos":[{"curso":"EletrÃ´nica e automaÃ§Ã£o","c24":363,"cresc":6.8,"nota":""}],"cresc":6.8}
+
+### Pipeline top_ies (top 10):
+  {"ies":"Universidade PitÃ¡goras Unopar Anhanguera","rede":"Privada","conc":2612.0}
+  {"ies":"UNIVERSIDADE ESTADUAL DE CAMPINAS","rede":"PÃºblica","conc":2309.0}
+  {"ies":"PONTIFÃCIA UNIVERSIDADE CATÃLICA DE CAMPINAS","rede":"Privada","conc":2189.0}
+  {"ies":"UNIVERSIDADE PAULISTA","rede":"Privada","conc":1381.0}
+  {"ies":"FACULDADE ANHANGÃERA DE CAMPINAS","rede":"Privada","conc":1378.0}
+  {"ies":"UNIVERSIDADE SÃO FRANCISCO","rede":"Privada","conc":814.0}
+  {"ies":"FACULDADE ESAMC CAMPINAS","rede":"Privada","conc":562.0}
+  {"ies":"Centro UniversitÃ¡rio Metrocamp Wyden","rede":"Privada","conc":524.0}
+  {"ies":"Centro UniversitÃ¡rio Favip Wyden","rede":"Privada","conc":422.0}
+  {"ies":"FACULDADE SÃO LEOPOLDO MANDIC","rede":"Privada","conc":410.0}
+
+### Score (linha desta cidade):
+  D1=0.5695 D2=0.1175 D3=0.6766 D4=0.4756 sal=5345.0 vinc=451234 tsup=21.3 idhm=0.805 cresc=-52.9
+
+### Estab serie (ultimos 5 anos):
+  ano=2020 estabs=51145.0 vinc_ativos=
+  ano=2021 estabs=52783.0 vinc_ativos=
+  ano=2023 estabs=55867.0 vinc_ativos=
+  ano=2024 estabs=59479.0 vinc_ativos=
+
+================================================================
+## Jundiai
+================================================================
+
+### Perfil rows (vs UF SP):
+  IDHM geral: cidade=0.822 uf=0.7801040652244444 delta=% status=above
+  Renda per capita (R$/mÃªs): cidade=3495.351162532 uf=2646.82452202067 delta=% status=above
+  Renda mÃ©dia RAIS (R$/mÃªs): cidade=5382.320551587075 uf=5349.54326752554 delta=% status=above
+  Ãndice de Gini: cidade=0.53 uf=0.525009701009876 delta=% status=above
+  Pop. 25+ com superior: cidade=20.62 uf=14.90261370946323 delta=% status=above
+  ProporÃ§Ã£o em pobreza: cidade=1.87 uf=4.660854720806323 delta=% status=above
+  ElegÃ­veis / vÃ­nculos: cidade=3.4948138597567047 uf=3.883376184723406 delta=% status=below
+
+### Top 12 setores (por_setor) ordenados por elegiveis:
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  9,2% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,6% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,4% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  3,7% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  4,6% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,5% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  1,0% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,0% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,0% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  1,6% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,3% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,8% | 
+
+### Top 20 cargos (por_cargo) por elegiveis:
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+
+### Pipeline cursos_alta (top 10):
+  {"area":"ComputaÃ§Ã£o e Tecnologias da InformaÃ§Ã£o e ComunicaÃ§Ã£o (TIC)","curso":"Infraestrutura e gestÃ£o de TIC","c24":124,"c20":76,"share":2.2,"cresc":63.2,"nota":""}
+  {"area":"ComputaÃ§Ã£o e Tecnologias da InformaÃ§Ã£o e ComunicaÃ§Ã£o (TIC)","curso":"AnÃ¡lise e desenvolvimento de algoritmos e aplicaÃ§Ãµes","c24":349,"c20":292,"share":6.18,"cresc":19.5,"nota":"reclassif."}
+  {"area":"SaÃºde e bem-estar","curso":"Tecnologia de diagnÃ³stico e tratamento mÃ©dico","c24":73,"c20":39,"share":1.29,"cresc":87.2,"nota":""}
+  {"area":"SaÃºde e bem-estar","curso":"Medicina","c24":120,"c20":79,"share":2.13,"cresc":51.9,"nota":""}
+  {"area":"NegÃ³cios, administraÃ§Ã£o e direito","curso":"FinanÃ§as, bancos e seguros","c24":122,"c20":86,"share":2.16,"cresc":41.9,"nota":""}
+  {"area":"SaÃºde e bem-estar","curso":"Enfermagem","c24":138,"c20":102,"share":2.44,"cresc":35.3,"nota":""}
+  {"area":"Engenharia, produÃ§Ã£o e construÃ§Ã£o","curso":"Eletricidade e energia","c24":115,"c20":81,"share":2.04,"cresc":42.0,"nota":""}
+  {"area":"Artes e humanidades","curso":"ProduÃ§Ã£o audiovisual, de mÃ­dia e cultural","c24":85,"c20":57,"share":1.51,"cresc":49.1,"nota":""}
+  {"area":"NegÃ³cios, administraÃ§Ã£o e direito","curso":"GestÃ£o comercial","c24":136,"c20":109,"share":2.41,"cresc":24.8,"nota":""}
+  {"area":"SaÃºde e bem-estar","curso":"FarmÃ¡cia","c24":72,"c20":52,"share":1.28,"cresc":38.5,"nota":""}
+
+### Pipeline areas_alta (top 10):
+  {"area":"SaÃºde e bem-estar","total_c24":721,"total_c20_baseline":571,"cursos":[{"curso":"PromoÃ§Ã£o, prevenÃ§Ã£o, terapia e reabilitaÃ§Ã£o","c24":318,"cresc":6.4,"nota":""},{"curso":"Enfermagem","c24":138,"cresc":35.3,"nota":""},{"curso":"Medicina","c24":120,"cresc":51.9,"nota":""},{"curso":"Tecnologia de diagnÃ³stico e tratamento mÃ©dico","c24":73,"cresc":87.2,"nota":""},{"curso":"FarmÃ¡cia","c24":72,"cresc":38.5,"nota":""}],"cresc":26.3}
+  {"area":"ComputaÃ§Ã£o e Tecnologias da InformaÃ§Ã£o e ComunicaÃ§Ã£o (TIC)","total_c24":473,"total_c20_baseline":368,"cursos":[{"curso":"AnÃ¡lise e desenvolvimento de algoritmos e aplicaÃ§Ãµes","c24":349,"cresc":19.5,"nota":"reclassif."},{"curso":"Infraestrutura e gestÃ£o de TIC","c24":124,"cresc":63.2,"nota":""}],"cresc":28.5}
+  {"area":"NegÃ³cios, administraÃ§Ã£o e direito","total_c24":1912,"total_c20_baseline":1831,"cursos":[{"curso":"GestÃ£o e administraÃ§Ã£o","c24":1654,"cresc":1.1,"nota":""},{"curso":"GestÃ£o comercial","c24":136,"cresc":24.8,"nota":""},{"curso":"FinanÃ§as, bancos e seguros","c24":122,"cresc":41.9,"nota":""}],"cresc":4.4}
+  {"area":"Engenharia, produÃ§Ã£o e construÃ§Ã£o","total_c24":188,"total_c20_baseline":153,"cursos":[{"curso":"Eletricidade e energia","c24":115,"cresc":42.0,"nota":""},{"curso":"Tecnologia de proteÃ§Ã£o ambiental","c24":73,"cresc":1.4,"nota":""}],"cresc":22.9}
+  {"area":"Artes e humanidades","total_c24":85,"total_c20_baseline":57,"cursos":[{"curso":"ProduÃ§Ã£o audiovisual, de mÃ­dia e cultural","c24":85,"cresc":49.1,"nota":""}],"cresc":49.1}
+
+### Pipeline top_ies (top 10):
+  {"ies":"CENTRO UNIVERSITÃRIO PADRE ANCHIETA","rede":"Privada","conc":1436.0}
+  {"ies":"Universidade PitÃ¡goras Unopar Anhanguera","rede":"Privada","conc":884.0}
+  {"ies":"UNIVERSIDADE PAULISTA","rede":"Privada","conc":699.0}
+  {"ies":"FACULDADE ANHANGUERA DE JUNDIAÃ","rede":"Privada","conc":454.0}
+  {"ies":"UNIVERSIDADE CIDADE DE SÃO PAULO","rede":"Privada","conc":252.0}
+  {"ies":"FACULDADE DE TECNOLOGIA DE JUNDIAÃ","rede":"PÃºblica","conc":244.0}
+  {"ies":"UNIVERSIDADE ANHEMBI MORUMBI","rede":"Privada","conc":207.0}
+  {"ies":"CENTRO UNIVERSITÃRIO INTERNACIONAL","rede":"Privada","conc":179.0}
+  {"ies":"UNIVERSIDADE CESUMAR","rede":"Privada","conc":127.0}
+  {"ies":"CENTRO UNIVERSITÃRIO ESTÃCIO DE SANTA CATARINA - ESTÃCIO SANTA CATARINA","rede":"Privada","conc":124.0}
+
+### Score (linha desta cidade):
+
+### Estab serie (ultimos 5 anos):
+  ano=2020 estabs=19004.0 vinc_ativos=
+  ano=2021 estabs=19405.0 vinc_ativos=
+  ano=2023 estabs=21427.0 vinc_ativos=
+  ano=2024 estabs=23212.0 vinc_ativos=
+
+================================================================
+## Piracicaba
+================================================================
+
+### Perfil rows (vs UF SP):
+  IDHM geral: cidade=0.785 uf=0.7801040652244444 delta=% status=above
+  Renda per capita (R$/mÃªs): cidade=2791.299953900725 uf=2646.82452202067 delta=% status=above
+  Renda mÃ©dia RAIS (R$/mÃªs): cidade=5031.014831308699 uf=5349.543267525539 delta=% status=below
+  Ãndice de Gini: cidade=0.52 uf=0.525009701009876 delta=% status=below
+  Pop. 25+ com superior: cidade=15.73 uf=14.90261370946323 delta=% status=above
+  ProporÃ§Ã£o em pobreza: cidade=3.11 uf=4.660854720806323 delta=% status=above
+  ElegÃ­veis / vÃ­nculos: cidade=2.2507394523712554 uf=3.883376184723406 delta=% status=below
+
+### Top 12 setores (por_setor) ordenados por elegiveis:
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  2,5% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,1% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,7% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  2,8% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,7% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,5% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,3% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  1,9% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,0% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,4% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,1% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  1,7% | 
+
+### Top 20 cargos (por_cargo) por elegiveis:
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+
+### Pipeline cursos_alta (top 10):
+  {"area":"NegÃ³cios, administraÃ§Ã£o e direito","curso":"FinanÃ§as, bancos e seguros","c24":62,"c20":16,"share":1.28,"cresc":287.5,"nota":""}
+  {"area":"NegÃ³cios, administraÃ§Ã£o e direito","curso":"GestÃ£o comercial","c24":93,"c20":32,"share":1.91,"cresc":190.6,"nota":""}
+  {"area":"Engenharia, produÃ§Ã£o e construÃ§Ã£o","curso":"Eletricidade e energia","c24":83,"c20":31,"share":1.71,"cresc":167.7,"nota":""}
+  {"area":"Agricultura, silvicultura, pesca e veterinÃ¡ria","curso":"ProduÃ§Ã£o agrÃ­cola, agropecuÃ¡ria e zootecnia","c24":208,"c20":154,"share":4.28,"cresc":35.1,"nota":""}
+  {"area":"ComputaÃ§Ã£o e Tecnologias da InformaÃ§Ã£o e ComunicaÃ§Ã£o (TIC)","curso":"AnÃ¡lise e desenvolvimento de algoritmos e aplicaÃ§Ãµes","c24":158,"c20":139,"share":3.25,"cresc":13.7,"nota":"reclassif."}
+  {"area":"Engenharia, produÃ§Ã£o e construÃ§Ã£o","curso":"Tecnologia de proteÃ§Ã£o ambiental","c24":77,"c20":65,"share":1.58,"cresc":18.5,"nota":""}
+  {"area":"SaÃºde e bem-estar","curso":"Odontologia","c24":71,"c20":60,"share":1.46,"cresc":18.3,"nota":""}
+  {"area":"Engenharia, produÃ§Ã£o e construÃ§Ã£o","curso":"EletrÃ´nica e automaÃ§Ã£o","c24":66,"c20":59,"share":1.36,"cresc":11.9,"nota":""}
+
+### Pipeline areas_alta (top 10):
+  {"area":"NegÃ³cios, administraÃ§Ã£o e direito","total_c24":155,"total_c20_baseline":48,"cursos":[{"curso":"GestÃ£o comercial","c24":93,"cresc":190.6,"nota":""},{"curso":"FinanÃ§as, bancos e seguros","c24":62,"cresc":287.5,"nota":""}],"cresc":222.9}
+  {"area":"Engenharia, produÃ§Ã£o e construÃ§Ã£o","total_c24":226,"total_c20_baseline":155,"cursos":[{"curso":"Eletricidade e energia","c24":83,"cresc":167.7,"nota":""},{"curso":"Tecnologia de proteÃ§Ã£o ambiental","c24":77,"cresc":18.5,"nota":""},{"curso":"EletrÃ´nica e automaÃ§Ã£o","c24":66,"cresc":11.9,"nota":""}],"cresc":45.8}
+  {"area":"Agricultura, silvicultura, pesca e veterinÃ¡ria","total_c24":208,"total_c20_baseline":154,"cursos":[{"curso":"ProduÃ§Ã£o agrÃ­cola, agropecuÃ¡ria e zootecnia","c24":208,"cresc":35.1,"nota":""}],"cresc":35.1}
+  {"area":"ComputaÃ§Ã£o e Tecnologias da InformaÃ§Ã£o e ComunicaÃ§Ã£o (TIC)","total_c24":158,"total_c20_baseline":139,"cursos":[{"curso":"AnÃ¡lise e desenvolvimento de algoritmos e aplicaÃ§Ãµes","c24":158,"cresc":13.7,"nota":"reclassif."}],"cresc":13.7}
+  {"area":"SaÃºde e bem-estar","total_c24":71,"total_c20_baseline":60,"cursos":[{"curso":"Odontologia","c24":71,"cresc":18.3,"nota":""}],"cresc":18.3}
+
+### Pipeline top_ies (top 10):
+  {"ies":"Universidade PitÃ¡goras Unopar Anhanguera","rede":"Privada","conc":950.0}
+  {"ies":"FACULDADE ANHANGÃERA DE PIRACICABA","rede":"Privada","conc":910.0}
+  {"ies":"UNIVERSIDADE ANHEMBI MORUMBI","rede":"Privada","conc":553.0}
+  {"ies":"UNIVERSIDADE DE SÃO PAULO","rede":"PÃºblica","conc":422.0}
+  {"ies":"UNIVERSIDADE METODISTA DE PIRACICABA","rede":"Privada","conc":282.0}
+  {"ies":"UNIVERSIDADE CIDADE DE SÃO PAULO","rede":"Privada","conc":270.0}
+  {"ies":"CENTRO UNIVERSITÃRIO INTERNACIONAL","rede":"Privada","conc":186.0}
+  {"ies":"ESCOLA DE ENGENHARIA DE PIRACICABA","rede":"PÃºblica","conc":173.0}
+  {"ies":"FACULDADE DE TECNOLOGIA DE PIRACICABA","rede":"Privada","conc":136.0}
+  {"ies":"Faculdade de Tecnologia de Piracicaba","rede":"PÃºblica","conc":91.0}
+
+### Score (linha desta cidade):
+  D1=0.4311 D2=0.0714 D3=0.6051 D4=0.4416 sal=4261.0 vinc=149773 tsup=15.7 idhm=0.785 cresc=-49.2
+
+### Estab serie (ultimos 5 anos):
+  ano=2020 estabs=16442.0 vinc_ativos=
+  ano=2021 estabs=16948.0 vinc_ativos=
+  ano=2023 estabs=18687.0 vinc_ativos=
+  ano=2024 estabs=19898.0 vinc_ativos=
+
+================================================================
+## Sorocaba
+================================================================
+
+### Perfil rows (vs UF SP):
+  IDHM geral: cidade=0.798 uf=0.7801040652244444 delta=% status=above
+  Renda per capita (R$/mÃªs): cidade=2703.375958676823 uf=2646.82452202067 delta=% status=above
+  Renda mÃ©dia RAIS (R$/mÃªs): cidade=5034.574117275479 uf=5349.543267525539 delta=% status=below
+  Ãndice de Gini: cidade=0.52 uf=0.525009701009876 delta=% status=below
+  Pop. 25+ com superior: cidade=16.99 uf=14.90261370946323 delta=% status=above
+  ProporÃ§Ã£o em pobreza: cidade=3.23 uf=4.660854720806323 delta=% status=above
+  ElegÃ­veis / vÃ­nculos: cidade=3.021620663874952 uf=3.883376184723406 delta=% status=below
+
+### Top 12 setores (por_setor) ordenados por elegiveis:
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,1% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,8% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  1,0% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,4% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,4% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,4% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  2,0% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,0% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,0% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,2% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,7% | 
+  [      ] eleg | total=        | sal_pond=        | pct_eleg=  0,6% | 
+
+### Top 20 cargos (por_cargo) por elegiveis:
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+  [      ] eleg | sal=        | total=       | 
+
+### Pipeline cursos_alta (top 10):
+  {"area":"ComputaÃ§Ã£o e Tecnologias da InformaÃ§Ã£o e ComunicaÃ§Ã£o (TIC)","curso":"AnÃ¡lise e desenvolvimento de algoritmos e aplicaÃ§Ãµes","c24":990,"c20":456,"share":10.25,"cresc":117.1,"nota":"reclassif."}
+  {"area":"SaÃºde e bem-estar","curso":"Odontologia","c24":190,"c20":58,"share":1.97,"cresc":227.6,"nota":""}
+  {"area":"SaÃºde e bem-estar","curso":"Tecnologia de diagnÃ³stico e tratamento mÃ©dico","c24":148,"c20":46,"share":1.53,"cresc":221.7,"nota":""}
+  {"area":"Agricultura, silvicultura, pesca e veterinÃ¡ria","curso":"VeterinÃ¡ria","c24":202,"c20":98,"share":2.09,"cresc":106.1,"nota":""}
+  {"area":"SaÃºde e bem-estar","curso":"FarmÃ¡cia","c24":130,"c20":51,"share":1.35,"cresc":154.9,"nota":""}
+  {"area":"Engenharia, produÃ§Ã£o e construÃ§Ã£o","curso":"EletrÃ´nica e automaÃ§Ã£o","c24":295,"c20":202,"share":3.06,"cresc":46.0,"nota":""}
+  {"area":"NegÃ³cios, administraÃ§Ã£o e direito","curso":"FinanÃ§as, bancos e seguros","c24":190,"c20":125,"share":1.97,"cresc":52.0,"nota":""}
+  {"area":"NegÃ³cios, administraÃ§Ã£o e direito","curso":"Direito","c24":510,"c20":435,"share":5.28,"cresc":17.2,"nota":""}
+  {"area":"NegÃ³cios, administraÃ§Ã£o e direito","curso":"GestÃ£o e administraÃ§Ã£o","c24":2010,"c20":1961,"share":20.82,"cresc":2.5,"nota":""}
+  {"area":"NegÃ³cios, administraÃ§Ã£o e direito","curso":"Marketing e propaganda","c24":293,"c20":253,"share":3.04,"cresc":15.8,"nota":""}
+
+### Pipeline areas_alta (top 10):
+  {"area":"ComputaÃ§Ã£o e Tecnologias da InformaÃ§Ã£o e ComunicaÃ§Ã£o (TIC)","total_c24":990,"total_c20_baseline":456,"cursos":[{"curso":"AnÃ¡lise e desenvolvimento de algoritmos e aplicaÃ§Ãµes","c24":990,"cresc":117.1,"nota":"reclassif."}],"cresc":117.1}
+  {"area":"SaÃºde e bem-estar","total_c24":468,"total_c20_baseline":155,"cursos":[{"curso":"Odontologia","c24":190,"cresc":227.6,"nota":""},{"curso":"Tecnologia de diagnÃ³stico e tratamento mÃ©dico","c24":148,"cresc":221.7,"nota":""},{"curso":"FarmÃ¡cia","c24":130,"cresc":154.9,"nota":""}],"cresc":201.9}
+  {"area":"NegÃ³cios, administraÃ§Ã£o e direito","total_c24":3174,"total_c20_baseline":2925,"cursos":[{"curso":"GestÃ£o e administraÃ§Ã£o","c24":2010,"cresc":2.5,"nota":""},{"curso":"Direito","c24":510,"cresc":17.2,"nota":""},{"curso":"Marketing e propaganda","c24":293,"cresc":15.8,"nota":""},{"curso":"FinanÃ§as, bancos e seguros","c24":190,"cresc":52.0,"nota":""},{"curso":"GestÃ£o comercial","c24":171,"cresc":13.2,"nota":""}],"cresc":8.5}
+  {"area":"Agricultura, silvicultura, pesca e veterinÃ¡ria","total_c24":202,"total_c20_baseline":98,"cursos":[{"curso":"VeterinÃ¡ria","c24":202,"cresc":106.1,"nota":""}],"cresc":106.1}
+  {"area":"Engenharia, produÃ§Ã£o e construÃ§Ã£o","total_c24":399,"total_c20_baseline":305,"cursos":[{"curso":"EletrÃ´nica e automaÃ§Ã£o","c24":295,"cresc":46.0,"nota":""},{"curso":"Tecnologia de proteÃ§Ã£o ambiental","c24":104,"cresc":1.0,"nota":""}],"cresc":30.8}
+  {"area":"CiÃªncias sociais, comunicaÃ§Ã£o e informaÃ§Ã£o","total_c24":371,"total_c20_baseline":323,"cursos":[{"curso":"Psicologia","c24":271,"cresc":6.7,"nota":""},{"curso":"Economia","c24":100,"cresc":44.9,"nota":""}],"cresc":14.9}
+
+### Pipeline top_ies (top 10):
+  {"ies":"Universidade PitÃ¡goras Unopar Anhanguera","rede":"Privada","conc":1614.0}
+  {"ies":"UNIVERSIDADE DE SOROCABA","rede":"Privada","conc":1252.0}
+  {"ies":"UNIVERSIDADE PAULISTA","rede":"Privada","conc":1218.0}
+  {"ies":"CENTRO UNIVERSITÃRIO FACENS","rede":"Privada","conc":789.0}
+  {"ies":"FACULDADE ANHANGÃERA DE SOROCABA","rede":"Privada","conc":628.0}
+  {"ies":"UNIVERSIDADE CIDADE DE SÃO PAULO","rede":"Privada","conc":618.0}
+  {"ies":"FACULDADE DE TECNOLOGIA DE SOROCABA","rede":"PÃºblica","conc":387.0}
+  {"ies":"UNIVERSIDADE FEDERAL DE SÃO CARLOS","rede":"PÃºblica","conc":347.0}
+  {"ies":"FACULDADE ESAMC SOROCABA","rede":"Privada","conc":317.0}
+  {"ies":"UNIVERSIDADE ANHEMBI MORUMBI","rede":"Privada","conc":274.0}
+
+### Score (linha desta cidade):
+  D1=0.4088 D2=0.0781 D3=0.6756 D4=0.4561 sal=4264.0 vinc=231399 tsup=17.0 idhm=0.798 cresc=-54.2
+
+### Estab serie (ultimos 5 anos):
+  ano=2020 estabs=25699.0 vinc_ativos=
+  ano=2021 estabs=27760.0 vinc_ativos=
+  ano=2023 estabs=27762.0 vinc_ativos=
+  ano=2024 estabs=29740.0 vinc_ativos=
