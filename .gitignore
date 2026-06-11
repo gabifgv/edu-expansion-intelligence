@@ -201,6 +201,9 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 
+# Claude Code worktrees (committed as broken gitlinks — break GitHub Pages checkout)
+.claude/worktrees/
+
 # Marimo
 marimo/_static/
 marimo/_lsp/
